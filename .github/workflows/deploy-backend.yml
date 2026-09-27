@@ -1,0 +1,39 @@
+name: Desplegar backend
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: deploy-backend-production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+      ALLOWED_ORIGINS: ${{ vars.ALLOWED_ORIGINS }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Verificar configuracion
+        shell: bash
+        run: |
+          test -n "$SUPABASE_ACCESS_TOKEN"
+          test -n "$SUPABASE_DB_PASSWORD"
+          test -n "$PROJECT_REF"
+          test -n "$ALLOWED_ORIGINS"
+      - run: npx supabase link --project-ref "$PROJECT_REF"
+      - run: npx supabase db push
+      - run: npx supabase secrets set ALLOWED_ORIGINS="$ALLOWED_ORIGINS" --project-ref "$PROJECT_REF"
+      - run: npx supabase functions deploy health --project-ref "$PROJECT_REF"
+      - run: npx supabase functions deploy careers --project-ref "$PROJECT_REF"
