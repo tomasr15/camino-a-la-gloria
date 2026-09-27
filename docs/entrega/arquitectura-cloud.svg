@@ -64,7 +64,7 @@
 			<rect x="310" y="15" width="380" height="80" rx="8" ry="8" style="stroke: rgb(9%,43%,36%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(93%,96%,94%); fill-rule: evenodd;"/>
 			<text x="322" y="72" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,16%,19%); stroke:none;" transform="translate(0,144) scale(1,-1)">GitHub Actions</text>
 			<text x="322" y="51" style="font-family: Helvetica; font-size: 11px;fill: rgb(7%,16%,19%); stroke:none;" transform="translate(0,102) scale(1,-1)">CI: lint, tipos, contratos, build y SQL</text>
-			<text x="322" y="34" style="font-family: Helvetica; font-size: 11px;fill: rgb(7%,16%,19%); stroke:none;" transform="translate(0,68) scale(1,-1)">CD backend: workflow manual con secretos</text>
+			<text x="322" y="34" style="font-family: Helvetica; font-size: 11px;fill: rgb(7%,16%,19%); stroke:none;" transform="translate(0,68) scale(1,-1)">CD backend preparado; secretos pendientes</text>
 			<path d="M 125,375 L 125,430 Z" style="stroke: rgb(32%,38%,41%); stroke-linecap: butt; stroke-width: 1.5;"/>
 			<polygon points="125 430, 121 423.0718, 129 423.0718" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,38%,41%); fill-rule: evenodd;"/>
 			<text x="40" y="400" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,38%,41%); stroke:none;" transform="translate(0,800) scale(1,-1)">HTTPS: interfaz</text>

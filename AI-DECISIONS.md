@@ -33,3 +33,12 @@ Estado: propuesta e implementación asistidas; **validación humana pendiente**.
 - **Resultado:** commits de cambios reales, workflows de CI y despliegue, documentación y backlog.
 - **Control:** no inventar historial previo, aprobaciones cruzadas, métricas de producción ni aportes individuales. La instrucción del usuario prohíbe borrar cualquier recurso.
 - **Validación/corrección humana:** completar en el PR de revisión antes de afirmar aprobación del equipo.
+
+## AI-005 · Verificación cloud y consolidación técnica
+
+- **Problema:** comprobar la infraestructura real y dejar una entrega utilizable sin confundir pruebas con aprobación humana.
+- **Acciones asistidas:** despliegue en Vercel/Supabase, configuración de dominio Auth y CORS, tablero con límites WIP, informe y exportación del diagrama. La integración técnica del código en `main` no constituye una revisión cruzada del equipo.
+- **Datos de prueba:** dos cuentas sintéticas cloud confirmadas mediante administración y una carrera de prueba; se conservan. La clave de servicio se usó solo para aprovisionar estos fixtures, en memoria, fuera del frontend y sin publicarla. Las solicitudes de aplicación y pruebas de aislamiento usan clave pública + JWT del usuario.
+- **Validación:** 13 comprobaciones cloud, inicio de sesión y recuperación desde navegador, 15 pruebas de contratos, 7 SQL y 10 de integración local. Resultado y límites en `docs/evidencia-checkpoint-1.md`.
+- **Límites:** no se validó correo de registro público; SMTP y secretos del workflow manual backend siguen pendientes. No se enviaron credenciales ni se concedió acceso a la cátedra.
+- **Validación/corrección humana:** pendiente en issues #2 y #5. No se marca como aprobación del equipo ni como envío académico.

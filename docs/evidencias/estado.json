@@ -1,0 +1,12 @@
+{
+  "date": "2026-09-27",
+  "checkpoint_due": "2026-09-28",
+  "frontend_url": "https://camino-a-la-gloria-dusky.vercel.app",
+  "repository_url": "https://github.com/tomasr15/camino-a-la-gloria",
+  "project_url": "https://github.com/users/tomasr15/projects/1",
+  "supabase_project_ref": "gmpjtvxpolmxtqvdxdit",
+  "supabase_region": "us-west-2",
+  "plans": {"vercel": "Hobby", "supabase": "Free"},
+  "human_review": "pending",
+  "academic_submission": "pending"
+}

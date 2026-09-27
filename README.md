@@ -4,6 +4,8 @@ Simulador web de carrera de director técnico. TPI de Desarrollo de Software Clo
 
 **Checkpoint 1 · 28/09/2026:** arquitectura y base técnica. Esta versión implementa pantalla inicial, registro/inicio de sesión, creación y lectura de una carrera privada y comprobación de conectividad. No incluye aún partidos, clubes reales, fichajes ni generación con IA.
 
+[Aplicación publicada](https://camino-a-la-gloria-dusky.vercel.app) · [Informe PDF](docs/entrega/Checkpoint-1-Camino-a-la-Gloria.pdf) · [Tablero del equipo](https://github.com/users/tomasr15/projects/1)
+
 ## Documentación de entrega
 
 - [Informe de arquitectura](docs/arquitectura.md)
@@ -41,6 +43,8 @@ npm run db:test
 ```
 
 `check` ejecuta ESLint, TypeScript, pruebas de contratos y build. `db:test` verifica acceso por propietario, rechazo de suplantación, una carrera por usuario y bloqueo de cambios de reputación. Las pruebas de base usan una transacción revertida, sin modificar datos preexistentes.
+
+La prueba de integración local se ejecuta con `npm run test:integration`. La verificación cloud está registrada en `docs/evidencias/cloud-smoke.json`; su script exige las variables públicas en `.env.cloud` y dos cuentas sintéticas dedicadas en `tmp/cloud-fixtures.json` (ambos ignorados). No aprovisiona usuarios ni borra datos. No compartir las credenciales de fixtures en GitHub.
 
 ## Stack
 

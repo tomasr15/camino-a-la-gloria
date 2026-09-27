@@ -50,7 +50,7 @@ def architecture():
  box(755,405,220,105,'CP2 / Datos deportivos',['API-Football','Importación con cuota y caché','Dataset por temporada'],colors.HexColor('#FFFAF0'),GOLD)
  box(755,255,220,105,'CP2 / Motor e IA',['Motor TypeScript: resultados','Gemini: narrativa JSON','Validación y fallback'],colors.HexColor('#FFFAF0'),GOLD)
  box(20,85,215,90,'GitHub',['Código, PR y tablero','Conventional Commits'])
- box(310,15,380,80,'GitHub Actions',['CI: lint, tipos, contratos, build y SQL','CD backend: workflow manual con secretos'])
+ box(310,15,380,80,'GitHub Actions',['CI: lint, tipos, contratos, build y SQL','CD backend preparado; secretos pendientes'])
  arrow([(125,375),(125,430)],'HTTPS: interfaz',40,400)
  arrow([(235,470),(310,470)],'Login',246,480)
  arrow([(235,440),(268,440),(268,344),(310,344)],'JWT',273,360)
@@ -151,7 +151,7 @@ table(['VALIDACIÓN','RESULTADO'],[
  ['Contratos','15 pruebas: entradas, suplantación de atributos, contrato narrativo y CORS.'],
  ['SQL / pgTAP','7 pruebas: propietario, lectura ajena, suplantación, unicidad, reputación y acceso anónimo.'],
  ['Integración local','10 comprobaciones del flujo real Auth → función → DB; fixtures sintéticos conservados.'],
- ['Cloud','Health 200 y careers 401 sin JWT; más comprobaciones en docs/evidencia-checkpoint-1.md.'],
+ ['Cloud','13 comprobaciones aprobadas: Auth, guardado/recuperación, aislamiento RLS, límites y CORS; prueba de navegador publicada.'],
  ['CI','GitHub Actions: jobs de aplicación y base. Ver ejecución enlazada en evidencia.']
 ], [155,content-155])
 story.append(Spacer(1,12))
@@ -168,6 +168,7 @@ table(['HITO','RESULTADO ESPERADO','RESPONSABILIDAD PROPUESTA'],[
 ], [120,390,content-510])
 story.append(Spacer(1,14))
 add('<b>Kanban:</b> Pendiente → En curso → En revisión → Hecho. WIP: una tarea en curso por integrante y hasta dos PR en revisión. Las tareas con criterios de aceptación están registradas en GitHub.')
+add('<b>Operación pendiente:</b> habilitar secretos del workflow manual de backend si se decide usar Actions para ese despliegue; probar SMTP antes de abrir registro a usuarios externos. Backend CP1 desplegado desde CLI autenticada.','SmallCP')
 add('<b>Pendientes humanos:</b> revisión de código y AI-DECISIONS, comprensión individual, acceso de la cátedra al repositorio privado y envío formal. No se presentan como realizados por la asistencia.')
 add('<b>Fuentes:</b> Camino a la Gloria (2).pdf, p. 1; TPI - Desarrollo de Software Cloud (1).pdf, pp. 1-4. Referencias técnicas y condiciones de proveedores en docs/decisiones.md.','SmallCP')
 
