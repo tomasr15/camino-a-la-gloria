@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 
 // Local fixtures only. This script never touches a cloud database or deletes data.
-const local = JSON.parse(execFileSync(process.platform === 'win32' ? 'node_modules\\supabase\\bin\\supabase.exe' : 'node_modules/supabase/bin/supabase', ['status', '-o', 'json'], { encoding: 'utf8' }));
+const local = JSON.parse(execFileSync(process.execPath, ['node_modules/supabase/dist/supabase.js', 'status', '-o', 'json'], { encoding: 'utf8' }));
 const base = local.API_URL;
 assert.ok(['127.0.0.1', 'localhost'].includes(new URL(base).hostname), 'Integration fixtures are restricted to localhost');
 const admin = createClient(base, local.SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
