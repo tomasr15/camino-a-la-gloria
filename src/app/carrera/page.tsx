@@ -7,8 +7,8 @@ import { getSupabase } from "@/lib/supabase";
 type Career = { id: string; manager_name: string; reputation: number; created_at: string };
 export default function CareerPage() {
   const [session, setSession] = useState<Session | null>(null);
-  const [ready, setReady] = useState(false);
-  const [configured, setConfigured] = useState(true);
+  const configured = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY && !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.startsWith("replace-"));
+  const [ready, setReady] = useState(!configured);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [careers, setCareers] = useState<Career[]>([]);
@@ -16,7 +16,7 @@ export default function CareerPage() {
   const [mode, setMode] = useState<"login" | "signup">("login");
   useEffect(() => {
     const client = getSupabase();
-    if (!client) { setConfigured(false); setReady(true); return; }
+    if (!client) return;
     client.auth.getSession().then(({ data }) => { setSession(data.session); setReady(true); });
     const { data } = client.auth.onAuthStateChange((_event, value) => { setSession(value); setCareers([]); setLoaded(false); });
     return () => data.subscription.unsubscribe();

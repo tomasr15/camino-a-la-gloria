@@ -16,7 +16,7 @@ enabled = false
 [studio]
 enabled = true
 port = 54323
-[inbucket]
+[local_smtp]
 enabled = true
 port = 54324
 [storage]
