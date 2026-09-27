@@ -1,0 +1,60 @@
+{
+  "tested_at": "2026-09-27T21:28:57.204Z",
+  "project_ref": "gmpjtvxpolmxtqvdxdit",
+  "frontend_url": "https://camino-a-la-gloria-dusky.vercel.app",
+  "results": [
+    {
+      "name": "Password login for two confirmed synthetic users",
+      "status": "PASS"
+    },
+    {
+      "name": "Public health and allowed CORS",
+      "status": "PASS"
+    },
+    {
+      "name": "Missing and invalid JWT rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Extra protected attributes rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Career persisted with default reputation (HTTP 201)",
+      "status": "PASS"
+    },
+    {
+      "name": "Duplicate career rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Owner retrieves persistent career",
+      "status": "PASS"
+    },
+    {
+      "name": "Other user cannot retrieve career",
+      "status": "PASS"
+    },
+    {
+      "name": "Direct REST enforces RLS isolation",
+      "status": "PASS"
+    },
+    {
+      "name": "Oversize body rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Unapproved origin rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Request identifier returned for traceability",
+      "status": "PASS"
+    },
+    {
+      "name": "Public Vercel frontend responds",
+      "status": "PASS"
+    }
+  ],
+  "limitation": "Accounts were confirmed as synthetic fixtures; public signup email delivery is not asserted. No data deleted."
+}
