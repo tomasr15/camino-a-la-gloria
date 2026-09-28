@@ -1,6 +1,6 @@
 # Registro de decisiones
 
-Estado: implementadas como propuesta técnica, revisión humana pendiente. Fuentes oficiales consultadas el 27/09/2026.
+Estado: revisadas el 28/09/2026 por Julian Coloma. La firma de Lucas Modernell y Tomas Rosato queda pendiente. Fuentes oficiales consultadas el 27/09/2026.
 
 | Decisión | Alternativa considerada | Motivo y costo asumido |
 |---|---|---|

@@ -26,7 +26,7 @@ Tablero: Pendiente → En curso → En revisión → Hecho. WIP: una tarea en cu
 | CP1-01 | 28/09 | Revisar arquitectura y justificar cada servicio; observaciones en PR | Tomás y revisor |
 | CP1-02 | 28/09 | Verificar cloud y acceso desde otro dispositivo; registrar URL y requestId | Lucas y revisor |
 | CP1-03 | 28/09 | Revisar UX, CI y trazabilidad; no dejar secretos en commits | Julian y revisor |
-| CP1-04 | 28/09 | Completar revisión humana del log de IA y ensayo | Los tres |
+| CP1-04 | 28/09 | Completar revisión humana del log de IA y ensayo | Los tres — revisión de Julian registrada 28/09; lectura de Lucas y Tomas, y ensayo, pendientes |
 | CP2-01 | 09/11 | Comprobar cobertura de liga/temporada y condiciones; dataset trazable | Lucas |
 | CP2-02 | 09/11 | Modelar clubes, planteles, fixtures y ofertas con migraciones | Lucas |
 | CP2-03 | 09/11 | Motor reproducible con resultados, avance atómico e idempotencia | Tomás |
