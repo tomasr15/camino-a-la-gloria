@@ -1,6 +1,6 @@
 # AI Decision Log
 
-Estado: propuesta e implementación asistidas. **Revisión técnica completada el 28/09/2026.** Firmada por Julian Coloma. Lucas Modernell y Tomas Rosato aún no completaron la lectura de este log; su firma queda pendiente y no se afirma aprobación cruzada. Las comprobaciones automáticas no equivalen a revisión humana. Fecha: 27/09/2026.
+Estado: propuesta e implementación asistidas. **Revisión técnica completada el 28/09/2026.** Firmada por Julian Coloma y Lucas Modernell. Tomas Rosato aún no completó la lectura de este log; su firma queda pendiente y no se afirma aprobación cruzada. Las comprobaciones automáticas no equivalen a revisión humana. Fecha: 27/09/2026.
 
 ## AI-001 · Alcance y arquitectura del checkpoint 1
 
