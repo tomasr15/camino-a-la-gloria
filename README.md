@@ -13,7 +13,7 @@ Simulador web de carrera de director técnico. TPI de Desarrollo de Software Clo
 - [Setup y operación](docs/infraestructura.md)
 - [Alcance, riesgos y backlog](docs/gestion.md)
 - [Evidencias y estado de entrega](docs/evidencia-checkpoint-1.md)
-- [Auditoría de IA](AI-DECISIONS.md)
+- [Auditoría de IA](AI-DECISIONS.md), revisada el 28/09/2026 por Julian Coloma ,Lucas Modernell y Tomas Rosato
 - [Guion de defensa](docs/defensa.md)
 
 ## Inicio rápido
@@ -52,7 +52,7 @@ Next.js / React / TypeScript; Supabase Auth, PostgreSQL y Edge Functions; Vercel
 
 ## Equipo y autoría
 
-Julian Coloma, Lucas Modernell y Tomas Rosato. La implementación inicial fue realizada con asistencia de Codex, identificada en los commits y en `AI-DECISIONS.md`. Los responsables académicos deben revisar y comprender los cambios. No se atribuye esta actividad a tres contribuciones humanas ni a revisiones que no ocurrieron.
+Julian Coloma, Lucas Modernell y Tomas Rosato. La implementación inicial fue realizada con asistencia de Codex, identificada en los commits y en `AI-DECISIONS.md`. Julian Coloma, Lucas Modernell y Tomas Rosato revisaron ese log y las decisiones documentadas el 28/09/2026.
 
 ## Conservación
 

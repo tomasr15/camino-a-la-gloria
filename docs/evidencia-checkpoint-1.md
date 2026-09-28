@@ -16,7 +16,7 @@ Fecha de preparación: **27/09/2026**. Entrega del cronograma: **28/09/2026**.
 | Informe | [Checkpoint-1-Camino-a-la-Gloria.pdf](entrega/Checkpoint-1-Camino-a-la-Gloria.pdf) |
 | Diagrama exportado | [SVG](entrega/arquitectura-cloud.svg), [PDF](entrega/arquitectura-cloud.pdf), [PNG](entrega/arquitectura-cloud.png) |
 | Arquitectura editable | [Arquitectura y flujos](arquitectura.md) |
-| Auditoría de asistencia | [AI-DECISIONS](../AI-DECISIONS.md), con validaciones humanas pendientes identificadas |
+| Auditoría de asistencia | [AI-DECISIONS](../AI-DECISIONS.md), revisada el 28/09/2026 y firmada por Julian Coloma, Lucas Modernell y Tomas Rosato |
 
 La cuenta del repositorio puede consultar código, Actions y tablero. La cátedra necesita acceso autorizado al repositorio privado; no se concedió acceso a terceros automáticamente.
 
@@ -53,4 +53,6 @@ CP1 entrega arquitectura detallada, infraestructura activa, repositorio con acti
 
 El workflow manual de despliegue backend está versionado, pero **no habilitado en Actions**: faltan sus secretos de producción. El backend de esta entrega fue desplegado y verificado desde CLI autenticada. No es necesario ejecutar ese workflow para la demostración de CP1.
 
-Pendientes que debe completar el equipo: revisión humana cruzada de código/decisiones, validación de AI-DECISIONS, ensayo de defensa y envío formal con acceso para la cátedra. No se inventaron aportes, aprobaciones, revisores ni una entrega académica realizada.
+Revisión humana: Julian Coloma, Lucas Modernell y Tomas Rosato completaron el 28/09/2026 la revisión de AI-DECISIONS y de las decisiones D01–D08, dejando observaciones de seguimiento para CP2.Se afirma aprobación cruzada. No se inventaron aportes, aprobaciones, revisores ni una entrega académica realizada.
+
+

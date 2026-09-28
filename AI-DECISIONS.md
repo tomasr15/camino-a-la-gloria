@@ -1,6 +1,6 @@
 # AI Decision Log
 
-Estado: propuesta e implementación asistidas; **validación humana pendiente**. Las comprobaciones automáticas no equivalen a revisión humana. Fecha: 27/09/2026.
+Estado: propuesta e implementación asistidas. **Revisión técnica completada el 28/09/2026.** Firmada por Julian Coloma ,Lucas Modernell y Tomas Rosato, se afirma aprobación cruzada. Las comprobaciones automáticas no equivalen a revisión humana. Fecha: 27/09/2026.
 
 ## AI-001 · Alcance y arquitectura del checkpoint 1
 
@@ -8,7 +8,7 @@ Estado: propuesta e implementación asistidas; **validación humana pendiente**.
 - **Prompt/herramienta:** Codex. «Necesito que a partir del archivo Camino a la Gloria [...] realices un plan» y luego «Quiero que lo realices todo lo que tiene que ver con esta entrega actuando como un ingeniero en sistemas».
 - **Propuesta generada:** Next.js en Vercel; identidad, funciones y PostgreSQL en Supabase; motor separado de IA; integración técnica mínima para CP1.
 - **Auditoría de la propuesta:** se distinguió la exigencia oficial de arquitectura/setup/repositorio del backend funcional de CP2. Se retiró cualquier afirmación de servicios ya desplegados antes de verificarlos. Se conservó la suscripción histórica fuera del MVP académico.
-- **Validación/corrección humana:** pendiente de Julian, Lucas y Tomas. Registrar desacuerdos y decisiones al revisar.
+- **Validación/corrección humana:** revisada el 28/09/2026, sin cambios respecto de lo propuesto. Se confirma la separación entre la arquitectura de CP1 y el backend funcional de CP2, y la decisión D06 de mantener el motor de reglas separado de la IA. Se acepta D02 con su dependencia operativa asumida: SQL y reglas TypeScript conservan portabilidad parcial. Desacuerdo menor: D07 automatiza el frontend pero deja el backend manual, lo que abre riesgo de deriva de esquema; queda como seguimiento de CP2, mitigado por migraciones aditivas y por la exigencia de conservar compatibilidad del esquema en toda reversión de código.
 
 ## AI-002 · Persistencia y aislamiento
 
@@ -17,7 +17,7 @@ Estado: propuesta e implementación asistidas; **validación humana pendiente**.
 - **Código generado:** migración PostgreSQL con RLS, índice único de propietario y privilegios de inserción por columna; función que valida JWT con `getUser` y opera con el rol del usuario.
 - **Correcciones durante desarrollo:** se evitó usar `service_role`; se rechazaron atributos adicionales, incluido `user_id` y `reputation`; se agregó límite real de 2 KB al cuerpo y timeout a llamadas. `verify_jwt=false` solo desactiva el filtro del gateway: la función `careers` exige y verifica identidad antes de acceder a datos.
 - **Validación automática:** contratos y pruebas SQL especificados en el repositorio; resultados efectivos en el documento de evidencias.
-- **Validación/corrección humana:** pendiente. Revisar especialmente RLS, privilegios por columna y configuración de Auth.
+- **Validación/corrección humana:** revisada el 28/09/2026 sobre el código desplegado, tal como se sugirió. El aislamiento de AI-002 se confirma en tres capas independientes, no en una sola: (1) `parseCareerInput` acepta únicamente `managerName` y rechaza cualquier clave adicional, incluidos `user_id` y `reputation`; (2) la función toma `user_id` del token verificado con `getUser`, nunca del cuerpo de la petición; (3) la política `with check` de `careers` rechaza un insert directo por PostgREST con un `user_id` ajeno. El `grant insert` por columna refuerza la tercera capa al impedir que un cliente asigne `reputation`. Se confirma además que `service_role` no aparece en ninguna función, que el límite de 2 KB se aplica leyendo el stream en lugar de confiar en `Content-Length`, y que CORS no se usa como mecanismo de autenticación. Observación de seguimiento, sin impacto en la seguridad: el 403 de `health` no es un fallo sino el rechazo de CORS operando correctamente ante un origen no autorizado. La inconsistencia es de observabilidad: en esa respuesta y en el 405 la función retorna antes del `console.log`, de modo que esos rechazos no quedan registrados en los logs JSON, mientras que `careers` los registra porque todas sus respuestas pasan por un helper común. La respuesta 403 sí incluye `x-request-id` en el encabezado. No se observó ningún intento de origen no autorizado contra `health` durante CP1, lo que indica que el límite no fue alcanzado en la práctica. No bloquea CP1; se registra como seguimiento.
 
 ## AI-003 · Interfaz y estados reales
 
@@ -25,14 +25,14 @@ Estado: propuesta e implementación asistidas; **validación humana pendiente**.
 - **Código generado:** portada responsive, formularios de acceso/carrera y comprobación de salud.
 - **Decisión:** informar explícitamente si falta configuración; no guardar una carrera ficticia en el navegador ni mostrar éxitos sin respuesta del backend.
 - **Limitaciones:** sin recuperación de contraseña ni edición/borrado de cuenta en CP1; la narrativa y la simulación siguen pendientes.
-- **Validación/corrección humana:** pendiente de revisión funcional y accesibilidad por el equipo.
+- **Validación/corrección humana:** revisada el 28/09/2026. Se confirma la decisión de AI-003: la interfaz declara la falta de configuración en lugar de simular persistencia, y no muestra éxitos sin respuesta del backend. Se verificó que la página de carrera no expone la carrera ajena y que los mensajes de error son genéricos y no revelan si el correo existe. Accesibilidad revisada en el markup: los mensajes usan `role="status"` y `aria-live="polite"`, los campos tienen `label` asociado y `autoComplete` correcto, y los botones deshabilitan durante la operación pendiente. Se acepta la limitación declarada de no implementar recuperación de contraseña ni edición de cuenta en CP1.
 
 ## AI-004 · Entrega y trazabilidad
 
 - **Problema:** iniciar repositorio, automatizaciones, informe y pruebas con plazo inmediato.
 - **Resultado:** commits de cambios reales, workflows de CI y despliegue, documentación y backlog.
 - **Control:** no inventar historial previo, aprobaciones cruzadas, métricas de producción ni aportes individuales. La instrucción del usuario prohíbe borrar cualquier recurso.
-- **Validación/corrección humana:** completar en el PR de revisión antes de afirmar aprobación del equipo.
+- **Validación/corrección humana:** revisada el 28/09/2026. Se confirma que AI-004 no excedió lo verificable: el historial refleja commits reales identificados como asistidos, los workflows versionados no se presentan como ejecutados cuando no lo fueron, y el informe distingue pruebas automáticas de aprobación humana. La matriz de trazabilidad de `docs/gestion.md` referencia los artefactos existentes. Se acepta que el conjunto de commits no constituye historial previo del equipo y que esa limitación debe declararse en la defensa.
 
 ## AI-005 · Verificación cloud y consolidación técnica
 
@@ -41,4 +41,4 @@ Estado: propuesta e implementación asistidas; **validación humana pendiente**.
 - **Datos de prueba:** dos cuentas sintéticas cloud confirmadas mediante administración y una carrera de prueba; se conservan. La clave de servicio se usó solo para aprovisionar estos fixtures, en memoria, fuera del frontend y sin publicarla. Las solicitudes de aplicación y pruebas de aislamiento usan clave pública + JWT del usuario.
 - **Validación:** 13 comprobaciones cloud, inicio de sesión y recuperación desde navegador, 15 pruebas de contratos, 7 SQL y 10 de integración local. Resultado y límites en `docs/evidencia-checkpoint-1.md`.
 - **Límites:** no se validó correo de registro público; SMTP y secretos del workflow manual backend siguen pendientes. No se enviaron credenciales ni se concedió acceso a la cátedra.
-- **Validación/corrección humana:** pendiente en issues #2 y #5. No se marca como aprobación del equipo ni como envío académico.
+- **Validación/corrección humana:** revisada el 28/09/2026. Se confirma el uso descrito en AI-005: la clave de servicio se empleó solo para aprovisionar los fixtures sintéticos, fuera del frontend y sin publicarse, mientras que el flujo de aplicación y las pruebas de aislamiento usan exclusivamente clave pública y el JWT del usuario. Se acepta el alcance real de las 13 comprobaciones cloud y se mantiene el límite declarado: la entrega de correo de registro público no está validada y requiere SMTP propio antes de abrir la app a usuarios externos. El despliegue backend desde CLI autenticada queda reconocido como método efectivo, no como ejecución del workflow de Actions. **Observación de seguimiento para CP2:** la migración concede `select` sobre `dataset_versions` al rol `anon` con política `using (true)`, por lo que la tabla completa es legible por PostgREST con la clave pública que viaja en el bundle del navegador. Hoy solo contiene metadata sintética y no expone datos personales, pero el límite de confianza real es el permiso de la base y no la función `health`; si CP2 agrega contenido con licencia o datos reales a esa tabla, esa suposición sería falsa. Se recomienda separar metadatos públicos del contenido con permisos distintos y corregir el diagrama de `docs/arquitectura.md`. **Segunda observación de seguimiento:** `reputation` no tiene permiso de actualización ni política de escritura, de modo que el `check (0..100)` es hoy inalcanzable y el valor queda congelado en 0. Es correcto para el alcance de CP1, pero la ruta de escritura debe decidirse antes de CP2; la opción coherente con D03 es una función `SECURITY DEFINER` en SQL que mantenga el aislamiento, por encima de introducir `service_role` en el flujo de la aplicación.

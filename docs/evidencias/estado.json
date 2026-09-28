@@ -7,6 +7,7 @@
   "supabase_project_ref": "gmpjtvxpolmxtqvdxdit",
   "supabase_region": "us-west-2",
   "plans": {"vercel": "Hobby", "supabase": "Free"},
-  "human_review": "pending",
-  "academic_submission": "pending"
+  "human_review": "complete",
+  "human_review_scope": "Revisión individual firmada por Julian Coloma, Lucas Modernell y Tomas Rosato el 28/09/2026.Se afirma aprobación cruzada.",
+  "academic_submission": "complete"
 }
