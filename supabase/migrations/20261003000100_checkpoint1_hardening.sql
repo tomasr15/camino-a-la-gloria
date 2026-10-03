@@ -15,6 +15,7 @@ as $$
 $$;
 revoke all on function public.dataset_probe() from public;
 grant execute on function public.dataset_probe() to anon, authenticated;
+revoke all on function public.dataset_probe() from service_role;
 comment on function public.dataset_probe() is 'Boolean availability probe for health checks; returns no dataset row.';
 
 -- 3. Single write path for careers.reputation. Owner-scoped by the verified JWT, clamped to
@@ -46,5 +47,8 @@ begin
   return v_reputation;
 end;
 $$;
-revoke all on function public.advance_career_reputation(integer) from public;
+-- Supabase concede EXECUTE por defecto sobre funciones nuevas del esquema public a anon,
+-- authenticated y service_role, asi que revocar solo de PUBLIC no alcanza: se revoca de
+-- cada rol cliente de forma explicita.
+revoke all on function public.advance_career_reputation(integer) from public, anon, authenticated, service_role;
 comment on function public.advance_career_reputation(integer) is 'Adjusts the caller reputation within 0..100; executable only by a SECURITY DEFINER function, never by a client role.';

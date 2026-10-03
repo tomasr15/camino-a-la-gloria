@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(15);
+select plan(16);
 insert into auth.users (id, email) values
   ('10000000-0000-4000-8000-000000000001', 'cp1-a@example.invalid'),
   ('10000000-0000-4000-8000-000000000002', 'cp1-b@example.invalid');
@@ -18,6 +18,7 @@ set local role anon;
 select throws_ok($$select * from public.careers$$, '42501', null, 'Anonymous access denied');
 select throws_ok($$select * from public.dataset_versions$$, '42501', null, 'dataset_versions is closed to anon');
 select is(public.dataset_probe(), true, 'Anonymous probe answers without exposing rows');
+select throws_ok($$select public.advance_career_reputation(10)$$, '42501', null, 'Anonymous cannot execute the reputation write path');
 reset role;
 select set_config('request.jwt.claim.sub', '10000000-0000-4000-8000-000000000001', true);
 select is(public.advance_career_reputation(10), 10, 'Trusted caller raises reputation');
