@@ -33,7 +33,7 @@ flowchart TB
   GW --> H
   CAR -->|getUser: validar JWT| AUTH
   CAR -->|Rol authenticated + JWT; RLS| DB
-  H -->|Rol anon; solo metadato de dataset| DB
+  H -->|Rol anon; probe booleano, sin filas| DB
   CAR --> LOG
   H --> LOG
   FUT -.->|Contexto sin email ni tokens| GEM[CP2: Gemini]
@@ -46,14 +46,14 @@ flowchart TB
 
 Líneas continuas: código/configuración de CP1. Líneas punteadas: diseño futuro. La existencia de un archivo de workflow no demuestra una ejecución exitosa; consultar las evidencias.
 
-El frontend no contiene credenciales privilegiadas. Las funciones usan la clave pública y el JWT del usuario; PostgreSQL aplica RLS también ante acceso REST directo. CORS limita orígenes de navegador y no reemplaza autenticación. `health` es público y solo devuelve disponibilidad e identificador de solicitud.
+El frontend no contiene credenciales privilegiadas. Las funciones usan la clave pública y el JWT del usuario; PostgreSQL aplica RLS también ante acceso REST directo. CORS limita orígenes de navegador y no reemplaza autenticación. `health` es público y solo devuelve disponibilidad e identificador de solicitud: no lee filas, llama a `public.dataset_probe()`, que devuelve un booleano. El rol `anon` no tiene `select` sobre `dataset_versions`.
 
 ## Flujos actuales
 
 1. **Registro:** navegador → Auth → correo de confirmación → sesión. El navegador conserva la sesión mediante el SDK. El backend valida el token con Auth en cada solicitud privada; no confía en `getSession` del cliente para autorizar.
 2. **Crear carrera:** validar origen, método y JWT; leer hasta 2 KB; aceptar únicamente `managerName`; buscar versión sintética conocida; insertar con `user_id` del token. La restricción única evita duplicados por reintento concurrente y produce HTTP 409.
 3. **Recuperar carrera:** usuario autenticado → función → consulta filtrada por propietario y RLS → como máximo una carrera.
-4. **Salud:** solicitud explícita → función → lectura de la versión de dataset → 200/503. Una portada accesible por sí sola no prueba disponibilidad del backend.
+4. **Salud:** solicitud explícita → función → `dataset_probe`, un booleano que no expone filas → 200/503. Los rechazos 403 y 405 y los 5xx también quedan en el log JSON. Una portada accesible por sí sola no prueba disponibilidad del backend.
 
 ## Datos implementados
 

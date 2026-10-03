@@ -1,9 +1,9 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(7);
+select plan(9);
 insert into auth.users (id, email) values
- ('10000000-0000-4000-8000-000000000001', 'cp1-a@example.invalid'),
- ('10000000-0000-4000-8000-000000000002', 'cp1-b@example.invalid');
+  ('10000000-0000-4000-8000-000000000001', 'cp1-a@example.invalid'),
+  ('10000000-0000-4000-8000-000000000002', 'cp1-b@example.invalid');
 set local role authenticated;
 select set_config('request.jwt.claim.sub', '10000000-0000-4000-8000-000000000001', true);
 select lives_ok($$insert into public.careers(user_id, dataset_version_id, manager_name) values ('10000000-0000-4000-8000-000000000001','00000000-0000-4000-8000-000000000001','Manager A')$$, 'Owner can create career');
@@ -15,5 +15,7 @@ select set_config('request.jwt.claim.sub', '10000000-0000-4000-8000-000000000002
 select is((select count(*)::integer from public.careers), 0, 'Another user cannot read first career');
 set local role anon;
 select throws_ok($$select * from public.careers$$, '42501', null, 'Anonymous access denied');
+select throws_ok($$select * from public.dataset_versions$$, '42501', null, 'dataset_versions is closed to anon');
+select is(public.dataset_probe(), true, 'Anonymous probe answers without exposing rows');
 select * from finish();
 rollback;
