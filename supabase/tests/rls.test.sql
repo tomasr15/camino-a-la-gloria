@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(9);
+select plan(15);
 insert into auth.users (id, email) values
   ('10000000-0000-4000-8000-000000000001', 'cp1-a@example.invalid'),
   ('10000000-0000-4000-8000-000000000002', 'cp1-b@example.invalid');
@@ -11,11 +11,20 @@ select is((select count(*)::integer from public.careers), 1, 'Owner sees own car
 select throws_ok($$insert into public.careers(user_id, dataset_version_id, manager_name) values ('10000000-0000-4000-8000-000000000002','00000000-0000-4000-8000-000000000001','Forged owner')$$, '42501', null, 'Cannot forge owner');
 select throws_ok($$insert into public.careers(user_id, dataset_version_id, manager_name) values ('10000000-0000-4000-8000-000000000001','00000000-0000-4000-8000-000000000001','Second career')$$, '23505', null, 'One career per user');
 select throws_ok($$update public.careers set reputation = 100$$, '42501', null, 'Cannot rewrite game stats');
+select throws_ok($$select public.advance_career_reputation(10)$$, '42501', null, 'Clients cannot execute the reputation write path');
 select set_config('request.jwt.claim.sub', '10000000-0000-4000-8000-000000000002', true);
 select is((select count(*)::integer from public.careers), 0, 'Another user cannot read first career');
 set local role anon;
 select throws_ok($$select * from public.careers$$, '42501', null, 'Anonymous access denied');
 select throws_ok($$select * from public.dataset_versions$$, '42501', null, 'dataset_versions is closed to anon');
 select is(public.dataset_probe(), true, 'Anonymous probe answers without exposing rows');
+reset role;
+select set_config('request.jwt.claim.sub', '10000000-0000-4000-8000-000000000001', true);
+select is(public.advance_career_reputation(10), 10, 'Trusted caller raises reputation');
+select is(public.advance_career_reputation(200), 100, 'Reputation is clamped at 100');
+select is(public.advance_career_reputation(-500), 0, 'Reputation is clamped at 0');
+select ok((select p.prosecdef from pg_proc p where p.oid = 'public.advance_career_reputation(integer)'::regprocedure), 'Reputation write path is SECURITY DEFINER');
+select set_config('request.jwt.claim.sub', '10000000-0000-4000-8000-000000000002', true);
+select throws_ok($$select public.advance_career_reputation(5)$$, 'P0002', null, 'No reputation change without a career');
 select * from finish();
 rollback;

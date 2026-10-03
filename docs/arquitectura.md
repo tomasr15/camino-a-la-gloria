@@ -81,6 +81,8 @@ erDiagram
 
 El índice único de `user_id` sirve también para búsqueda de la carrera. El dataset inicial no contiene nombres, jugadores ni estadísticas reales. No se duplican perfiles hasta que el producto necesite atributos adicionales a Auth y al nombre del director técnico.
 
+`dataset_versions` es legible por `authenticated` —la función `careers` necesita resolver la versión—, pero no por `anon`; la disponibilidad se verifica con `public.dataset_probe()`, que devuelve solo un booleano. La reputación se escribe únicamente por `public.advance_career_reputation(p_delta integer)`: toma el propietario del JWT verificado, acota el resultado a 0..100 y no está concedida a `anon` ni a `authenticated`, de modo que ningún cliente pueda inflarla. La invocará la función `SECURITY DEFINER` del motor de CP2, que validará antes el resultado del partido. No existe `grant update` sobre `careers` para clientes.
+
 Modelo previsto para CP2: `competitions`, `clubs`, `players`, `rosters`, `fixtures`, `match_results`, `offers` y `narrative_events`. `rosters` une jugador/club/dataset. Los resultados y reputación pertenecen a una carrera, separados de los datos reales. Antes de simular se agregará unicidad por carrera/partido y transacción de resultado más avance.
 
 ## IA y motor: contrato de evolución
@@ -93,7 +95,8 @@ API-Football se consultará durante importaciones controladas, no en cada partid
 
 ## Seguridad, disponibilidad y escala
 
-- Privacidad por propietario, restricciones de base y privilegios de inserción limitados. Sin permisos de actualización/borrado para clientes en CP1.
+- Privacidad por propietario, restricciones de base y privilegios de inserción limitados. Sin permisos de actualización/borrado para clientes. La reputación solo se escribe por función `SECURITY DEFINER` sin permiso para roles cliente.
+- El frontend envía una CSP: `default-src 'self'`, sin `object-src`, `frame-ancestors 'none'` y `connect-src` limitado a Supabase. `script-src` incluye `'unsafe-inline'` porque Next.js inserta scripts de arranque; es una concesión conocida, no reforzada con nonces.
 - Confirmación de correo y contraseña mínima de 8 caracteres. CAPTCHA y límites adicionales de abuso quedan para la siguiente etapa antes de apertura masiva.
 - Timeouts de 5 s en salud y 8 s por llamada de carreras; errores públicos genéricos; logs sin contraseñas, emails, JWT ni payloads.
 - Frontend estático cuando corresponde; funciones sin estado y una sola carrera por usuario para acotar lecturas. La base sigue siendo el punto central; no se promete escalado ilimitado ni SLA del nivel gratuito.
