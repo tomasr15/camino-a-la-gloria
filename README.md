@@ -42,9 +42,9 @@ npm run check
 npm run db:test
 ```
 
-`check` ejecuta ESLint, TypeScript, pruebas de contratos y build. `db:test` verifica acceso por propietario, rechazo de suplantación, una carrera por usuario y bloqueo de cambios de reputación. Las pruebas de base usan una transacción revertida, sin modificar datos preexistentes.
+`check` ejecuta ESLint, TypeScript —incluidas las Edge Functions—, pruebas de contratos y build. `db:test` verifica acceso por propietario, rechazo de suplantación, una carrera por usuario, bloqueo de cambios de reputación, cierre de `dataset_versions` al rol `anon` y la ruta de escritura acotada de reputación. Las pruebas de base usan una transacción revertida, sin modificar datos preexistentes.
 
-La prueba de integración local se ejecuta con `npm run test:integration`. La verificación cloud está registrada en `docs/evidencias/cloud-smoke.json`; su script exige las variables públicas en `.env.cloud` y dos cuentas sintéticas dedicadas en `tmp/cloud-fixtures.json` (ambos ignorados). No aprovisiona usuarios ni borra datos. No compartir las credenciales de fixtures en GitHub.
+La prueba de integración local se ejecuta con `npm run test:integration`. La verificación cloud se ejecuta con `npm run test:cloud` y su salida queda en `docs/evidencias/cloud-smoke.json`; exige las variables públicas en `.env.cloud` y dos cuentas sintéticas dedicadas en `tmp/cloud-fixtures.json` (ambos ignorados). No aprovisiona usuarios ni borra datos. No compartir las credenciales de fixtures en GitHub.
 
 ## Stack
 

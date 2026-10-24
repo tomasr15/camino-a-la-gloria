@@ -33,7 +33,7 @@ flowchart TB
   GW --> H
   CAR -->|getUser: validar JWT| AUTH
   CAR -->|Rol authenticated + JWT; RLS| DB
-  H -->|Rol anon; solo metadato de dataset| DB
+  H -->|Rol anon; probe booleano, sin filas| DB
   CAR --> LOG
   H --> LOG
   FUT -.->|Contexto sin email ni tokens| GEM[CP2: Gemini]
@@ -46,14 +46,14 @@ flowchart TB
 
 Líneas continuas: código/configuración de CP1. Líneas punteadas: diseño futuro. La existencia de un archivo de workflow no demuestra una ejecución exitosa; consultar las evidencias.
 
-El frontend no contiene credenciales privilegiadas. Las funciones usan la clave pública y el JWT del usuario; PostgreSQL aplica RLS también ante acceso REST directo. CORS limita orígenes de navegador y no reemplaza autenticación. `health` es público y solo devuelve disponibilidad e identificador de solicitud.
+El frontend no contiene credenciales privilegiadas. Las funciones usan la clave pública y el JWT del usuario; PostgreSQL aplica RLS también ante acceso REST directo. CORS limita orígenes de navegador y no reemplaza autenticación. `health` es público y solo devuelve disponibilidad e identificador de solicitud: no lee filas, llama a `public.dataset_probe()`, que devuelve un booleano. El rol `anon` no tiene `select` sobre `dataset_versions`.
 
 ## Flujos actuales
 
 1. **Registro:** navegador → Auth → correo de confirmación → sesión. El navegador conserva la sesión mediante el SDK. El backend valida el token con Auth en cada solicitud privada; no confía en `getSession` del cliente para autorizar.
 2. **Crear carrera:** validar origen, método y JWT; leer hasta 2 KB; aceptar únicamente `managerName`; buscar versión sintética conocida; insertar con `user_id` del token. La restricción única evita duplicados por reintento concurrente y produce HTTP 409.
 3. **Recuperar carrera:** usuario autenticado → función → consulta filtrada por propietario y RLS → como máximo una carrera.
-4. **Salud:** solicitud explícita → función → lectura de la versión de dataset → 200/503. Una portada accesible por sí sola no prueba disponibilidad del backend.
+4. **Salud:** solicitud explícita → función → `dataset_probe`, un booleano que no expone filas → 200/503. Los rechazos 403 y 405 y los 5xx también quedan en el log JSON. Una portada accesible por sí sola no prueba disponibilidad del backend.
 
 ## Datos implementados
 
@@ -81,6 +81,8 @@ erDiagram
 
 El índice único de `user_id` sirve también para búsqueda de la carrera. El dataset inicial no contiene nombres, jugadores ni estadísticas reales. No se duplican perfiles hasta que el producto necesite atributos adicionales a Auth y al nombre del director técnico.
 
+`dataset_versions` es legible por `authenticated` —la función `careers` necesita resolver la versión—, pero no por `anon`; la disponibilidad se verifica con `public.dataset_probe()`, que devuelve solo un booleano. La reputación se escribe únicamente por `public.advance_career_reputation(p_delta integer)`: toma el propietario del JWT verificado, acota el resultado a 0..100 y no está concedida a `anon` ni a `authenticated`, de modo que ningún cliente pueda inflarla. La invocará la función `SECURITY DEFINER` del motor de CP2, que validará antes el resultado del partido. No existe `grant update` sobre `careers` para clientes. Ojo con las migraciones: Supabase concede `EXECUTE` por defecto sobre funciones nuevas del esquema `public` a `anon`, `authenticated` y `service_role`, así que revocar solo de `PUBLIC` no alcanza y hay que revocar de cada rol explícitamente.
+
 Modelo previsto para CP2: `competitions`, `clubs`, `players`, `rosters`, `fixtures`, `match_results`, `offers` y `narrative_events`. `rosters` une jugador/club/dataset. Los resultados y reputación pertenecen a una carrera, separados de los datos reales. Antes de simular se agregará unicidad por carrera/partido y transacción de resultado más avance.
 
 ## IA y motor: contrato de evolución
@@ -93,7 +95,8 @@ API-Football se consultará durante importaciones controladas, no en cada partid
 
 ## Seguridad, disponibilidad y escala
 
-- Privacidad por propietario, restricciones de base y privilegios de inserción limitados. Sin permisos de actualización/borrado para clientes en CP1.
+- Privacidad por propietario, restricciones de base y privilegios de inserción limitados. Sin permisos de actualización/borrado para clientes. La reputación solo se escribe por función `SECURITY DEFINER` sin permiso para roles cliente.
+- El frontend envía una CSP: `default-src 'self'`, sin `object-src`, `frame-ancestors 'none'` y `connect-src` limitado a Supabase. `script-src` incluye `'unsafe-inline'` porque Next.js inserta scripts de arranque; es una concesión conocida, no reforzada con nonces.
 - Confirmación de correo y contraseña mínima de 8 caracteres. CAPTCHA y límites adicionales de abuso quedan para la siguiente etapa antes de apertura masiva.
 - Timeouts de 5 s en salud y 8 s por llamada de carreras; errores públicos genéricos; logs sin contraseñas, emails, JWT ni payloads.
 - Frontend estático cuando corresponde; funciones sin estado y una sola carrera por usuario para acotar lecturas. La base sigue siendo el punto central; no se promete escalado ilimitado ni SLA del nivel gratuito.
