@@ -1,14 +1,19 @@
 import type { NextConfig } from "next";
 
 const development = process.env.NODE_ENV !== "production";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL)
+  : undefined;
+const supabaseOrigins = supabaseUrl
+  ? [supabaseUrl.origin, `${supabaseUrl.protocol === "http:" ? "ws:" : "wss:"}//${supabaseUrl.host}`]
+  : [];
 // Next.js inlines its bootstrap and flight-data scripts, so 'unsafe-inline' is required
 // even in production. Development additionally needs 'unsafe-eval' for the fast-refresh
 // overlay and 'ws:' for the HMR socket.
 const scriptSrc = development ? "'self' 'unsafe-inline' 'unsafe-eval'" : "'self' 'unsafe-inline'";
 const connectSrc = [
   "'self'",
-  "https://*.supabase.co",
-  "wss://*.supabase.co",
+  ...supabaseOrigins,
   ...(development ? ["ws:", "http:"] : [])
 ].join(" ");
 const contentSecurityPolicy = [
@@ -22,8 +27,8 @@ const contentSecurityPolicy = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
-  // Upgrading http subresources would break the local http:// development origin.
-  ...(development ? [] : ["upgrade-insecure-requests"])
+  // A production build can also use the local HTTP Supabase stack.
+  ...(development || supabaseUrl?.protocol === "http:" ? [] : ["upgrade-insecure-requests"])
 ].join("; ");
 
 const config: NextConfig = {
