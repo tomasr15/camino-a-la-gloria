@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-10-27T14:09:16.320Z",
+  "environment": "local",
+  "mode": "live",
+  "maximumProviderCalls": 1,
+  "source": "gemini",
+  "reason": null,
+  "narrative": {
+    "title": "Victoria local: la tribuna tiene su propio análisis",
+    "body": "Resultado confirmado: Deportivo Horizonte (local) 2 - 1 Atletico Cumbre (visitante). Victoria local.\n\nFolclore de tribuna (ficción): ¡Eh, ladrón de guantes blancos, cobrá bien la concha de tu madre! ¡Te compraste la Ferrari con el sobre que te mandaron, hijo de puta! Nos estás robando en la cara, caradura, si hasta el banderín del córner te avisa y mirás para otro lado. ¡Comprado, mercenario, devolve la plata!",
+    "matchId": "b9ab0a9b-66d6-4af4-a2c9-fc7eef3d0529/1/s1-r1-m0"
+  },
+  "quotaDisabledAfterTest": true,
+  "checks": [
+    "Auth and engine through HTTP",
+    "confirmed score preserved",
+    "live narrative persisted and reused",
+    "requestId propagated",
+    "cross-user isolation",
+    "forged score rejected",
+    "missing result rejected",
+    "invalid JWT rejected",
+    "engine state unchanged"
+  ],
+  "model": "gemini-3.5-flash-lite",
+  "tokens": 516,
+  "promptVersion": "tribuna-v1",
+  "providerCalls": 1
+}

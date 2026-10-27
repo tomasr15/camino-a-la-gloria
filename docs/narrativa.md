@@ -55,6 +55,22 @@ El esquema se instala con IA desactivada y cupos cero. Los límites propios no g
 
 ## Configuración y activación
 
+### Primera prueba gratuita, 27/10/2026
+
+Modelo seleccionado: `gemini-3.5-flash-lite`, estable y con entrada y salida gratuitas en Free Tier según [precios](https://ai.google.dev/gemini-api/docs/pricing) y [ficha del modelo](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash-lite), consultados el 27/10/2026. Confirmar que el proyecto de la clave figure como Free Tier y no tenga cuenta de facturación vinculada. Los límites locales por sí solos no impiden cargos de un proyecto pago. No activar facturación ni créditos para esta prueba.
+
+Crear la clave en [AI Studio](https://aistudio.google.com/api-keys) y pegarla exclusivamente en `supabase/.env.local`, ignorado por Git. Configurar `GEMINI_MODEL=gemini-3.5-flash-lite` y, una vez confirmada la condición gratuita, `NARRATIVE_ENABLED=true`. Reiniciar `npm run functions:serve` para cargar esas variables.
+
+Ejecutar desde la raíz del repositorio:
+
+```text
+npm run test:narrative-live -- --free-tier-confirmed
+```
+
+Este comando rechaza una clave ausente o un modelo distinto antes de crear fixtures. Crea un partido local nuevo, permite un solo intento adicional en el contador diario actual (no borra consumo previo), mantiene una reserva por minuto y deshabilita el cupo en `finally` al terminar la solicitud HTTP. No reintenta. Comprueba que se haya usado Gemini y conserva evidencia sin claves ni tokens de sesión en `docs/evidencias/narrative-live.json`. Un fallback hace fallar la prueba y deja el motivo; el cupo igualmente queda cerrado. Si se termina el proceso a la fuerza, ejecutar manualmente el corte SQL descrito abajo. Luego volver a `NARRATIVE_ENABLED=false` para dejar el entorno cerrado.
+
+La ejecución de este comando requiere confirmación del estado de facturación. El 27/10/2026, tras la confirmación del usuario de proyecto gratuito sin facturación, se ejecutó una llamada real a `gemini-3.5-flash-lite`: respuesta aceptada, 516 tokens informados y reutilización del relato sin nueva generación. Se comprobó aislamiento, rechazo de marcador falsificado y conservación del estado del motor. Al finalizar quedaron el cupo de base deshabilitado y `NARRATIVE_ENABLED=false`; las funciones se reiniciaron con ese estado. Evidencia: `docs/evidencias/narrative-live.json`.
+
 Aplicar las migraciones, configurar la firma del motor en la base y en el runtime, y agregar estas variables solo al entorno del servidor (`supabase/.env.local` ignorado en local o secrets del proyecto):
 
 ```dotenv
@@ -91,6 +107,6 @@ npm run db:test
 
 En una terminal, con Gemini desactivado: `npm run functions:serve`. En otra: `npm run test:narrative-http`. El script crea usuarios y una carrera sintéticos, juega una jornada y comprueba persistencia, aislamiento y conservación del estado. Los fixtures de prueba se conservan. Las pruebas de base restauran la configuración de cupo que encontraron. El job de base de CI corre también la prueba de concurrencia de narrativa.
 
-Evidencia local generada por los scripts: `docs/evidencias/narrative-db.json` y `narrative-http.json`. No se ejecutó una llamada real a Gemini porque falta configurar su clave y modelo.
+Evidencia local generada por los scripts: `docs/evidencias/narrative-db.json`, `narrative-http.json` y `narrative-live.json`. La prueba real de una llamada quedó registrada el 27/10/2026; la clave permanece exclusivamente en el archivo local ignorado.
 
 La base determinista sigue cubierta por `npm test -- tests/narrative.test.ts`: resultados, seis temas, repetibilidad, ausencia de mutaciones, límites e inyección de campos privados o hechos deportivos.

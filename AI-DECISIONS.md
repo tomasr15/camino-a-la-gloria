@@ -1,5 +1,12 @@
 # AI Decision Log
 
+## CP2-03 · Prueba real acotada (27/10/2026)
+
+- **Autorización:** el usuario confirmó clave guardada, proyecto en nivel gratuito sin facturación y solicitó una sola llamada real.
+- **Preparación:** comando `test:narrative-live` con confirmación explícita de Free Tier, un intento adicional al contador del día y cierre del cupo en `finally`. El modo de regresión verifica que la base esté deshabilitada antes de pedir narrativa.
+- **Resultado:** una llamada a `gemini-3.5-flash-lite`, 516 tokens informados, relato aceptado y persistido con el tono solicitado. La recarga reutilizó el relato; los controles HTTP de aislamiento, marcador falsificado y estado del motor pasaron. Evidencia en `docs/evidencias/narrative-live.json`.
+- **Cierre:** cupo de base deshabilitado y `NARRATIVE_ENABLED=false`; runtime reiniciado. La clave se conserva en el archivo ignorado y no se incluye en evidencia ni commits. La confirmación del nivel gratuito no implica revisión humana del código; esa revisión sigue pendiente.
+
 ## CP2-03 · Gemini, hechos y cupo persistente (27/10/2026)
 
 - **Solicitud:** integrar Gemini, validación de hechos y control de consumo, conservando el tono picante aprobado en la conversación.

@@ -21,6 +21,7 @@
     "test:game-integration": "node --experimental-transform-types scripts/game-integration.mjs",
     "test:narrative-db": "node scripts/narrative-db-integration.mjs",
     "test:narrative-http": "node --experimental-transform-types scripts/narrative-http-integration.mjs",
+    "test:narrative-live": "node --env-file=supabase/.env.local --experimental-transform-types scripts/narrative-http-integration.mjs --live",
     "report:narrative-usage": "node scripts/narrative-usage.mjs",
     "test:cloud": "node scripts/cloud-smoke.mjs"
   },
