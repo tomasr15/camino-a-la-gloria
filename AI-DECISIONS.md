@@ -1,5 +1,19 @@
 # AI Decision Log
 
+## CP2-03 · Base de narrativa humorística (27/10/2026)
+
+- **Segundo ajuste editorial solicitado:** subir el tono picante. Se reescribieron las seis escenas con puteadas explícitas y remates de popular argentina, conservando el contexto, el marcador y el rótulo de ficción. Se documentó este registro como predeterminado.
+
+- **Corrección de tono solicitada por el usuario:** reemplazar los chistes de mascota y metegol por humor de fútbol argentino, con bronca, puteadas, aprietes de la barra y sospechas de apuestas. Se reescribieron las cuatro escenas y se agregaron `apuestas` e `hinchada`. El rótulo «Folclore de tribuna (ficción)» diferencia estas escenas del resultado confirmado. Documentación y pruebas actualizadas a seis temas. Esta corrección de dirección no equivale a revisión humana del código.
+
+- **Solicitud:** implementar contexto, fallback determinista y pruebas; incorporar barra, apagones, árbitros comprados e intoxicaciones como humor.
+- **Herramienta:** Codex. Rama `feat/cp2-narrativa-base`.
+- **Código generado:** `supabase/functions/_shared/narrative.ts`, `tests/narrative.test.ts` y `docs/narrativa.md`.
+- **Decisión:** contexto mínimo validado e inmutable, marcador y desenlace derivados exclusivamente del resultado, sección explícita de ficción con cuatro temas seleccionables. Se conserva la salida `{title, body, matchId}`.
+- **Límites:** el indicador `confirmed` no autentica ni demuestra persistencia. El handler futuro debe obtener el resultado autorizado desde la base. Pendientes Gemini, validación de su texto libre, cuotas, persistencia y conexión al motor.
+- **Validación humana:** pendiente de revisión del equipo; no se atribuyen firmas ni aprobaciones.
+- **Validación automática:** `npm run check` completado: lint, TypeScript, 61 pruebas en cuatro archivos y build de producción. No se ejecutaron llamadas a Gemini ni pruebas de base, porque esta entrega contiene funciones puras sin cambios SQL.
+
 Estado: propuesta e implementación asistidas. **Revisión técnica completada el 28/09/2026.** Firmada por Julian Coloma ,Lucas Modernell y Tomas Rosato, se afirma aprobación cruzada. Las comprobaciones automáticas no equivalen a revisión humana. Fecha: 27/09/2026.
 
 ## AI-001 · Alcance y arquitectura del checkpoint 1
