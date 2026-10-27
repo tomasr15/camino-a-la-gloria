@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-10-27T13:26:27.762Z",
+  "environment": "local",
+  "providerCalls": 0,
+  "checks": [
+    "cross-user result isolation",
+    "forged signature rejected",
+    "direct table access denied",
+    "confirmed result read",
+    "concurrent requests respect shared daily cap",
+    "pending attempt cannot be regenerated",
+    "completion idempotent and rejected facts persisted",
+    "consumed tokens recorded even for fallback",
+    "rolling minute cap enforced",
+    "database kill switch enforced",
+    "sporting results unchanged"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "generatedAt": "2026-10-27T13:32:00.832Z",
+  "environment": "local",
+  "providerCalls": 0,
+  "checks": [
+    "Auth and engine through HTTP",
+    "confirmed score preserved",
+    "spicy fallback persisted and reused",
+    "requestId propagated",
+    "cross-user isolation",
+    "forged score rejected",
+    "missing result rejected",
+    "invalid JWT rejected",
+    "engine state unchanged"
+  ]
+}

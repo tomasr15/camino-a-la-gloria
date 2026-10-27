@@ -1,5 +1,16 @@
 # AI Decision Log
 
+## CP2-03 · Gemini, hechos y cupo persistente (27/10/2026)
+
+- **Solicitud:** integrar Gemini, validación de hechos y control de consumo, conservando el tono picante aprobado en la conversación.
+- **Herramienta:** Codex, rama `feat/cp2-narrativa-base`. Se incorporó `feat/cp2-motor-progresion` como dependencia para usar los resultados persistidos de CP2-02.
+- **Código generado:** adaptador REST y validador, servicio de narrativa, handler e índice de Edge Function, migración privada con RPC firmados, configuración de deploy, scripts de consumo y pruebas de integración con evidencia JSON. Documentación en `docs/narrativa.md`.
+- **Decisión:** Gemini genera únicamente la escena de ficción; el resumen y título deportivos se escriben con datos confirmados. Se exige correspondencia exacta de matchId, goles y desenlace en el JSON y se aplican filtros léxicos conservadores sobre el texto. Se mantiene el humor argentino explícito solicitado.
+- **Consumo:** reserva atómica global antes de llamar al proveedor; un ticket por resultado; límites diario UTC y por minuto móvil; 768 tokens máximos de salida; timeout de ocho segundos; sin reintentos. Los fallos y las respuestas rechazadas consumen la reserva. Los tokens desconocidos se declaran. El fallback se guarda antes de consumir IA y permanece utilizable si el worker se interrumpe.
+- **Límites:** los filtros léxicos no prueban toda la semántica del texto libre. El endpoint actual usa los clubes sintéticos del motor. La clave y el modelo de Gemini no están configurados: no se realizó una prueba real ni se habilitó consumo cloud. El cupo queda desactivado por defecto.
+- **Validación automática:** `npm run check`: 123 pruebas, lint, TypeScript y build; `npm run db:test`: 29 pruebas SQL; `test:narrative-db`: 11 controles con concurrencia real; `test:narrative-http`: nueve controles HTTP del camino Auth → motor → resultado → narrativa. Evidencias generadas por script en `docs/evidencias/narrative-*.json`.
+- **Revisión humana:** pendiente de revisión del diff y aprobación cruzada del equipo; no se atribuyen firmas.
+
 ## CP2-03 · Base de narrativa humorística (27/10/2026)
 
 - **Segundo ajuste editorial solicitado:** subir el tono picante. Se reescribieron las seis escenas con puteadas explícitas y remates de popular argentina, conservando el contexto, el marcador y el rótulo de ficción. Se documentó este registro como predeterminado.

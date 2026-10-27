@@ -33,3 +33,5 @@ jobs:
       - run: npm ci
       - run: npx supabase start
       - run: npm run db:test
+      - run: node scripts/game-local-setup.mjs
+      - run: npm run test:narrative-db

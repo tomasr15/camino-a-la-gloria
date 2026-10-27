@@ -44,3 +44,6 @@ verify_jwt = false
 verify_jwt = false
 [functions.game]
 verify_jwt = false
+
+[functions.narrative]
+verify_jwt = false
