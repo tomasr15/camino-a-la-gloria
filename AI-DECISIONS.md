@@ -1,5 +1,14 @@
 # AI Decision Log
 
+## CP2-03 · Crónica picante y preparación de PR (27/10/2026)
+
+- **Solicitud:** afinar el prompt con el estilo de crónica aprobado por el usuario y dejar el PR listo.
+- **Código y diseño asistidos:** prompt versionado `cronica-picante-v2` con imagen de tribuna, diálogo y remate costumbrista; extensión orientativa de 450 a 900 caracteres en dos o tres párrafos. Se admite LF para separar párrafos conservando los demás controles del validador y el resumen deportivo derivado del resultado.
+- **Verificación:** `npm run check` pasó lint, tipos, 131 pruebas y build. Se agregaron tres fixtures editoriales para distintos desenlaces y cinco casos de rechazo de controles no permitidos. Los fixtures son ejemplos escritos para pruebas, no muestras del proveedor.
+- **Consumo:** sin nuevas llamadas reales. La evidencia de la llamada de 516 tokens corresponde a `tribuna-v1`; el nuevo prompt requiere evaluación de proveedor posterior si se autoriza otra prueba. El cupo y la variable local permanecen deshabilitados.
+- **PR:** la narrativa depende del motor del PR #19; se prepara contra `feat/cp2-motor-progresion` para mostrar solo el diff CP2-03. La integración a `main` requiere resolver primero esa dependencia y la revisión cruzada.
+- **Revisión humana:** el usuario aprobó la dirección editorial del ejemplo en la conversación. Eso no equivale a revisión del diff ni aprobación de otro integrante; ambas siguen pendientes.
+
 ## CP2-03 · Prueba real acotada (27/10/2026)
 
 - **Autorización:** el usuario confirmó clave guardada, proyecto en nivel gratuito sin facturación y solicitó una sola llamada real.

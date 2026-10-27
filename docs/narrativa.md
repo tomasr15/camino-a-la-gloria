@@ -29,6 +29,14 @@ La salida es texto plano; la interfaz debe renderizarla como texto, nunca como H
 
 ## JSON y controles de hechos
 
+### Crónica picante: `cronica-picante-v2`
+
+La versión actual pide una crónica de entre 450 y 900 caracteres orientativos, en dos o tres párrafos: una imagen de popular o platea, un intercambio entre hinchas anónimos y un remate costumbrista. Se mantiene el voseo, las puteadas explícitas y la bronca exagerada. El ejemplo editorial usa el encendedor que el socio ya tiene en la mano, los pases que le salen más difíciles que refinanciar una deuda y el hincha que promete no volver mientras organiza la próxima visita. Se pide variar voces, detalles y cierres, usando el tema recibido como disparador.
+
+Se admiten saltos LF para conservar los párrafos. Los otros controles, HTML, límites de longitud y comprobaciones de hechos siguen vigentes. El máximo contractual de la escena permanece en 1000 caracteres; la extensión y estructura pedidas al modelo son pautas editoriales, no garantías de calidad.
+
+La validación sin red incluye tres crónicas de referencia escritas como fixtures para victoria local, empate y victoria visitante, con barra, apagón y apuestas. Verifica que los párrafos se conserven y el resumen siga tomando el marcador confirmado. Estos fixtures no son muestras generadas por Gemini. La llamada real de 516 tokens documentada abajo usó `tribuna-v1`; `cronica-picante-v2` aún no tiene evaluación real del proveedor. El cupo permanece deshabilitado y no se hicieron nuevas llamadas para este ajuste.
+
 Gemini devuelve exclusivamente `{matchId, homeGoals, awayGoals, outcome, scene}` con esquema JSON. El servidor compara todos los hechos por igualdad exacta y rechaza campos adicionales. Solo inserta `scene` en el relato; el título y el resumen deportivo se componen con datos confirmados. El texto se acota a 1000 caracteres y se rechazan HTML, controles, cifras, marcadores escritos con palabras, nombres de los clubes y vocabulario de goles, lesiones, penales, expulsiones y desenlaces. Si se rechaza, se guarda el fallback con la causa y el consumo conocido.
 
 Los filtros léxicos sobre ficción libre son conservadores, pueden rechazar chistes válidos y no prueban semánticamente cualquier oración posible. Una paráfrasis no contemplada puede pasar. La garantía fuerte es que los datos deportivos y el estado del motor se componen y conservan fuera del texto generado. El tono real del proveedor y su tasa de fallback requieren evaluación con una clave configurada; un bloqueo de contenido del proveedor también produce fallback.

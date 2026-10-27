@@ -18,6 +18,23 @@ describe("Gemini factual boundary", () => {
     expect(result.title).toBe(buildFallbackNarrative(context).title);
   });
   it.each([
+    [2, 1, "barra", "Un socio buscaba el encendedor que tenía en la mano. «¡Dos pases seguidos, la concha de su madre! ¡No les estoy pidiendo que me refinancien la deuda!», gritó contra el alambrado.\n\nEl de la radio le pidió calma. «Calma tenía cuando llegué, boludo. Ahora tengo una cuota por pagar y un plantel que me cobra por hacerme renegar».\n\nSe fue jurando que no volvía nunca más. Antes de llegar a la esquina ya estaba preguntando a qué hora abrían la cancha."],
+    [0, 0, "apagon", "La popular quedó a oscuras y uno abrazó la radio como si fuera una estufa. «¡No prendan una mierda, que así por lo menos descanso la vista!», pidió hacia la cabina.\n\nUn vecino le ofreció la linterna del teléfono. «Guardá eso, hermano, que bastante pagué para venir a sufrir y encima querés que vea».\n\nPrometió quedarse en casa la próxima. Cuando anunciaron que volvía la luz, ya estaba estirando el cuello para encontrar su lugar en el alambrado."],
+    [1, 2, "apuestas", "Un hincha apoyó el vaso en el escalón y largó: «¡Estos juegan por las apuestas!». El veterano de al lado ni soltó la radio.\n\n«Yo aposté a que daban un pase como la gente y ya perdí la casa, la concha de su madre», contestó. El primero se quedó pensando si reírse o pedirle el contacto de la inmobiliaria.\n\nSe fueron discutiendo quién era más boludo por seguir pagando la cuota. En la parada del bondi arreglaron encontrarse temprano en la próxima."],
+  ] as const)("preserves chronicle paragraphs and confirmed %s-%s for %s", (homeGoals, awayGoals, theme, scene) => {
+    const fixture = parseNarrativeContext({ ...context,
+      home: { ...context.home, goals: homeGoals }, away: { ...context.away, goals: awayGoals },
+      humor: { mode: "fictional", theme },
+    });
+    const output = validateGeminiNarrative({ ...expectedFacts(fixture), scene }, fixture);
+    expect(output.body).toContain(`(local) ${homeGoals} - ${awayGoals}`);
+    expect(output.body.split("Folclore de tribuna (ficción): ")[1]).toBe(scene);
+    expect(output.title).toBe(buildFallbackNarrative(fixture).title);
+  });
+  it.each(["\t", "\r", "\u0000", "\u001b", "\u007f"])("rejects non-paragraph controls %j", control => {
+    expect(() => validateGeminiNarrative({ ...valid(), scene: scene + control }, context)).toThrow("invalid_scene");
+  });
+  it.each([
     { ...valid(), homeGoals: 9 }, { ...valid(), outcome: "away_win" }, { ...valid(), matchId: "other" },
     { ...valid(), injury: "invented" }, { ...valid(), scene: "<script>alert('oops')</script>" },
     ...["El partido terminó tres a cero y la tribuna no lo podía creer.", "El delantero metió dos goles y se fue silbado.",
