@@ -24,6 +24,7 @@ npx supabase db push
 npx supabase secrets set ALLOWED_ORIGINS=https://<dominio-del-frontend>
 npx supabase functions deploy health
 npx supabase functions deploy careers
+npx supabase functions deploy game
 ```
 
 Si el setup inicial se aplica desde SQL Editor, ejecutar exactamente la migración versionada y registrar esa vía. Antes de futuros `db push`, reconciliar el historial de migraciones con `migration repair` solo después de verificar que el SQL ya fue aplicado; no reejecutar ciegamente el esquema.
@@ -40,6 +41,7 @@ La integración Git despliega el frontend. El equipo debe usar PR y esperar CI a
 
 - `ci.yml`: app y SQL en jobs separados sobre push y PR. El job SQL usa infraestructura efímera del runner sin tocar cloud.
 - `deploy-backend.yml`: ejecución manual sobre `main`, primero valida app, luego enlaza proyecto, aplica migraciones y despliega funciones.
+- Para `game`, configurar antes la misma clave `GAME_SIGNING_KEY` en los secretos de Edge Functions y en `game_private.signing_key`; no guardar la clave en Git. El workflow conserva el secreto cloud ya aprovisionado.
 - Configuración necesaria en entorno `production`: secrets `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`; variables `SUPABASE_PROJECT_REF`, `ALLOWED_ORIGINS`.
 - No iniciar el workflow de backend sin esas variables ni afirmar que está operativo hasta una ejecución exitosa.
 
