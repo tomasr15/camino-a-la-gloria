@@ -37,3 +37,4 @@ jobs:
       - run: npx supabase secrets set ALLOWED_ORIGINS="$ALLOWED_ORIGINS" --project-ref "$PROJECT_REF"
       - run: npx supabase functions deploy health --project-ref "$PROJECT_REF"
       - run: npx supabase functions deploy careers --project-ref "$PROJECT_REF"
+      - run: npx supabase functions deploy game --project-ref "$PROJECT_REF"
