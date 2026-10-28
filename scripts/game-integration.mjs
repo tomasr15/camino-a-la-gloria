@@ -44,11 +44,16 @@ const start = { requestId: randomUUID(), expectedVersion: 1,
 const started = await call('game', a.token, start);
 assert.equal(started.status, 200, JSON.stringify(started.body));
 assert.equal(started.body.version, 2);
-assert.equal(started.body.game.phase, 'playing');
-assert.ok(started.body.game.match);
-const auto = await call('game', a.token, { requestId: randomUUID(), expectedVersion: 2, command: { type: 'auto', season: 1, round: 1 } });
-assert.equal(auto.status, 200, JSON.stringify(auto.body));
+// A round without a controllable chance closes on start; otherwise finish it.
+let auto = started;
+if (started.body.game.phase === 'playing') {
+  assert.ok(started.body.game.match);
+  auto = await call('game', a.token, { requestId: randomUUID(), expectedVersion: 2, command: { type: 'auto', season: 1, round: 1 } });
+  assert.equal(auto.status, 200, JSON.stringify(auto.body));
+}
 assert.equal(auto.body.game.results.length, 4);
+assert.equal(auto.body.game.match, null);
+assert.equal(auto.body.game.lastMatch.round, 1);
 assert.equal(auto.body.game.phase, 'ready');
 assert.equal(auto.body.game.round, 2);
 const raceCommand = { type: 'start', season: 1, round: 2, formation: '4-4-2', tactic: 'balanced', lineup: bestLineup(clubs[0], '4-4-2') };
@@ -65,7 +70,7 @@ for (let round = 2; round <= 14; round++) {
     assert.equal(next.status, 200, JSON.stringify(next.body));
     current = next.body;
   }
-  if (current.game.match.pendingEvent) {
+  if (current.game.match?.pendingEvent) {
     const eventId = current.game.match.pendingEvent.id;
     const shot = await call('game', a.token, { requestId: randomUUID(), expectedVersion: current.version,
       command: { type: 'shoot', season: 1, round, eventId, direction: 'left', precision: 50 } });
@@ -79,6 +84,9 @@ for (let round = 2; round <= 14; round++) {
     current = finish.body;
   }
   assert.equal(current.game.results.length, round * 4);
+  const own = current.game.results.find(r => r.round === round && (r.home === clubs[0].id || r.away === clubs[0].id));
+  assert.equal(current.game.lastMatch.id, own.id);
+  assert.deepEqual([current.game.lastMatch.homeGoals, current.game.lastMatch.awayGoals], [own.homeGoals, own.awayGoals]);
 }
 assert.equal(current.game.phase, 'finished');
 assert.equal(current.game.results.length, 56);

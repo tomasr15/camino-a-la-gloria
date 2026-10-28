@@ -16,7 +16,7 @@ Comandos:
 
 `initialize` admite un club de nivel bajo. `start` acepta un once propio válido y una táctica `defensive`, `balanced` u `offensive`. La respuesta incluye el próximo `pendingEvent` cuando hay una ocasión controlable. `shoot` resuelve esa ocasión; `auto` resuelve todas las restantes de la jornada. Se guardan los cuatro resultados y la reputación cuando termina la jornada. `nextSeason` admite una oferta recibida o `null` para quedarse.
 
-La respuesta `game` incluye `calendar`, `results`, `table`, `reputation`, `confidence`, `match`, `offers` e `history`. El servidor oculta la semilla, la elección del arquero, el azar futuro y los eventos aún no vistos. La interfaz visual del mano a mano corresponde al issue #9. La precisión declarada por el cliente sirve para la demo, pero no verifica habilidad frente a un cliente manipulado.
+La respuesta `game` incluye `calendar`, `results`, `table`, `reputation`, `confidence`, `match`, `lastMatch`, `offers` e `history`. `match` es el partido del usuario en curso y vale `null` cuando la jornada está cerrada. `lastMatch` es el último partido terminado del usuario, con marcador final y todos sus eventos; se completa al cerrar cada jornada, incluso si `start` la cierra de inmediato porque el club no tuvo ocasiones controlables, y vuelve a `null` al empezar otra temporada. El servidor oculta la semilla, la elección del arquero, el azar futuro y los eventos aún no vistos. La interfaz visual del mano a mano corresponde al issue #9. La precisión declarada por el cliente sirve para la demo, pero no verifica habilidad frente a un cliente manipulado.
 
 ## Desarrollo local
 
