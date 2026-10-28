@@ -1,5 +1,5 @@
 import { corsHeaders } from "../http.ts";
-import { clubs } from "./data.ts";
+import { clubs, dataset } from "./data.ts";
 import { initialize, publicView, transition } from "./engine.ts";
 import { digest, parseRequest } from "./contracts.ts";
 import { GameError } from "./model.ts";
@@ -35,7 +35,7 @@ export function createGameHandler(deps: {
       if (!store) return respond(401, { error: "UNAUTHORIZED", requestId });
       if (request.method === "GET") {
         const snapshot = await store.read();
-        return respond(200, { version: snapshot.version, game: snapshot.state ? publicView(snapshot.state) : null, clubs, isSynthetic: true, requestId });
+        return respond(200, { version: snapshot.version, game: snapshot.state ? publicView(snapshot.state) : null, clubs, isSynthetic: dataset.isSynthetic, requestId });
       }
       if (!request.headers.get("content-type")?.includes("application/json")) return respond(415, { error: "JSON_REQUIRED", requestId });
       const reader = request.body?.getReader();

@@ -86,24 +86,24 @@ describe("probability and progression", () => {
   });
   it("ranks points, goal difference, goals, wins then stable lottery", () => {
     const results:Result[]=[
-      {id:"a",round:1,home:"club-0",away:"club-1",homeGoals:2,awayGoals:0},
-      {id:"b",round:1,home:"club-2",away:"club-3",homeGoals:3,awayGoals:1},
-      {id:"c",round:1,home:"club-4",away:"club-5",homeGoals:1,awayGoals:0}
+      {id:"a",round:1,home:clubs[0].id,away:clubs[1].id,homeGoals:2,awayGoals:0},
+      {id:"b",round:1,home:clubs[2].id,away:clubs[3].id,homeGoals:3,awayGoals:1},
+      {id:"c",round:1,home:clubs[4].id,away:clubs[5].id,homeGoals:1,awayGoals:0}
     ];
-    expect(table(results,"seed",1).slice(0,3).map(r=>r.clubId)).toEqual(["club-2","club-0","club-4"]);
+    expect(table(results,"seed",1).slice(0,3).map(r=>r.clubId)).toEqual([clubs[2].id,clubs[0].id,clubs[4].id]);
     expect(table([],"seed",1)).toEqual(table([],"seed",1));
   });
 });
 describe("match lifecycle", () => {
   it("reproduces a season from the same seed and decisions", () => {
-    const a=complete(initialize("club-0","repeat"));
-    expect(complete(initialize("club-0","repeat"))).toEqual(a);
-    expect(complete(initialize("club-0","different")).results).not.toEqual(a.results);
+    const a=complete(initialize(clubs[0].id,"repeat"));
+    expect(complete(initialize(clubs[0].id,"repeat"))).toEqual(a);
+    expect(complete(initialize(clubs[0].id,"different")).results).not.toEqual(a.results);
   });
   it("limits control to two chances and hides future outcomes and random state", () => {
     let seen=0;
     for(let i=0;i<40;i++){
-      const state=start(initialize("club-0","private"+i));
+      const state=start(initialize(clubs[0].id,"private"+i));
       expect((state.pending?.flatMap(m=>m.shots).filter(s=>s.controlled)??[]).length).toBeLessThanOrEqual(2);
       if(state.phase==="playing"){
         seen++; expect(state.results).toHaveLength(0); expect(state.reputation).toBe(20);
@@ -118,16 +118,16 @@ describe("match lifecycle", () => {
     expect(seen).toBeGreaterThan(30);
   });
   it("finishes once and preserves reputation and history when staying or moving", () => {
-    const finished=complete(initialize("club-0","career"));
+    const finished=complete(initialize(clubs[0].id,"career"));
     expect(finished.results).toHaveLength(56); expect(finished.round).toBe(15);
     const standings=table(finished.results,finished.seed,finished.season);
     expect(standings.every(r=>r.played===14)).toBe(true);
     expect(standings.reduce((s,r)=>s+r.for,0)).toBe(standings.reduce((s,r)=>s+r.against,0));
     const next=transition(finished,{type:"nextSeason",season:1,offerClubId:null});
     expect(next.reputation).toBe(finished.reputation); expect(next.history).toHaveLength(1);
-    expect(next.results).toEqual([]); expect(next.season).toBe(2); expect(publicView(next).confidence["club-0"]).toBe(0);
+    expect(next.results).toEqual([]); expect(next.season).toBe(2); expect(publicView(next).confidence[clubs[0].id]).toBe(0);
     expect(()=>transition(next,{type:"nextSeason",season:1,offerClubId:null})).toThrow("STALE_SEASON");
-    expect(()=>transition(finished,{type:"nextSeason",season:1,offerClubId:"club-0"})).toThrow("INVALID_OFFER");
+    expect(()=>transition(finished,{type:"nextSeason",season:1,offerClubId:clubs[0].id})).toThrow("INVALID_OFFER");
     if(finished.offers.length) expect(transition(finished,{type:"nextSeason",season:1,offerClubId:finished.offers[0]}).clubId).toBe(finished.offers[0]);
   });
   it("automatic scores vary and match the expected goal budget statistically", () => {
@@ -146,7 +146,7 @@ describe("match lifecycle", () => {
 });
 it("rejects forged fields, NaN and invalid rounds at the command boundary",()=>{
   const wrap=(command:unknown)=>({requestId:"10000000-0000-4000-8000-000000000001",expectedVersion:0,command});
-  expect(()=>parseRequest(wrap({type:"initialize",clubId:"club-0",reputation:100}))).toThrow();
+  expect(()=>parseRequest(wrap({type:"initialize",clubId:clubs[0].id,reputation:100}))).toThrow();
   expect(()=>parseRequest(wrap({type:"shoot",season:1,round:1,eventId:"x",direction:"left",precision:NaN}))).toThrow();
   expect(()=>parseRequest(wrap({type:"auto",season:1,round:15}))).toThrow();
   expect(()=>parseRequest({...wrap({type:"auto",season:1,round:1}),userId:"forged"})).toThrow();

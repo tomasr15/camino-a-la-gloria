@@ -1,6 +1,6 @@
 import { GameError, clamp } from "./model.ts";
 import type { Club, Formation, Player, Selection, Tactic } from "./model.ts";
-import { random } from "./random.ts";
+import rawDataset from "./datasets/cp2-real-v1.json" with { type: "json" };
 
 const average = (players: Player[], field: "attack" | "defense") =>
   players.reduce((n, p) => n + p[field], 0) / players.length;
@@ -35,23 +35,17 @@ export function strength(club: Club, selection: Selection, confidence = 0): { at
     defense: defense * (selection.formation === "4-3-3" ? 0.95 : 1) * tactic[1] * (1 + confidence)
   };
 }
-const definitions = [
-  ["Barrio del Sol", "low", 48, 6], ["Union del Arroyo", "low", 50, -6], ["Deportivo Horizonte", "low", 52, 0],
-  ["Atletico Cumbre", "medium", 58, 3], ["Estrella del Sur", "medium", 60, -3], ["Sporting del Valle", "medium", 62, 0],
-  ["Real del Puerto", "high", 69, 4], ["Club Aurora", "high", 72, -4]
-] as const;
-export const clubs: Club[] = definitions.map(([name, tier, target, profile], index) => {
-  const rng = random("synthetic-v1-" + index);
-  const club: Club = { id: "club-" + index, name, tier, reference: 0, target: tier === "low" ? 6 : tier === "medium" ? 4 : 2, players: [] };
-  const positions = ["GK", "GK", ...Array(6).fill("DEF"), ...Array(6).fill("MID"), ...Array(4).fill("FWD")] as Player["position"][];
-  club.players = positions.map((position, i) => ({
-    id: club.id + "-p" + i, name: "Jugador ficticio " + (index + 1) + "-" + (i + 1), position,
-    attack: clamp(target + profile + Math.floor(rng() * 17) - 8, 1, 100),
-    defense: clamp(target - profile + Math.floor(rng() * 17) - 8, 1, 100),
-    saves: clamp((position === "GK" ? target - profile : 10) + Math.floor(rng() * 17) - 8, 1, 100)
-  }));
-  // Normalize team reference, not individual attributes. Synthetic ratings are
-  // game parameters, never claims about real footballers.
+// Real 2024 squads built by scripts/import-dataset.mjs; attributes are derived
+// from season statistics, listed from low to high tier.
+export const dataset = rawDataset as {
+  code: string; isSynthetic: boolean;
+  clubs: Array<{ id: string; name: string; tier: Club["tier"]; strength: number; players: Player[] }>;
+};
+export const clubs: Club[] = dataset.clubs.map(({ id, name, tier, strength: target, players }) => {
+  const club: Club = { id, name, tier, reference: 0, target: tier === "low" ? 6 : tier === "medium" ? 4 : 2,
+    players: players.map(({ id, name, position, attack, defense, saves }) => ({ id, name, position, attack, defense, saves })) };
+  // Normalize team reference, not individual attributes: the derived ratings
+  // keep each club's internal order and the tier sets its playing strength.
   const ref = () => {
     const s = strength(club, { formation: "4-4-2", tactic: "balanced", lineup: bestLineup(club, "4-4-2") });
     return (s.attack + s.defense) / 2;

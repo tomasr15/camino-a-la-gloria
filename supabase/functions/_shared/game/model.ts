@@ -1,5 +1,5 @@
 export const ENGINE_VERSION = "cp2-v1";
-export const DATASET_CODE = "cp2-synthetic-v1";
+export const DATASET_CODE = "cp2-real-v1";
 export type Position = "GK" | "DEF" | "MID" | "FWD";
 export type Formation = "4-4-2" | "4-3-3";
 export type Tactic = "defensive" | "balanced" | "offensive";

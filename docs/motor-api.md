@@ -1,6 +1,6 @@
 # Contrato del motor CP2
 
-La función Edge `game` requiere JWT del usuario y una carrera creada mediante `careers`. `GET /functions/v1/game` devuelve `{ version, game, clubs, isSynthetic }`; antes de iniciar, `game` es `null`. Los clubes y jugadores son ficticios.
+La función Edge `game` requiere JWT del usuario y una carrera creada mediante `careers`. `GET /functions/v1/game` devuelve `{ version, game, clubs, isSynthetic }`; antes de iniciar, `game` es `null`. Los clubes y jugadores son reales (Liga Profesional Argentina 2024, dataset `cp2-real-v1`); sus atributos son parámetros del juego derivados de estadísticas, descritos en `docs/dataset.md`.
 
 `POST /functions/v1/game` recibe `{ requestId, expectedVersion, command }`. `requestId` es un UUID nuevo para cada decisión. Si se reintenta la misma solicitud, devuelve la respuesta original con `replayed: true`. Una decisión distinta con versión antigua responde `STALE_VERSION` (HTTP 409); el cliente debe consultar de nuevo.
 

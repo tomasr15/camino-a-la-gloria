@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(13);
+select plan(14);
 
 insert into auth.users (id, email) values
   ('20000000-0000-4000-8000-000000000001', 'game-a@example.invalid'),
@@ -22,8 +22,8 @@ from (
       'issuedAt', floor(extract(epoch from clock_timestamp()) * 1000),
       'requestId', '20000000-0000-4000-8000-000000000010',
       'commandHash', 'initial-command', 'expectedVersion', 0,
-      'command', json_build_object('type', 'initialize', 'clubId', 'club-0'),
-      'state', json_build_object('engineVersion', 'cp2-v1', 'datasetCode', 'cp2-synthetic-v1',
+      'command', json_build_object('type', 'initialize', 'clubId', 'apf-474'),
+      'state', json_build_object('engineVersion', 'cp2-v1', 'datasetCode', 'cp2-real-v1',
         'seed', 'test-seed', 'season', 1, 'round', 1, 'reputation', 20, 'results', json_build_array()),
       'view', json_build_object('phase', 'ready'))::text as payload
   union all
@@ -33,7 +33,18 @@ from (
       'issuedAt', floor(extract(epoch from clock_timestamp()) * 1000),
       'requestId', '20000000-0000-4000-8000-000000000011',
       'commandHash', 'stale-command', 'expectedVersion', 0,
-      'command', json_build_object('type', 'initialize', 'clubId', 'club-0'),
+      'command', json_build_object('type', 'initialize', 'clubId', 'apf-474'),
+      'state', json_build_object('engineVersion', 'cp2-v1', 'datasetCode', 'cp2-real-v1',
+        'seed', 'test-seed', 'season', 1, 'round', 1, 'reputation', 20, 'results', json_build_array()),
+      'view', json_build_object('phase', 'ready'))::text
+  union all
+  select 'synthetic',
+    json_build_object(
+      'action', 'commit', 'userId', '20000000-0000-4000-8000-000000000001',
+      'issuedAt', floor(extract(epoch from clock_timestamp()) * 1000),
+      'requestId', '20000000-0000-4000-8000-000000000012',
+      'commandHash', 'synthetic-command', 'expectedVersion', 1,
+      'command', json_build_object('type', 'auto', 'season', 1, 'round', 1),
       'state', json_build_object('engineVersion', 'cp2-v1', 'datasetCode', 'cp2-synthetic-v1',
         'seed', 'test-seed', 'season', 1, 'round', 1, 'reputation', 20, 'results', json_build_array()),
       'view', json_build_object('phase', 'ready'))::text
@@ -60,6 +71,9 @@ select is(
 select throws_ok(
   $$select public.game_commit(payload,signature) from game_envelopes where name='stale'$$,
   'P0001', 'STALE_VERSION', 'Competing request with stale version cannot commit');
+select throws_ok(
+  $$select public.game_commit(payload,signature) from game_envelopes where name='synthetic'$$,
+  'P0001', 'INVALID_SERVER_STATE', 'Only the real dataset can be committed');
 select throws_ok(
   $$select public.game_commit(payload,repeat('0',64)) from game_envelopes where name='initialize'$$,
   '42501', 'INVALID_SERVER_SIGNATURE', 'Changing the signature invalidates the request');

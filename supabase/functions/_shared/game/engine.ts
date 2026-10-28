@@ -1,6 +1,6 @@
 import { DATASET_CODE, ENGINE_VERSION, GameError, clamp } from "./model.ts";
 import type { Command, GameState, Result, Shot } from "./model.ts";
-import { clubs, cpuSelection, getClub, lineupPlayers } from "./data.ts";
+import { clubs, cpuSelection, dataset, getClub, lineupPlayers } from "./data.ts";
 import { confidence, offers, reputationDelta, schedule, seasonBonus, table } from "./competition.ts";
 import { random } from "./random.ts";
 import { resolve, resolveAutomatically, simulateMatch } from "./simulation.ts";
@@ -76,7 +76,7 @@ export function publicView(state: GameState) {
   const visible = match?.shots.filter(s => s.resolved && (!pendingShot || match.shots.indexOf(s) < match.shots.indexOf(pendingShot))) ?? [];
   const standings = table(state.results, state.seed, state.season);
   return {
-    engineVersion: state.engineVersion, datasetCode: state.datasetCode, isSynthetic: true,
+    engineVersion: state.engineVersion, datasetCode: state.datasetCode, isSynthetic: dataset.isSynthetic,
     season: state.season, round: state.round, phase: state.phase, clubId: state.clubId, reputation: state.reputation,
     confidence: Object.fromEntries(clubs.map(c => [c.id, confidence(c.id, state.results)])),
     calendar: schedule(state.seed, state.season), results: state.results, table: standings,
