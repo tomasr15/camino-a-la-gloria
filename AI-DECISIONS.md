@@ -1,5 +1,46 @@
 # AI Decision Log
 
+## CP2-03 · Crónica picante y preparación de PR (27/10/2026)
+
+- **Solicitud:** afinar el prompt con el estilo de crónica aprobado por el usuario y dejar el PR listo.
+- **Código y diseño asistidos:** prompt versionado `cronica-picante-v2` con imagen de tribuna, diálogo y remate costumbrista; extensión orientativa de 450 a 900 caracteres en dos o tres párrafos. Se admite LF para separar párrafos conservando los demás controles del validador y el resumen deportivo derivado del resultado.
+- **Verificación:** `npm run check` pasó lint, tipos, 131 pruebas y build. Se agregaron tres fixtures editoriales para distintos desenlaces y cinco casos de rechazo de controles no permitidos. Los fixtures son ejemplos escritos para pruebas, no muestras del proveedor.
+- **Consumo:** sin nuevas llamadas reales. La evidencia de la llamada de 516 tokens corresponde a `tribuna-v1`; el nuevo prompt requiere evaluación de proveedor posterior si se autoriza otra prueba. El cupo y la variable local permanecen deshabilitados.
+- **PR:** la narrativa depende del motor del PR #19; se prepara contra `feat/cp2-motor-progresion` para mostrar solo el diff CP2-03. La integración a `main` requiere resolver primero esa dependencia y la revisión cruzada.
+- **Revisión humana:** el usuario aprobó la dirección editorial del ejemplo en la conversación. Eso no equivale a revisión del diff ni aprobación de otro integrante; ambas siguen pendientes.
+
+## CP2-03 · Prueba real acotada (27/10/2026)
+
+- **Autorización:** el usuario confirmó clave guardada, proyecto en nivel gratuito sin facturación y solicitó una sola llamada real.
+- **Preparación:** comando `test:narrative-live` con confirmación explícita de Free Tier, un intento adicional al contador del día y cierre del cupo en `finally`. El modo de regresión verifica que la base esté deshabilitada antes de pedir narrativa.
+- **Resultado:** una llamada a `gemini-3.5-flash-lite`, 516 tokens informados, relato aceptado y persistido con el tono solicitado. La recarga reutilizó el relato; los controles HTTP de aislamiento, marcador falsificado y estado del motor pasaron. Evidencia en `docs/evidencias/narrative-live.json`.
+- **Cierre:** cupo de base deshabilitado y `NARRATIVE_ENABLED=false`; runtime reiniciado. La clave se conserva en el archivo ignorado y no se incluye en evidencia ni commits. La confirmación del nivel gratuito no implica revisión humana del código; esa revisión sigue pendiente.
+
+## CP2-03 · Gemini, hechos y cupo persistente (27/10/2026)
+
+- **Solicitud:** integrar Gemini, validación de hechos y control de consumo, conservando el tono picante aprobado en la conversación.
+- **Herramienta:** Codex, rama `feat/cp2-narrativa-base`. Se incorporó `feat/cp2-motor-progresion` como dependencia para usar los resultados persistidos de CP2-02.
+- **Código generado:** adaptador REST y validador, servicio de narrativa, handler e índice de Edge Function, migración privada con RPC firmados, configuración de deploy, scripts de consumo y pruebas de integración con evidencia JSON. Documentación en `docs/narrativa.md`.
+- **Decisión:** Gemini genera únicamente la escena de ficción; el resumen y título deportivos se escriben con datos confirmados. Se exige correspondencia exacta de matchId, goles y desenlace en el JSON y se aplican filtros léxicos conservadores sobre el texto. Se mantiene el humor argentino explícito solicitado.
+- **Consumo:** reserva atómica global antes de llamar al proveedor; un ticket por resultado; límites diario UTC y por minuto móvil; 768 tokens máximos de salida; timeout de ocho segundos; sin reintentos. Los fallos y las respuestas rechazadas consumen la reserva. Los tokens desconocidos se declaran. El fallback se guarda antes de consumir IA y permanece utilizable si el worker se interrumpe.
+- **Límites:** los filtros léxicos no prueban toda la semántica del texto libre. El endpoint actual usa los clubes sintéticos del motor. La clave y el modelo de Gemini no están configurados: no se realizó una prueba real ni se habilitó consumo cloud. El cupo queda desactivado por defecto.
+- **Validación automática:** `npm run check`: 123 pruebas, lint, TypeScript y build; `npm run db:test`: 29 pruebas SQL; `test:narrative-db`: 11 controles con concurrencia real; `test:narrative-http`: nueve controles HTTP del camino Auth → motor → resultado → narrativa. Evidencias generadas por script en `docs/evidencias/narrative-*.json`.
+- **Revisión humana:** pendiente de revisión del diff y aprobación cruzada del equipo; no se atribuyen firmas.
+
+## CP2-03 · Base de narrativa humorística (27/10/2026)
+
+- **Segundo ajuste editorial solicitado:** subir el tono picante. Se reescribieron las seis escenas con puteadas explícitas y remates de popular argentina, conservando el contexto, el marcador y el rótulo de ficción. Se documentó este registro como predeterminado.
+
+- **Corrección de tono solicitada por el usuario:** reemplazar los chistes de mascota y metegol por humor de fútbol argentino, con bronca, puteadas, aprietes de la barra y sospechas de apuestas. Se reescribieron las cuatro escenas y se agregaron `apuestas` e `hinchada`. El rótulo «Folclore de tribuna (ficción)» diferencia estas escenas del resultado confirmado. Documentación y pruebas actualizadas a seis temas. Esta corrección de dirección no equivale a revisión humana del código.
+
+- **Solicitud:** implementar contexto, fallback determinista y pruebas; incorporar barra, apagones, árbitros comprados e intoxicaciones como humor.
+- **Herramienta:** Codex. Rama `feat/cp2-narrativa-base`.
+- **Código generado:** `supabase/functions/_shared/narrative.ts`, `tests/narrative.test.ts` y `docs/narrativa.md`.
+- **Decisión:** contexto mínimo validado e inmutable, marcador y desenlace derivados exclusivamente del resultado, sección explícita de ficción con cuatro temas seleccionables. Se conserva la salida `{title, body, matchId}`.
+- **Límites:** el indicador `confirmed` no autentica ni demuestra persistencia. El handler futuro debe obtener el resultado autorizado desde la base. Pendientes Gemini, validación de su texto libre, cuotas, persistencia y conexión al motor.
+- **Validación humana:** pendiente de revisión del equipo; no se atribuyen firmas ni aprobaciones.
+- **Validación automática:** `npm run check` completado: lint, TypeScript, 61 pruebas en cuatro archivos y build de producción. No se ejecutaron llamadas a Gemini ni pruebas de base, porque esta entrega contiene funciones puras sin cambios SQL.
+
 Estado: propuesta e implementación asistidas. **Revisión técnica completada el 28/09/2026.** Firmada por Julian Coloma ,Lucas Modernell y Tomas Rosato, se afirma aprobación cruzada. Las comprobaciones automáticas no equivalen a revisión humana. Fecha: 27/09/2026.
 
 ## AI-001 · Alcance y arquitectura del checkpoint 1
