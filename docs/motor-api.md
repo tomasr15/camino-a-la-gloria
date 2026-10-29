@@ -4,6 +4,8 @@ La función Edge `game` requiere JWT del usuario y una carrera creada mediante `
 
 `POST /functions/v1/game` recibe `{ requestId, expectedVersion, command }`. `requestId` es un UUID nuevo para cada decisión. Si se reintenta la misma solicitud, devuelve la respuesta original con `replayed: true`. Una decisión distinta con versión antigua responde `STALE_VERSION` (HTTP 409); el cliente debe consultar de nuevo.
 
+Si una partida guardada tiene un `engineVersion` o `datasetCode` incompatible, `GET /functions/v1/game` y las nuevas transiciones responden `UNSUPPORTED_GAME_VERSION` (HTTP 409). La comprobación ocurre antes de construir la vista pública, incluso cuando la partida no tiene resultados; las partidas de `cp2-synthetic-v1` no se proyectan con los clubes reales.
+
 Comandos:
 
 ```json

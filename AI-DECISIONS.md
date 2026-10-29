@@ -125,3 +125,10 @@ Estado: propuesta e implementación asistidas. **Revisión técnica completada e
 - **Validación automática y local:** 131 pruebas Vitest, incluidas las de niveles y franjas de fuerza con los datos reales; 30 aserciones pgTAP, con una nueva que rechaza el dataset ficticio; integraciones de narrativa en verde. En 300 temporadas simuladas un club bajo tiene 1,7 manos a mano por fecha y suma entre 13 y 15 puntos. Estas comprobaciones no constituyen aprobación humana.
 - **Límites y seguimiento:** falta revisar las condiciones de uso de API-Football sobre publicar nombres en un repositorio público. Las partidas guardadas en cloud con el dataset ficticio dejan de ser válidas. Los atributos son parámetros del juego derivados de estadísticas, no evaluaciones de los futbolistas.
 - **Validación/corrección humana:** revisada el 28/10/2026 por Julian Coloma: diff leído y acuerdo con el cambio.
+
+### Corrección de lectura de partidas incompatibles (29/10/2026)
+
+- **Solicitud/herramienta:** Tomás pidió a Codex resolver el hallazgo P2 en la misma PR #23. La incompatibilidad de las partidas anteriores ya estaba anunciada; el defecto era que `GET game` devolvía 503 con resultados antiguos o 200 mezclando clubes y datasets cuando no había resultados.
+- **Implementación asistida:** `publicView` y `transition` comparten la validación de `engineVersion` y `datasetCode`. La lectura rechaza la partida antes de proyectar tabla, calendario o eventos, con `UNSUPPORTED_GAME_VERSION` (HTTP 409). Se documentó el contrato de lectura.
+- **Validación:** las cuatro pruebas de incompatibilidad fallaron antes de la corrección; después, `npm run check` pasó lint, tipos, 139 pruebas y build. Se cubren dataset y motor incompatibles con y sin resultados, el rechazo de transiciones sin modificar el estado y dos lecturas válidas del dataset actual.
+- **Alcance y revisión:** esta corrección no incorpora un reinicio ni una migración de partidas. Requiere desplegar `game` para aplicarse en cloud. La revisión humana de este cambio sigue pendiente; la autorización para implementarlo no equivale a aprobación del diff.

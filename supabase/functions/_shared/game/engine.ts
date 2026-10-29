@@ -5,6 +5,10 @@ import { confidence, offers, reputationDelta, schedule, seasonBonus, table } fro
 import { random } from "./random.ts";
 import { resolve, resolveAutomatically, simulateMatch } from "./simulation.ts";
 
+function assertSupportedVersion(state: GameState): void {
+  if (state.engineVersion !== ENGINE_VERSION || state.datasetCode !== DATASET_CODE) throw new GameError("UNSUPPORTED_GAME_VERSION");
+}
+
 export function initialize(clubId: string, seed: string): GameState {
   if (getClub(clubId).tier !== "low") throw new GameError("INITIAL_CLUB_MUST_BE_LOW", 400);
   return { engineVersion: ENGINE_VERSION, datasetCode: DATASET_CODE, seed, season: 1, round: 1, clubId, reputation: 20, phase: "ready", results: [], offers: [], history: [], pending: null };
@@ -34,7 +38,7 @@ function finishRound(state: GameState): void {
   }
 }
 export function transition(previous: GameState, command: Exclude<Command, { type: "initialize" }>): GameState {
-  if (previous.engineVersion !== ENGINE_VERSION || previous.datasetCode !== DATASET_CODE) throw new GameError("UNSUPPORTED_GAME_VERSION");
+  assertSupportedVersion(previous);
   if (command.season !== previous.season) throw new GameError("STALE_SEASON");
   const state = structuredClone(previous);
   if (command.type === "nextSeason") {
@@ -84,6 +88,7 @@ function projectMatch(match: Match, visible: Shot[], pendingShot?: Shot) {
 // Explicit public projection: never return root seed, keeper decision, future
 // events, probability roll or automatic execution to a browser.
 export function publicView(state: GameState) {
+  assertSupportedVersion(state);
   const pendingShot = nextShot(state);
   const match = state.pending?.find(m => m.home === state.clubId || m.away === state.clubId);
   const visible = match?.shots.filter(s => s.resolved && (!pendingShot || match.shots.indexOf(s) < match.shots.indexOf(pendingShot))) ?? [];
