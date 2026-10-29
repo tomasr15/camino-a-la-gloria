@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { invokeFunction, withReference } from "@/lib/functions";
 import { getSupabase } from "@/lib/supabase";
 export default function StatusPage() {
   const [status, setStatus] = useState("Todavía no se comprobó la conexión.");
@@ -10,8 +11,8 @@ export default function StatusPage() {
     if (!client) { setStatus("El servicio todavía no está configurado en este entorno."); return; }
     setBusy(true);
     try {
-      const { data, error } = await client.functions.invoke("health", { method: "GET" });
-      setStatus(error || data?.status !== "ok" ? "El servicio no está disponible. Intentá nuevamente más tarde." : `Conexión comprobada: servicio y base de datos disponibles. Referencia: ${data.requestId}`);
+      const { data, error, requestId } = await invokeFunction<{ status: string; requestId: string }>(client, "health", { method: "GET" });
+      setStatus(error || data?.status !== "ok" ? withReference("El servicio no está disponible. Intentá nuevamente más tarde.", requestId) : `Conexión comprobada: servicio y base de datos disponibles. Referencia: ${data.requestId}`);
     } catch { setStatus("No se pudo comprobar la conexión."); }
     finally { setBusy(false); }
   }
