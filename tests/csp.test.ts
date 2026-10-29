@@ -2,9 +2,10 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 afterEach(() => { vi.unstubAllEnvs(); vi.resetModules(); });
 
-async function policy(url: string | undefined, mode: "production" | "development" = "production") {
+async function policy(url: string | undefined, mode: "production" | "development" = "production", sentryDsn?: string) {
   vi.stubEnv("NODE_ENV", mode);
   vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", url);
+  vi.stubEnv("NEXT_PUBLIC_SENTRY_DSN", sentryDsn);
   vi.resetModules();
   const { default: config } = await import("../next.config");
   const rules = await config.headers!();
@@ -37,5 +38,15 @@ describe("browser connections in the production build", () => {
     expect(connections).toContain("ws:");
     expect(directives).toContain("script-src 'self' 'unsafe-inline' 'unsafe-eval'");
     expect(directives).not.toContain("upgrade-insecure-requests");
+  });
+
+  it("allows the Sentry ingest host when error capture is configured", async () => {
+    const { connections } = await policy("https://project.supabase.co", "production", "https://key123@o42.ingest.us.sentry.io/77");
+    expect(connections).toEqual(["'self'", "https://project.supabase.co", "wss://project.supabase.co", "https://o42.ingest.us.sentry.io"]);
+  });
+
+  it("ignores a malformed Sentry DSN", async () => {
+    const { connections } = await policy(undefined, "production", "not a dsn");
+    expect(connections).toEqual(["'self'"]);
   });
 });

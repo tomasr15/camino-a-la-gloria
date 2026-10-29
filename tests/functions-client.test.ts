@@ -29,3 +29,18 @@ describe("frontend invokeFunction", () => {
     expect(withReference("No pudimos cargar tu carrera.", null)).toBe("No pudimos cargar tu carrera.");
   });
 });
+
+describe("invokeFunction reports failures to Sentry", () => {
+  it("reports 5xx and network errors with the requestId, but not expected 4xx", async () => {
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const report = vi.fn(async () => true);
+    const failWith = (status?: number) => ({ functions: { invoke: vi.fn(async () => ({ data: null, error: Object.assign(new Error("x"), status ? { context: new Response(null, { status }) } : {}) })) } });
+    await invokeFunction(failWith(409), "careers", {}, report);
+    expect(report).not.toHaveBeenCalled();
+    const failed = await invokeFunction(failWith(503), "careers", {}, report);
+    expect(report).toHaveBeenCalledWith({ message: "careers falló desde el navegador con 503", exceptionType: "HttpError", tags: { function: "careers", requestId: failed.requestId, status: 503 } });
+    await invokeFunction(failWith(), "health", { method: "GET" }, report);
+    expect(report).toHaveBeenLastCalledWith(expect.objectContaining({ message: "health falló desde el navegador sin respuesta", exceptionType: "NetworkError" }));
+    consoleError.mockRestore();
+  });
+});

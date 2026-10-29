@@ -11,9 +11,16 @@ const supabaseOrigins = supabaseUrl
 // even in production. Development additionally needs 'unsafe-eval' for the fast-refresh
 // overlay and 'ws:' for the HMR socket.
 const scriptSrc = development ? "'self' 'unsafe-inline' 'unsafe-eval'" : "'self' 'unsafe-inline'";
+// Error capture posts events straight to the Sentry ingest host of the DSN
+// (the host parseDsn in supabase/functions/_shared/error-report.ts sends to).
+function sentryIngestOrigin(dsn: string | undefined): string | null {
+  try { return dsn && new URL(dsn).protocol === "https:" ? new URL(dsn).origin : null; } catch { return null; }
+}
+const sentryOrigin = sentryIngestOrigin(process.env.NEXT_PUBLIC_SENTRY_DSN);
 const connectSrc = [
   "'self'",
   ...supabaseOrigins,
+  ...(sentryOrigin ? [sentryOrigin] : []),
   ...(development ? ["ws:", "http:"] : [])
 ].join(" ");
 const contentSecurityPolicy = [
