@@ -1,4 +1,5 @@
 import { corsHeaders } from "../http.ts";
+import { requestIdFrom } from "../request-id.ts";
 import { clubs, dataset } from "./data.ts";
 import { initialize, publicView, transition } from "./engine.ts";
 import { digest, parseRequest } from "./contracts.ts";
@@ -17,12 +18,13 @@ export function createGameHandler(deps: {
   log?: (entry: Record<string, unknown>) => void;
 }) {
   return async (request: Request): Promise<Response> => {
-    const started = performance.now(), requestId = crypto.randomUUID();
+    // Trace id from the x-request-id header; unrelated to parsed.requestId, the idempotency key in the body.
+    const started = performance.now(), { requestId, requestIdSource } = requestIdFrom(request);
     const headers = corsHeaders(request, deps.origins);
     function respond(status: number, body: unknown) {
       const responseHeaders = headers ?? new Headers({ "Content-Type": "application/json", "Cache-Control": "no-store" });
       responseHeaders.set("x-request-id", requestId);
-      deps.log?.({ requestId, function: "game", method: request.method, status, durationMs: Math.round(performance.now() - started) });
+      deps.log?.({ requestId, requestIdSource, function: "game", method: request.method, status, durationMs: Math.round(performance.now() - started) });
       return new Response(status === 204 ? null : JSON.stringify(body), { status, headers: responseHeaders });
     }
     if (!headers) return respond(403, { error: "ORIGIN_NOT_ALLOWED", requestId });

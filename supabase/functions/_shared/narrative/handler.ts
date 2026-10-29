@@ -1,4 +1,5 @@
 import { corsHeaders } from "../http.ts";
+import { requestIdFrom } from "../request-id.ts";
 import { HUMOR_THEMES, parseNarrativeContext, type NarrativeContext } from "../narrative.ts";
 import { generateNarrative, type NarrativeStore, type SavedNarrative } from "./service.ts";
 
@@ -22,12 +23,12 @@ export function createNarrativeHandler(deps: {
   log?: (entry: Record<string, unknown>) => void;
 }) {
   return async (request: Request) => {
-    const requestId = crypto.randomUUID(), start = performance.now();
+    const { requestId, requestIdSource } = requestIdFrom(request), start = performance.now();
     const headers = corsHeaders(request, deps.origins);
     function respond(status: number, body: Record<string, unknown>) {
       const h = headers ?? new Headers({ "Content-Type": "application/json", "Cache-Control": "no-store" });
       h.set("x-request-id", requestId);
-      deps.log?.({ requestId, function: "narrative", status, durationMs: Math.round(performance.now() - start),
+      deps.log?.({ requestId, requestIdSource, function: "narrative", status, durationMs: Math.round(performance.now() - start),
         source: body.source, reason: body.reason });
       return new Response(status === 204 ? null : JSON.stringify({ ...body, requestId }), { status, headers: h });
     }

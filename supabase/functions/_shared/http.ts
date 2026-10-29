@@ -3,7 +3,7 @@ export function corsHeaders(request: Request, allowedOrigins: string[]): Headers
   if (origin && !allowedOrigins.includes(origin)) return null;
   const headers = new Headers({
     "Content-Type": "application/json; charset=utf-8",
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-request-id",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Expose-Headers": "x-request-id",
     "Vary": "Origin",

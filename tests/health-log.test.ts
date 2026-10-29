@@ -31,18 +31,35 @@ describe("health rejections leave a log entry", () => {
   it("records the rejected origin with 403", async () => {
     const response = await handler(new Request("https://backend.test/health", { headers: { origin: "https://evil.test" } }));
     expect(response.status).toBe(403);
-    expect(logged()).toEqual([{ requestId: expect.any(String), function: "health", method: "GET", status: 403, durationMs: expect.any(Number) }]);
+    expect(logged()).toEqual([{ requestId: expect.any(String), requestIdSource: "server", function: "health", method: "GET", status: 403, durationMs: expect.any(Number) }]);
     expect(response.headers.get("x-request-id")).toBe(logged()[0].requestId);
   });
   it("records the rejected method with 405", async () => {
     const response = await handler(new Request("https://backend.test/health", { method: "POST", headers: { origin: "https://app.test" } }));
     expect(response.status).toBe(405);
-    expect(logged()).toEqual([{ requestId: expect.any(String), function: "health", method: "POST", status: 405, durationMs: expect.any(Number) }]);
+    expect(logged()).toEqual([{ requestId: expect.any(String), requestIdSource: "server", function: "health", method: "POST", status: 405, durationMs: expect.any(Number) }]);
     expect(response.headers.get("x-request-id")).toBe(logged()[0].requestId);
   });
   it("records the preflight without a body", async () => {
     const response = await handler(new Request("https://backend.test/health", { method: "OPTIONS", headers: { origin: "https://app.test" } }));
     expect(response.status).toBe(204);
     expect(logged()[0]).toMatchObject({ function: "health", method: "OPTIONS", status: 204 });
+  });
+});
+
+describe("health correlates the browser requestId", () => {
+  const browserId = "6f1c2b9e-4a7d-4c3e-9b8a-1d2e3f4a5b6c";
+  it("reuses a valid x-request-id in the log, the header and the body", async () => {
+    const response = await handler(new Request("https://backend.test/health", { method: "POST", headers: { origin: "https://app.test", "x-request-id": browserId.toUpperCase() } }));
+    expect(response.status).toBe(405);
+    expect(logged()).toEqual([{ requestId: browserId, requestIdSource: "client", function: "health", method: "POST", status: 405, durationMs: expect.any(Number) }]);
+    expect(response.headers.get("x-request-id")).toBe(browserId);
+    expect((await response.json()).requestId).toBe(browserId);
+  });
+  it("replaces a malformed x-request-id instead of logging it", async () => {
+    const response = await handler(new Request("https://backend.test/health", { method: "POST", headers: { origin: "https://app.test", "x-request-id": "evil\",\"status\":200" } }));
+    expect(logged()[0]).toMatchObject({ requestIdSource: "server", status: 405 });
+    expect(logged()[0].requestId).not.toContain("evil");
+    expect(response.headers.get("x-request-id")).toBe(logged()[0].requestId);
   });
 });
