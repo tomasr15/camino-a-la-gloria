@@ -1,0 +1,1373 @@
+{
+ "code": "cp2-real-v1",
+ "isSynthetic": false,
+ "source": {
+  "provider": "API-Football",
+  "league": 128,
+  "leagueName": "Liga Profesional Argentina",
+  "season": 2024,
+  "sourceHash": "fce9dc52fa6a78928290ead4ec1754e6185e016b35b01d75279b9d4defce42a4"
+ },
+ "clubs": [
+  {
+   "id": "apf-474",
+   "name": "Sarmiento Junin",
+   "tier": "low",
+   "strength": 48,
+   "players": [
+    {
+     "id": "apf-474-6563",
+     "name": "Lucas Acosta",
+     "position": "GK",
+     "attack": 10,
+     "defense": 30,
+     "saves": 29,
+     "minutes": 2070
+    },
+    {
+     "id": "apf-474-6597",
+     "name": "F. Monetti",
+     "position": "GK",
+     "attack": 10,
+     "defense": 18,
+     "saves": 18,
+     "minutes": 1260
+    },
+    {
+     "id": "apf-474-11417",
+     "name": "J. Insaurralde",
+     "position": "DEF",
+     "attack": 52,
+     "defense": 35,
+     "saves": 10,
+     "minutes": 3420
+    },
+    {
+     "id": "apf-474-125333",
+     "name": "E. López",
+     "position": "DEF",
+     "attack": 67,
+     "defense": 44,
+     "saves": 10,
+     "minutes": 2719
+    },
+    {
+     "id": "apf-474-129879",
+     "name": "F. Paredes",
+     "position": "DEF",
+     "attack": 47,
+     "defense": 48,
+     "saves": 10,
+     "minutes": 2277
+    },
+    {
+     "id": "apf-474-51739",
+     "name": "E. Hernández",
+     "position": "DEF",
+     "attack": 38,
+     "defense": 37,
+     "saves": 10,
+     "minutes": 768
+    },
+    {
+     "id": "apf-474-289500",
+     "name": "J. Guasone",
+     "position": "DEF",
+     "attack": 36,
+     "defense": 63,
+     "saves": 10,
+     "minutes": 719
+    },
+    {
+     "id": "apf-474-50831",
+     "name": "G. Sauro",
+     "position": "DEF",
+     "attack": 32,
+     "defense": 42,
+     "saves": 10,
+     "minutes": 632
+    },
+    {
+     "id": "apf-474-294605",
+     "name": "J. Gho",
+     "position": "MID",
+     "attack": 77,
+     "defense": 45,
+     "saves": 10,
+     "minutes": 2526
+    },
+    {
+     "id": "apf-474-362526",
+     "name": "G. Díaz",
+     "position": "MID",
+     "attack": 40,
+     "defense": 38,
+     "saves": 10,
+     "minutes": 2053
+    },
+    {
+     "id": "apf-474-58607",
+     "name": "Y. Arismendi",
+     "position": "MID",
+     "attack": 41,
+     "defense": 53,
+     "saves": 10,
+     "minutes": 1878
+    },
+    {
+     "id": "apf-474-304378",
+     "name": "M. García",
+     "position": "MID",
+     "attack": 20,
+     "defense": 8,
+     "saves": 10,
+     "minutes": 1756
+    },
+    {
+     "id": "apf-474-5209",
+     "name": "E. Méndez",
+     "position": "MID",
+     "attack": 40,
+     "defense": 64,
+     "saves": 10,
+     "minutes": 1396
+    },
+    {
+     "id": "apf-474-6309",
+     "name": "V. Burgoa",
+     "position": "MID",
+     "attack": 14,
+     "defense": 6,
+     "saves": 10,
+     "minutes": 1057
+    },
+    {
+     "id": "apf-474-2565",
+     "name": "I. Morales",
+     "position": "FWD",
+     "attack": 28,
+     "defense": 22,
+     "saves": 10,
+     "minutes": 1912
+    },
+    {
+     "id": "apf-474-5927",
+     "name": "L. López",
+     "position": "FWD",
+     "attack": 42,
+     "defense": 38,
+     "saves": 10,
+     "minutes": 996
+    },
+    {
+     "id": "apf-474-5189",
+     "name": "S. Quiroga",
+     "position": "FWD",
+     "attack": 59,
+     "defense": 78,
+     "saves": 10,
+     "minutes": 945
+    },
+    {
+     "id": "apf-474-465447",
+     "name": "Tomas Guiacobini",
+     "position": "FWD",
+     "attack": 30,
+     "defense": 61,
+     "saves": 10,
+     "minutes": 776
+    }
+   ]
+  },
+  {
+   "id": "apf-476",
+   "name": "Deportivo Riestra",
+   "tier": "low",
+   "strength": 50,
+   "players": [
+    {
+     "id": "apf-476-5774",
+     "name": "I. Arce",
+     "position": "GK",
+     "attack": 10,
+     "defense": 73,
+     "saves": 70,
+     "minutes": 3510
+    },
+    {
+     "id": "apf-476-5507",
+     "name": "J. Dobboletta",
+     "position": "GK",
+     "attack": 10,
+     "defense": 50,
+     "saves": 50,
+     "minutes": 0
+    },
+    {
+     "id": "apf-476-169917",
+     "name": "A. Barrionuevo",
+     "position": "DEF",
+     "attack": 70,
+     "defense": 52,
+     "saves": 10,
+     "minutes": 3178
+    },
+    {
+     "id": "apf-476-5526",
+     "name": "N. Sansotre",
+     "position": "DEF",
+     "attack": 36,
+     "defense": 25,
+     "saves": 10,
+     "minutes": 2966
+    },
+    {
+     "id": "apf-476-5694",
+     "name": "N. Caro",
+     "position": "DEF",
+     "attack": 32,
+     "defense": 26,
+     "saves": 10,
+     "minutes": 2678
+    },
+    {
+     "id": "apf-476-59338",
+     "name": "J. Goitía",
+     "position": "DEF",
+     "attack": 56,
+     "defense": 64,
+     "saves": 10,
+     "minutes": 2527
+    },
+    {
+     "id": "apf-476-278365",
+     "name": "P. Ramírez",
+     "position": "DEF",
+     "attack": 51,
+     "defense": 57,
+     "saves": 10,
+     "minutes": 2455
+    },
+    {
+     "id": "apf-476-59320",
+     "name": "M. Rodríguez",
+     "position": "DEF",
+     "attack": 61,
+     "defense": 41,
+     "saves": 10,
+     "minutes": 923
+    },
+    {
+     "id": "apf-476-294454",
+     "name": "P. Monje",
+     "position": "MID",
+     "attack": 47,
+     "defense": 57,
+     "saves": 10,
+     "minutes": 2024
+    },
+    {
+     "id": "apf-476-59339",
+     "name": "J. Goya",
+     "position": "MID",
+     "attack": 18,
+     "defense": 49,
+     "saves": 10,
+     "minutes": 1418
+    },
+    {
+     "id": "apf-476-59357",
+     "name": "B. Sánchez",
+     "position": "MID",
+     "attack": 63,
+     "defense": 52,
+     "saves": 10,
+     "minutes": 1122
+    },
+    {
+     "id": "apf-476-5888",
+     "name": "G. Pereira",
+     "position": "MID",
+     "attack": 63,
+     "defense": 45,
+     "saves": 10,
+     "minutes": 1025
+    },
+    {
+     "id": "apf-476-59344",
+     "name": "G. Bravo",
+     "position": "MID",
+     "attack": 56,
+     "defense": 43,
+     "saves": 10,
+     "minutes": 531
+    },
+    {
+     "id": "apf-476-58327",
+     "name": "W. Acuña",
+     "position": "MID",
+     "attack": 49,
+     "defense": 48,
+     "saves": 10,
+     "minutes": 466
+    },
+    {
+     "id": "apf-476-59355",
+     "name": "J. Herrera",
+     "position": "FWD",
+     "attack": 55,
+     "defense": 31,
+     "saves": 10,
+     "minutes": 3144
+    },
+    {
+     "id": "apf-476-59200",
+     "name": "M. Céliz",
+     "position": "FWD",
+     "attack": 29,
+     "defense": 76,
+     "saves": 10,
+     "minutes": 2852
+    },
+    {
+     "id": "apf-476-5415",
+     "name": "N. Benegas",
+     "position": "FWD",
+     "attack": 63,
+     "defense": 66,
+     "saves": 10,
+     "minutes": 1762
+    },
+    {
+     "id": "apf-476-5617",
+     "name": "G. Fernández",
+     "position": "FWD",
+     "attack": 32,
+     "defense": 49,
+     "saves": 10,
+     "minutes": 804
+    }
+   ]
+  },
+  {
+   "id": "apf-2432",
+   "name": "Barracas Central",
+   "tier": "low",
+   "strength": 52,
+   "players": [
+    {
+     "id": "apf-2432-6424",
+     "name": "S. Moyano",
+     "position": "GK",
+     "attack": 10,
+     "defense": 45,
+     "saves": 42,
+     "minutes": 2160
+    },
+    {
+     "id": "apf-2432-6493",
+     "name": "M. Miño",
+     "position": "GK",
+     "attack": 10,
+     "defense": 83,
+     "saves": 81,
+     "minutes": 900
+    },
+    {
+     "id": "apf-2432-126866",
+     "name": "N. Capraro",
+     "position": "DEF",
+     "attack": 37,
+     "defense": 41,
+     "saves": 10,
+     "minutes": 3406
+    },
+    {
+     "id": "apf-2432-280936",
+     "name": "R. Herrera",
+     "position": "DEF",
+     "attack": 54,
+     "defense": 76,
+     "saves": 10,
+     "minutes": 2905
+    },
+    {
+     "id": "apf-2432-5485",
+     "name": "G. Goñi",
+     "position": "DEF",
+     "attack": 32,
+     "defense": 31,
+     "saves": 10,
+     "minutes": 2723
+    },
+    {
+     "id": "apf-2432-5541",
+     "name": "N. Demartini",
+     "position": "DEF",
+     "attack": 58,
+     "defense": 65,
+     "saves": 10,
+     "minutes": 1627
+    },
+    {
+     "id": "apf-2432-74933",
+     "name": "R. Barrios",
+     "position": "DEF",
+     "attack": 70,
+     "defense": 65,
+     "saves": 10,
+     "minutes": 1556
+    },
+    {
+     "id": "apf-2432-346883",
+     "name": "A. Irazoque",
+     "position": "DEF",
+     "attack": 45,
+     "defense": 52,
+     "saves": 10,
+     "minutes": 101
+    },
+    {
+     "id": "apf-2432-156767",
+     "name": "R. Insúa",
+     "position": "MID",
+     "attack": 57,
+     "defense": 42,
+     "saves": 10,
+     "minutes": 3587
+    },
+    {
+     "id": "apf-2432-289468",
+     "name": "S. Rosané",
+     "position": "MID",
+     "attack": 44,
+     "defense": 71,
+     "saves": 10,
+     "minutes": 2842
+    },
+    {
+     "id": "apf-2432-5242",
+     "name": "F. Mater",
+     "position": "MID",
+     "attack": 39,
+     "defense": 73,
+     "saves": 10,
+     "minutes": 2225
+    },
+    {
+     "id": "apf-2432-6613",
+     "name": "N. Barrios",
+     "position": "MID",
+     "attack": 44,
+     "defense": 30,
+     "saves": 10,
+     "minutes": 1582
+    },
+    {
+     "id": "apf-2432-59328",
+     "name": "I. Tapia",
+     "position": "MID",
+     "attack": 70,
+     "defense": 22,
+     "saves": 10,
+     "minutes": 1248
+    },
+    {
+     "id": "apf-2432-59201",
+     "name": "M. Iacobellis",
+     "position": "MID",
+     "attack": 56,
+     "defense": 55,
+     "saves": 10,
+     "minutes": 1153
+    },
+    {
+     "id": "apf-2432-279798",
+     "name": "M. Zalazar",
+     "position": "FWD",
+     "attack": 66,
+     "defense": 33,
+     "saves": 10,
+     "minutes": 1981
+    },
+    {
+     "id": "apf-2432-266684",
+     "name": "L. Brochero",
+     "position": "FWD",
+     "attack": 35,
+     "defense": 61,
+     "saves": 10,
+     "minutes": 1828
+    },
+    {
+     "id": "apf-2432-81337",
+     "name": "A. Domínguez",
+     "position": "FWD",
+     "attack": 33,
+     "defense": 34,
+     "saves": 10,
+     "minutes": 1675
+    },
+    {
+     "id": "apf-2432-52000",
+     "name": "J. Candia",
+     "position": "FWD",
+     "attack": 30,
+     "defense": 32,
+     "saves": 10,
+     "minutes": 1088
+    }
+   ]
+  },
+  {
+   "id": "apf-453",
+   "name": "Independiente",
+   "tier": "medium",
+   "strength": 58,
+   "players": [
+    {
+     "id": "apf-453-2356",
+     "name": "R. Rey",
+     "position": "GK",
+     "attack": 10,
+     "defense": 70,
+     "saves": 70,
+     "minutes": 3690
+    },
+    {
+     "id": "apf-453-311072",
+     "name": "D. Segovia",
+     "position": "GK",
+     "attack": 10,
+     "defense": 50,
+     "saves": 50,
+     "minutes": 0
+    },
+    {
+     "id": "apf-453-6051",
+     "name": "J. Laso",
+     "position": "DEF",
+     "attack": 58,
+     "defense": 49,
+     "saves": 10,
+     "minutes": 3151
+    },
+    {
+     "id": "apf-453-6605",
+     "name": "D. Pérez",
+     "position": "DEF",
+     "attack": 46,
+     "defense": 61,
+     "saves": 10,
+     "minutes": 1857
+    },
+    {
+     "id": "apf-453-298165",
+     "name": "F. Loyola",
+     "position": "DEF",
+     "attack": 79,
+     "defense": 52,
+     "saves": 10,
+     "minutes": 1620
+    },
+    {
+     "id": "apf-453-58363",
+     "name": "J. Fedorco",
+     "position": "DEF",
+     "attack": 42,
+     "defense": 57,
+     "saves": 10,
+     "minutes": 1564
+    },
+    {
+     "id": "apf-453-237206",
+     "name": "K. Lomónaco",
+     "position": "DEF",
+     "attack": 75,
+     "defense": 51,
+     "saves": 10,
+     "minutes": 1549
+    },
+    {
+     "id": "apf-453-6371",
+     "name": "A. Spörle",
+     "position": "DEF",
+     "attack": 73,
+     "defense": 59,
+     "saves": 10,
+     "minutes": 1492
+    },
+    {
+     "id": "apf-453-2474",
+     "name": "I. Marcone",
+     "position": "MID",
+     "attack": 39,
+     "defense": 69,
+     "saves": 10,
+     "minutes": 3082
+    },
+    {
+     "id": "apf-453-413307",
+     "name": "D. Martínez",
+     "position": "MID",
+     "attack": 29,
+     "defense": 66,
+     "saves": 10,
+     "minutes": 1854
+    },
+    {
+     "id": "apf-453-126671",
+     "name": "L. González",
+     "position": "MID",
+     "attack": 57,
+     "defense": 24,
+     "saves": 10,
+     "minutes": 1585
+    },
+    {
+     "id": "apf-453-35720",
+     "name": "F. Mancuello",
+     "position": "MID",
+     "attack": 82,
+     "defense": 30,
+     "saves": 10,
+     "minutes": 1509
+    },
+    {
+     "id": "apf-453-294787",
+     "name": "A. Luna",
+     "position": "MID",
+     "attack": 53,
+     "defense": 46,
+     "saves": 10,
+     "minutes": 1281
+    },
+    {
+     "id": "apf-453-51580",
+     "name": "G. Neves",
+     "position": "MID",
+     "attack": 57,
+     "defense": 62,
+     "saves": 10,
+     "minutes": 609
+    },
+    {
+     "id": "apf-453-6483",
+     "name": "G. Ávalos",
+     "position": "FWD",
+     "attack": 72,
+     "defense": 52,
+     "saves": 10,
+     "minutes": 3259
+    },
+    {
+     "id": "apf-453-59231",
+     "name": "W. Mazzantti",
+     "position": "FWD",
+     "attack": 51,
+     "defense": 81,
+     "saves": 10,
+     "minutes": 2967
+    },
+    {
+     "id": "apf-453-414392",
+     "name": "S. López",
+     "position": "FWD",
+     "attack": 23,
+     "defense": 55,
+     "saves": 10,
+     "minutes": 956
+    },
+    {
+     "id": "apf-453-35715",
+     "name": "A. Canelo",
+     "position": "FWD",
+     "attack": 39,
+     "defense": 56,
+     "saves": 10,
+     "minutes": 828
+    }
+   ]
+  },
+  {
+   "id": "apf-436",
+   "name": "Racing Club",
+   "tier": "medium",
+   "strength": 60,
+   "players": [
+    {
+     "id": "apf-436-2547",
+     "name": "G. Arias",
+     "position": "GK",
+     "attack": 10,
+     "defense": 49,
+     "saves": 49,
+     "minutes": 2970
+    },
+    {
+     "id": "apf-436-5904",
+     "name": "G. Gómez",
+     "position": "GK",
+     "attack": 10,
+     "defense": 29,
+     "saves": 30,
+     "minutes": 1539
+    },
+    {
+     "id": "apf-436-6608",
+     "name": "G. Rojas",
+     "position": "DEF",
+     "attack": 79,
+     "defense": 46,
+     "saves": 10,
+     "minutes": 2346
+    },
+    {
+     "id": "apf-436-197520",
+     "name": "G. Martirena",
+     "position": "DEF",
+     "attack": 96,
+     "defense": 71,
+     "saves": 10,
+     "minutes": 2081
+    },
+    {
+     "id": "apf-436-63937",
+     "name": "A. García",
+     "position": "DEF",
+     "attack": 55,
+     "defense": 45,
+     "saves": 10,
+     "minutes": 2006
+    },
+    {
+     "id": "apf-436-125177",
+     "name": "N. Colombo",
+     "position": "DEF",
+     "attack": 44,
+     "defense": 61,
+     "saves": 10,
+     "minutes": 1846
+    },
+    {
+     "id": "apf-436-6401",
+     "name": "F. Mura",
+     "position": "DEF",
+     "attack": 85,
+     "defense": 32,
+     "saves": 10,
+     "minutes": 1443
+    },
+    {
+     "id": "apf-436-289466",
+     "name": "M. Di Cesare",
+     "position": "DEF",
+     "attack": 50,
+     "defense": 66,
+     "saves": 10,
+     "minutes": 1300
+    },
+    {
+     "id": "apf-436-6006",
+     "name": "S. Sosa",
+     "position": "MID",
+     "attack": 53,
+     "defense": 82,
+     "saves": 10,
+     "minutes": 3181
+    },
+    {
+     "id": "apf-436-310181",
+     "name": "I. Rodríguez",
+     "position": "MID",
+     "attack": 64,
+     "defense": 43,
+     "saves": 10,
+     "minutes": 2704
+    },
+    {
+     "id": "apf-436-5970",
+     "name": "E. Almendra",
+     "position": "MID",
+     "attack": 76,
+     "defense": 81,
+     "saves": 10,
+     "minutes": 1856
+    },
+    {
+     "id": "apf-436-129882",
+     "name": "J. Nardoni",
+     "position": "MID",
+     "attack": 35,
+     "defense": 35,
+     "saves": 10,
+     "minutes": 1666
+    },
+    {
+     "id": "apf-436-6005",
+     "name": "J. Quintero",
+     "position": "MID",
+     "attack": 94,
+     "defense": 35,
+     "saves": 10,
+     "minutes": 1560
+    },
+    {
+     "id": "apf-436-363341",
+     "name": "B. Gallego",
+     "position": "MID",
+     "attack": 70,
+     "defense": 53,
+     "saves": 10,
+     "minutes": 1000
+    },
+    {
+     "id": "apf-436-11775",
+     "name": "A. Balboa",
+     "position": "FWD",
+     "attack": 68,
+     "defense": 66,
+     "saves": 10,
+     "minutes": 2917
+    },
+    {
+     "id": "apf-436-70749",
+     "name": "A. Martínez",
+     "position": "FWD",
+     "attack": 94,
+     "defense": 40,
+     "saves": 10,
+     "minutes": 2568
+    },
+    {
+     "id": "apf-436-11493",
+     "name": "M. Salas",
+     "position": "FWD",
+     "attack": 58,
+     "defense": 58,
+     "saves": 10,
+     "minutes": 2407
+    },
+    {
+     "id": "apf-436-170127",
+     "name": "S. Solari",
+     "position": "FWD",
+     "attack": 66,
+     "defense": 59,
+     "saves": 10,
+     "minutes": 1546
+    }
+   ]
+  },
+  {
+   "id": "apf-438",
+   "name": "Velez Sarsfield",
+   "tier": "medium",
+   "strength": 62,
+   "players": [
+    {
+     "id": "apf-438-5343",
+     "name": "T. Marchiori",
+     "position": "GK",
+     "attack": 10,
+     "defense": 65,
+     "saves": 68,
+     "minutes": 3862
+    },
+    {
+     "id": "apf-438-288759",
+     "name": "R. Rodríguez",
+     "position": "GK",
+     "attack": 10,
+     "defense": 54,
+     "saves": 54,
+     "minutes": 90
+    },
+    {
+     "id": "apf-438-6704",
+     "name": "Elías Gómez",
+     "position": "DEF",
+     "attack": 69,
+     "defense": 57,
+     "saves": 10,
+     "minutes": 3474
+    },
+    {
+     "id": "apf-438-355004",
+     "name": "V. Gómez",
+     "position": "DEF",
+     "attack": 48,
+     "defense": 63,
+     "saves": 10,
+     "minutes": 3207
+    },
+    {
+     "id": "apf-438-129896",
+     "name": "J. García",
+     "position": "DEF",
+     "attack": 62,
+     "defense": 82,
+     "saves": 10,
+     "minutes": 2764
+    },
+    {
+     "id": "apf-438-1201",
+     "name": "E. Mammana",
+     "position": "DEF",
+     "attack": 48,
+     "defense": 68,
+     "saves": 10,
+     "minutes": 2600
+    },
+    {
+     "id": "apf-438-129897",
+     "name": "D. Fernández",
+     "position": "DEF",
+     "attack": 35,
+     "defense": 43,
+     "saves": 10,
+     "minutes": 1467
+    },
+    {
+     "id": "apf-438-50766",
+     "name": "L. Jara",
+     "position": "DEF",
+     "attack": 45,
+     "defense": 44,
+     "saves": 10,
+     "minutes": 736
+    },
+    {
+     "id": "apf-438-70584",
+     "name": "C. Aquino",
+     "position": "MID",
+     "attack": 95,
+     "defense": 39,
+     "saves": 10,
+     "minutes": 3521
+    },
+    {
+     "id": "apf-438-362752",
+     "name": "C. Ordoñez",
+     "position": "MID",
+     "attack": 47,
+     "defense": 50,
+     "saves": 10,
+     "minutes": 3344
+    },
+    {
+     "id": "apf-438-6053",
+     "name": "A. Bouzat",
+     "position": "MID",
+     "attack": 42,
+     "defense": 78,
+     "saves": 10,
+     "minutes": 3156
+    },
+    {
+     "id": "apf-438-362750",
+     "name": "T. Fernández",
+     "position": "MID",
+     "attack": 84,
+     "defense": 39,
+     "saves": 10,
+     "minutes": 2434
+    },
+    {
+     "id": "apf-438-6310",
+     "name": "J. Elías",
+     "position": "MID",
+     "attack": 29,
+     "defense": 50,
+     "saves": 10,
+     "minutes": 695
+    },
+    {
+     "id": "apf-438-1694",
+     "name": "S. Cáseres",
+     "position": "MID",
+     "attack": 38,
+     "defense": 53,
+     "saves": 10,
+     "minutes": 438
+    },
+    {
+     "id": "apf-438-10149",
+     "name": "B. Romero",
+     "position": "FWD",
+     "attack": 78,
+     "defense": 42,
+     "saves": 10,
+     "minutes": 3405
+    },
+    {
+     "id": "apf-438-6098",
+     "name": "F. Pizzini",
+     "position": "FWD",
+     "attack": 78,
+     "defense": 66,
+     "saves": 10,
+     "minutes": 3262
+    },
+    {
+     "id": "apf-438-6411",
+     "name": "M. Pellegrini",
+     "position": "FWD",
+     "attack": 43,
+     "defense": 67,
+     "saves": 10,
+     "minutes": 605
+    },
+    {
+     "id": "apf-438-292170",
+     "name": "Lenny Lobato",
+     "position": "FWD",
+     "attack": 49,
+     "defense": 37,
+     "saves": 10,
+     "minutes": 526
+    }
+   ]
+  },
+  {
+   "id": "apf-451",
+   "name": "Boca Juniors",
+   "tier": "high",
+   "strength": 69,
+   "players": [
+    {
+     "id": "apf-451-884",
+     "name": "S. Romero",
+     "position": "GK",
+     "attack": 10,
+     "defense": 46,
+     "saves": 47,
+     "minutes": 2479
+    },
+    {
+     "id": "apf-451-177230",
+     "name": "L. Brey",
+     "position": "GK",
+     "attack": 10,
+     "defense": 70,
+     "saves": 73,
+     "minutes": 1221
+    },
+    {
+     "id": "apf-451-2419",
+     "name": "L. Advíncula",
+     "position": "DEF",
+     "attack": 78,
+     "defense": 44,
+     "saves": 10,
+     "minutes": 2712
+    },
+    {
+     "id": "apf-451-289444",
+     "name": "L. Blanco",
+     "position": "DEF",
+     "attack": 71,
+     "defense": 62,
+     "saves": 10,
+     "minutes": 2597
+    },
+    {
+     "id": "apf-451-51599",
+     "name": "C. Lema",
+     "position": "DEF",
+     "attack": 63,
+     "defense": 86,
+     "saves": 10,
+     "minutes": 2135
+    },
+    {
+     "id": "apf-451-6082",
+     "name": "N. Figal",
+     "position": "DEF",
+     "attack": 35,
+     "defense": 42,
+     "saves": 10,
+     "minutes": 1917
+    },
+    {
+     "id": "apf-451-126743",
+     "name": "J. Barinaga",
+     "position": "DEF",
+     "attack": 72,
+     "defense": 62,
+     "saves": 10,
+     "minutes": 1669
+    },
+    {
+     "id": "apf-451-890",
+     "name": "M. Rojo",
+     "position": "DEF",
+     "attack": 32,
+     "defense": 32,
+     "saves": 10,
+     "minutes": 1354
+    },
+    {
+     "id": "apf-451-288707",
+     "name": "K. Zenón",
+     "position": "MID",
+     "attack": 86,
+     "defense": 35,
+     "saves": 10,
+     "minutes": 2754
+    },
+    {
+     "id": "apf-451-5916",
+     "name": "G. Fernández",
+     "position": "MID",
+     "attack": 42,
+     "defense": 59,
+     "saves": 10,
+     "minutes": 2507
+    },
+    {
+     "id": "apf-451-5791",
+     "name": "M. Braida",
+     "position": "MID",
+     "attack": 57,
+     "defense": 79,
+     "saves": 10,
+     "minutes": 2291
+    },
+    {
+     "id": "apf-451-237186",
+     "name": "C. Medina",
+     "position": "MID",
+     "attack": 58,
+     "defense": 51,
+     "saves": 10,
+     "minutes": 1735
+    },
+    {
+     "id": "apf-451-323788",
+     "name": "S. Rivero",
+     "position": "MID",
+     "attack": 73,
+     "defense": 40,
+     "saves": 10,
+     "minutes": 1586
+    },
+    {
+     "id": "apf-451-6209",
+     "name": "T. Belmonte",
+     "position": "MID",
+     "attack": 34,
+     "defense": 64,
+     "saves": 10,
+     "minutes": 1133
+    },
+    {
+     "id": "apf-451-6327",
+     "name": "M. Merentiel",
+     "position": "FWD",
+     "attack": 85,
+     "defense": 36,
+     "saves": 10,
+     "minutes": 2812
+    },
+    {
+     "id": "apf-451-274",
+     "name": "E. Cavani",
+     "position": "FWD",
+     "attack": 72,
+     "defense": 33,
+     "saves": 10,
+     "minutes": 2047
+    },
+    {
+     "id": "apf-451-59229",
+     "name": "M. Giménez",
+     "position": "FWD",
+     "attack": 81,
+     "defense": 66,
+     "saves": 10,
+     "minutes": 1585
+    },
+    {
+     "id": "apf-451-237090",
+     "name": "E. Zeballos",
+     "position": "FWD",
+     "attack": 44,
+     "defense": 39,
+     "saves": 10,
+     "minutes": 1046
+    }
+   ]
+  },
+  {
+   "id": "apf-435",
+   "name": "River Plate",
+   "tier": "high",
+   "strength": 72,
+   "players": [
+    {
+     "id": "apf-435-2463",
+     "name": "F. Armani",
+     "position": "GK",
+     "attack": 10,
+     "defense": 65,
+     "saves": 65,
+     "minutes": 3240
+    },
+    {
+     "id": "apf-435-6492",
+     "name": "J. Ledesma",
+     "position": "GK",
+     "attack": 10,
+     "defense": 67,
+     "saves": 67,
+     "minutes": 360
+    },
+    {
+     "id": "apf-435-2550",
+     "name": "P. Díaz",
+     "position": "DEF",
+     "attack": 69,
+     "defense": 69,
+     "saves": 10,
+     "minutes": 2820
+    },
+    {
+     "id": "apf-435-6237",
+     "name": "E. Díaz",
+     "position": "DEF",
+     "attack": 77,
+     "defense": 87,
+     "saves": 10,
+     "minutes": 1941
+    },
+    {
+     "id": "apf-435-5988",
+     "name": "M. Casco",
+     "position": "DEF",
+     "attack": 55,
+     "defense": 20,
+     "saves": 10,
+     "minutes": 1328
+    },
+    {
+     "id": "apf-435-6080",
+     "name": "F. Bustos",
+     "position": "DEF",
+     "attack": 66,
+     "defense": 45,
+     "saves": 10,
+     "minutes": 1183
+    },
+    {
+     "id": "apf-435-6602",
+     "name": "M. Herrera",
+     "position": "DEF",
+     "attack": 84,
+     "defense": 72,
+     "saves": 10,
+     "minutes": 1104
+    },
+    {
+     "id": "apf-435-2469",
+     "name": "G. Pezzella",
+     "position": "DEF",
+     "attack": 61,
+     "defense": 41,
+     "saves": 10,
+     "minutes": 806
+    },
+    {
+     "id": "apf-435-194906",
+     "name": "P. Solari",
+     "position": "MID",
+     "attack": 91,
+     "defense": 34,
+     "saves": 10,
+     "minutes": 2053
+    },
+    {
+     "id": "apf-435-237143",
+     "name": "S. Simón",
+     "position": "MID",
+     "attack": 59,
+     "defense": 59,
+     "saves": 10,
+     "minutes": 1977
+    },
+    {
+     "id": "apf-435-414385",
+     "name": "C. Echeverri",
+     "position": "MID",
+     "attack": 91,
+     "defense": 43,
+     "saves": 10,
+     "minutes": 1708
+    },
+    {
+     "id": "apf-435-5997",
+     "name": "I. Fernández",
+     "position": "MID",
+     "attack": 84,
+     "defense": 43,
+     "saves": 10,
+     "minutes": 1640
+    },
+    {
+     "id": "apf-435-6519",
+     "name": "R. Villagra",
+     "position": "MID",
+     "attack": 28,
+     "defense": 34,
+     "saves": 10,
+     "minutes": 1605
+    },
+    {
+     "id": "apf-435-6028",
+     "name": "R. Aliendro",
+     "position": "MID",
+     "attack": 64,
+     "defense": 69,
+     "saves": 10,
+     "minutes": 1437
+    },
+    {
+     "id": "apf-435-214",
+     "name": "F. Colidio",
+     "position": "FWD",
+     "attack": 92,
+     "defense": 61,
+     "saves": 10,
+     "minutes": 2276
+    },
+    {
+     "id": "apf-435-9933",
+     "name": "M. Borja",
+     "position": "FWD",
+     "attack": 97,
+     "defense": 48,
+     "saves": 10,
+     "minutes": 2221
+    },
+    {
+     "id": "apf-435-449249",
+     "name": "Franco Mastantuono",
+     "position": "FWD",
+     "attack": 81,
+     "defense": 77,
+     "saves": 10,
+     "minutes": 1227
+    },
+    {
+     "id": "apf-435-35551",
+     "name": "A. Bareiro",
+     "position": "FWD",
+     "attack": 40,
+     "defense": 45,
+     "saves": 10,
+     "minutes": 433
+    }
+   ]
+  }
+ ]
+}

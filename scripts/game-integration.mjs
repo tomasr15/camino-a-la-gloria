@@ -32,7 +32,7 @@ const a = await user('a'), b = await user('b');
 assert.equal((await call('careers', a.token, { managerName: 'Prueba motor' })).status, 201);
 assert.equal((await call('careers', b.token, { managerName: 'Prueba aislamiento' })).status, 201);
 assert.equal((await call('game', a.token)).body.game, null);
-const init = { requestId: randomUUID(), expectedVersion: 0, command: { type: 'initialize', clubId: 'club-0' } };
+const init = { requestId: randomUUID(), expectedVersion: 0, command: { type: 'initialize', clubId: clubs[0].id } };
 const initialized = await call('game', a.token, init);
 assert.equal(initialized.status, 200, JSON.stringify(initialized.body));
 assert.equal(initialized.body.version, 1);
@@ -84,7 +84,7 @@ for (let round = 2; round <= 14; round++) {
     current = finish.body;
   }
   assert.equal(current.game.results.length, round * 4);
-  const own = current.game.results.find(r => r.round === round && (r.home === 'club-0' || r.away === 'club-0'));
+  const own = current.game.results.find(r => r.round === round && (r.home === clubs[0].id || r.away === clubs[0].id));
   assert.equal(current.game.lastMatch.id, own.id);
   assert.deepEqual([current.game.lastMatch.homeGoals, current.game.lastMatch.awayGoals], [own.homeGoals, own.awayGoals]);
 }
@@ -97,7 +97,7 @@ assert.equal(nextSeason.status, 200, JSON.stringify(nextSeason.body));
 assert.equal(nextSeason.body.game.season, 2);
 assert.equal(nextSeason.body.game.history[0].results.length, 56);
 assert.equal(nextSeason.body.game.results.length, 0);
-assert.equal(nextSeason.body.game.clubId, 'club-0');
+assert.equal(nextSeason.body.game.clubId, clubs[0].id);
 const direct = await b.client.from('careers').select('reputation');
 assert.ifError(direct.error);
 assert.equal(direct.data.length, 1);
