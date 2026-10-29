@@ -105,6 +105,6 @@ API-Football se consultará durante importaciones controladas, no en cada partid
 
 ## Operación
 
-Logs JSON incluyen `requestId`, función, método cuando corresponde, código HTTP y duración. Revisar errores 5xx y latencia en Supabase; builds en Vercel y CI en GitHub. Las métricas de IA y consumo se agregan al integrar proveedores. No se anuncian alertas automáticas si todavía no están configuradas.
+Logs JSON incluyen `requestId`, `requestIdSource`, función, método cuando corresponde, código HTTP y duración. El navegador genera el `requestId` y lo envía en el encabezado `x-request-id` (`src/lib/functions.ts`); la función lo reutiliza si es un UUID válido y, si no, genera uno propio (`requestIdSource: "server"`). Así el mismo identificador aparece en el mensaje de error que ve el usuario, en la respuesta y en el log. Es una referencia de traza, no autoriza nada ni reemplaza la clave de idempotencia del body de `game`. Revisar errores 5xx y latencia en Supabase; builds en Vercel y CI en GitHub. El consumo diario de IA contra el cupo se consulta con `report:narrative-quota`. No se anuncian alertas automáticas si todavía no están configuradas.
 
 Ante fallo: identificar solicitud; revisar función, Auth y DB; corregir mediante commit y despliegue. Migraciones futuras serán aditivas y revisadas. El usuario prohíbe borrados: no ejecutar resets ni estrategias de rollback que destruyan datos. Una reversión del código debe conservar compatibilidad con el esquema.

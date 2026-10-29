@@ -55,6 +55,8 @@ La integración Git despliega el frontend. El equipo debe usar PR y esperar CI a
 | Carrera 403 | Revisar origen permitido; no ampliar a todos los dominios |
 | Carrera 409 | Ya existe una carrera: recuperarla con GET, no reintentar inserciones |
 | Carrera 503 | Buscar requestId en logs; revisar Auth, políticas y migración |
+| Mensaje con «Referencia: <uuid>» | Buscar ese UUID en los logs de Edge Functions: es el `requestId` de la solicitud; `requestIdSource: "client"` confirma que vino del navegador |
+| Narrativa siempre en fallback | `npm run -s report:narrative-usage \| npm run -s report:narrative-quota`: si hoy figura `corte`, el cupo diario se agotó; `deshabilitada` indica el corte manual |
 | Error en despliegue | Revisar CI/build; corregir mediante commit sin reescribir historial |
 
 No borrar datos como método de reparación. Si una corrección exige una operación destructiva, dejarla pendiente para decisión del usuario.
