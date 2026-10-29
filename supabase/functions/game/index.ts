@@ -2,10 +2,12 @@ import { createClient } from "npm:@supabase/supabase-js@2.117.2";
 import { sign } from "../_shared/game/contracts.ts";
 import { createGameHandler } from "../_shared/game/handler.ts";
 import { GameError } from "../_shared/game/model.ts";
+import { reportServerError } from "../_shared/edge-report.ts";
 
 Deno.serve(createGameHandler({
   origins: (Deno.env.get("ALLOWED_ORIGINS") ?? "").split(",").map(x => x.trim()).filter(Boolean),
   log: entry => console.log(JSON.stringify(entry)),
+  report: input => reportServerError(input),
   authenticate: async token => {
     const secret = Deno.env.get("GAME_SIGNING_KEY");
     if (!secret || secret.length < 64) throw new GameError("GAME_NOT_CONFIGURED", 503);

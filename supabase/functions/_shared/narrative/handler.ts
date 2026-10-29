@@ -1,5 +1,6 @@
 import { corsHeaders } from "../http.ts";
 import { requestIdFrom } from "../request-id.ts";
+import type { ServerErrorInput } from "../edge-report.ts";
 import { HUMOR_THEMES, parseNarrativeContext, type NarrativeContext } from "../narrative.ts";
 import { generateNarrative, type NarrativeStore, type SavedNarrative } from "./service.ts";
 
@@ -21,15 +22,17 @@ export function createNarrativeHandler(deps: {
   origins: string[]; authenticate: (token: string) => Promise<Session | null>;
   provider?: (context: NarrativeContext) => Promise<{ value: unknown; tokens: number | null }>;
   log?: (entry: Record<string, unknown>) => void;
+  report?: (input: ServerErrorInput) => void;
 }) {
   return async (request: Request) => {
     const { requestId, requestIdSource } = requestIdFrom(request), start = performance.now();
     const headers = corsHeaders(request, deps.origins);
-    function respond(status: number, body: Record<string, unknown>) {
+    function respond(status: number, body: Record<string, unknown>, cause?: unknown) {
       const h = headers ?? new Headers({ "Content-Type": "application/json", "Cache-Control": "no-store" });
       h.set("x-request-id", requestId);
       deps.log?.({ requestId, requestIdSource, function: "narrative", status, durationMs: Math.round(performance.now() - start),
         source: body.source, reason: body.reason });
+      if (status >= 500) deps.report?.({ function: "narrative", status, requestId, method: request.method, code: body.error, cause });
       return new Response(status === 204 ? null : JSON.stringify({ ...body, requestId }), { status, headers: h });
     }
     if (!headers) return respond(403, { error: "ORIGIN_NOT_ALLOWED" });
@@ -60,7 +63,7 @@ export function createNarrativeHandler(deps: {
       const { context, entry } = await session.read(input);
       return respond(200, { ...(entry ?? await generateNarrative(context, session.store(input), deps.provider)) });
     } catch (error) {
-      return respond(error instanceof HttpError ? error.status : 503, { error: error instanceof HttpError ? error.message : "SERVICE_UNAVAILABLE" });
+      return respond(error instanceof HttpError ? error.status : 503, { error: error instanceof HttpError ? error.message : "SERVICE_UNAVAILABLE" }, error);
     }
   };
 }
