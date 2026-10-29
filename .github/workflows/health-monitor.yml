@@ -1,0 +1,28 @@
+name: Monitor de health
+on:
+  schedule:
+    # Cada 10 minutos. GitHub puede demorar las ejecuciones programadas unos minutos.
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: health-monitor
+  cancel-in-progress: false
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      # Variables del repositorio (Settings → Secrets and variables → Actions → Variables).
+      # Sin HEALTH_URL el job termina sin hacer nada.
+      HEALTH_URL: ${{ vars.HEALTH_URL }}
+      SENTRY_DSN: ${{ vars.SENTRY_DSN }}
+      SENTRY_ENVIRONMENT: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      # Sin npm ci: el script solo usa Node y el cliente de errores compartido.
+      - run: npm run monitor:health

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import type { Session } from "@supabase/supabase-js";
+import { errorStatus, invokeFunction, withReference } from "@/lib/functions";
 import { getSupabase } from "@/lib/supabase";
 
 type Career = { id: string; manager_name: string; reputation: number; created_at: string };
@@ -24,11 +25,13 @@ export default function CareerPage() {
 
   async function loadCareers() {
     setBusy(true); setMessage("");
+    let requestId: string | null = null;
     try {
-      const { data, error } = await getSupabase()!.functions.invoke("careers", { method: "GET" });
-      if (error) throw error;
-      setCareers(data.careers); setLoaded(true);
-    } catch { setMessage("No pudimos cargar tu carrera. Revisá tu conexión y volvé a intentar."); }
+      const result = await invokeFunction<{ careers: Career[] }>(getSupabase()!, "careers", { method: "GET" });
+      requestId = result.requestId;
+      if (result.error || !result.data) throw result.error;
+      setCareers(result.data.careers); setLoaded(true);
+    } catch { setMessage(withReference("No pudimos cargar tu carrera. Revisá tu conexión y volvé a intentar.", requestId)); }
     finally { setBusy(false); }
   }
   async function authenticate(event: FormEvent<HTMLFormElement>) {
@@ -45,15 +48,17 @@ export default function CareerPage() {
   async function createCareer(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setMessage("");
     const managerName = String(new FormData(event.currentTarget).get("managerName")).trim();
+    let requestId: string | null = null;
     try {
-      const { data, error } = await getSupabase()!.functions.invoke("careers", { body: { managerName } });
-      if (error) {
-        const status = (error as { context?: Response }).context?.status;
-        if (status === 409) { setMessage("Ya tenés una carrera. Usá «Cargar mi carrera» para verla."); return; }
-        throw error;
+      const result = await invokeFunction<{ career: Career }>(getSupabase()!, "careers", { body: { managerName } });
+      requestId = result.requestId;
+      if (result.error) {
+        if (errorStatus(result.error) === 409) { setMessage("Ya tenés una carrera. Usá «Cargar mi carrera» para verla."); return; }
+        throw result.error;
       }
-      setCareers([data.career]); setLoaded(true); setMessage("Tu carrera quedó guardada. Este es el primer paso de tu historia.");
-    } catch { setMessage("No pudimos guardar tu carrera. Volvé a intentar; si ya se guardó, podés recuperarla con «Cargar mi carrera»."); }
+      if (!result.data) throw new Error("EMPTY_RESPONSE");
+      setCareers([result.data.career]); setLoaded(true); setMessage("Tu carrera quedó guardada. Este es el primer paso de tu historia.");
+    } catch { setMessage(withReference("No pudimos guardar tu carrera. Volvé a intentar; si ya se guardó, podés recuperarla con «Cargar mi carrera».", requestId)); }
     finally { setBusy(false); }
   }
 

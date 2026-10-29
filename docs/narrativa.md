@@ -99,6 +99,8 @@ Para cortar inmediatamente las nuevas reservas: `update narrative_private.config
 
 `npm run report:narrative-usage` informa límites, intentos, tokens conocidos, consumo desconocido y causas. Por defecto consulta la base local. Para operación cloud acepta `NARRATIVE_REPORT_DB_URL` en el entorno del operador; no imprimir ni guardar esa credencial en Git.
 
+`report:narrative-quota` agrega ese registro por día UTC contra el límite vigente: intentos, restantes, porcentaje de uso, tokens informados y estado (`ok`, `alerta` desde el 80%, `corte` al agotarse y `deshabilitada` con el corte manual), más los rechazos acumulados por causa. Lee el JSON por entrada estándar o desde un archivo y no se conecta a la base: `npm run -s report:narrative-usage | npm run -s report:narrative-quota` (agregar `-- --json` para la salida en JSON). Los rechazos por cupo no guardan fecha en `events`, por eso se informan acumulados y no por día. El corte en sí lo aplica `narrative_reserve`.
+
 ## Verificación
 
 `npm run check` ejecuta lint, tipos, pruebas y build. Las pruebas del adaptador simulan JSON válido, contradicciones, estadísticas inventadas, bloqueos, 429/5xx, timeout, cuerpo excesivo y errores de almacenamiento. No requieren una clave real.

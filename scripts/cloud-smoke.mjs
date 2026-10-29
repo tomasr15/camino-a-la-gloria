@@ -42,5 +42,11 @@ const direct = await b.client.from('careers').select('*'); assert.ifError(direct
 assert.equal((await call('careers', a.token, 'POST', { managerName: 'x'.repeat(3000) })).status, 413); pass('Oversize body rejected');
 assert.equal((await call('careers', a.token, 'GET', undefined, 'https://unapproved.example')).status, 403); pass('Unapproved origin rejected');
 assert.ok(other.headers.get('x-request-id')); pass('Request identifier returned for traceability');
+const traceId = crypto.randomUUID();
+const preflight = await fetch(`${base}/functions/v1/careers`, { method: 'OPTIONS', headers: { Origin: origin, 'Access-Control-Request-Method': 'GET', 'Access-Control-Request-Headers': 'authorization, x-request-id' } });
+assert.ok(preflight.headers.get('access-control-allow-headers')?.includes('x-request-id'));
+const traced = await fetch(`${base}/functions/v1/health`, { headers: { Origin: origin, apikey: key, 'x-request-id': traceId } });
+assert.equal(traced.headers.get('x-request-id'), traceId); assert.equal((await traced.json()).requestId, traceId);
+pass(`Browser requestId accepted by CORS and returned unchanged (${traceId})`);
 const publicApp = await fetch(origin); assert.equal(publicApp.status, 200); assert.ok((await publicApp.text()).includes('Camino a la Gloria')); pass('Public Vercel frontend responds');
 writeFileSync('docs/evidencias/cloud-smoke.json', JSON.stringify({ tested_at: new Date().toISOString(), project_ref: 'gmpjtvxpolmxtqvdxdit', frontend_url: origin, results, limitation: 'Accounts were confirmed as synthetic fixtures; public signup email delivery is not asserted. No data deleted.' }, null, 2) + '\n');

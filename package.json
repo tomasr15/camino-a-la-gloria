@@ -23,6 +23,8 @@
     "test:narrative-http": "node --experimental-transform-types scripts/narrative-http-integration.mjs",
     "test:narrative-live": "node --env-file=supabase/.env.local --experimental-transform-types scripts/narrative-http-integration.mjs --live",
     "report:narrative-usage": "node scripts/narrative-usage.mjs",
+    "report:narrative-quota": "node scripts/narrative-quota.mjs",
+    "monitor:health": "node --experimental-transform-types scripts/health-monitor.mjs",
     "test:cloud": "node scripts/cloud-smoke.mjs"
   },
   "dependencies": {

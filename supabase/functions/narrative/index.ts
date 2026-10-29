@@ -3,6 +3,7 @@ import { sign } from "../_shared/game/contracts.ts";
 import { getClub } from "../_shared/game/data.ts";
 import { contextFromResult, createNarrativeHandler, HttpError } from "../_shared/narrative/handler.ts";
 import { createGeminiProvider, PROMPT_VERSION } from "../_shared/narrative/gemini.ts";
+import { reportServerError } from "../_shared/edge-report.ts";
 
 const model = Deno.env.get("GEMINI_MODEL") ?? "";
 const apiKey = Deno.env.get("GEMINI_API_KEY") ?? "";
@@ -11,7 +12,7 @@ try { if (Deno.env.get("NARRATIVE_ENABLED") === "true") provider = createGeminiP
 catch { /* Configuration errors fall back without spending quota. */ }
 Deno.serve(createNarrativeHandler({
   origins: (Deno.env.get("ALLOWED_ORIGINS") ?? "").split(",").map(s => s.trim()).filter(Boolean),
-  provider, log: entry => console.log(JSON.stringify(entry)),
+  provider, log: entry => console.log(JSON.stringify(entry)), report: input => reportServerError(input),
   authenticate: async token => {
     const secret = Deno.env.get("GAME_SIGNING_KEY");
     if (!secret || secret.length < 64) throw new HttpError("SERVICE_NOT_CONFIGURED", 503);
