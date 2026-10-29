@@ -1,5 +1,5 @@
 import { DATASET_CODE, ENGINE_VERSION, GameError, clamp } from "./model.ts";
-import type { Command, GameState, Result, Shot } from "./model.ts";
+import type { Command, GameState, Match, Result, Shot } from "./model.ts";
 import { clubs, cpuSelection, getClub, lineupPlayers } from "./data.ts";
 import { confidence, offers, reputationDelta, schedule, seasonBonus, table } from "./competition.ts";
 import { random } from "./random.ts";
@@ -21,6 +21,9 @@ function finishRound(state: GameState): void {
   }));
   if (results.some(r => state.results.some(old => old.id === r.id))) throw new GameError("ROUND_ALREADY_COMMITTED");
   state.results.push(...results);
+  // Keep the user's finished match: pending is cleared below and the client
+  // still needs its final score and events.
+  state.lastMatch = state.pending.find(m => m.home === state.clubId || m.away === state.clubId)!;
   const own = results.find(r => r.home === state.clubId || r.away === state.clubId)!;
   state.reputation = clamp(state.reputation + reputationDelta(state.clubId, own), 0, 100);
   state.round++; state.pending = null; state.phase = state.round === 15 ? "finished" : "ready";
@@ -39,7 +42,7 @@ export function transition(previous: GameState, command: Exclude<Command, { type
     if (command.offerClubId !== null && !state.offers.includes(command.offerClubId)) throw new GameError("INVALID_OFFER", 400);
     state.history.push({ season: state.season, clubId: state.clubId, reputation: state.reputation, results: state.results, table: table(state.results, state.seed, state.season) });
     state.clubId = command.offerClubId ?? state.clubId;
-    state.season++; state.round = 1; state.results = []; state.offers = []; state.pending = null; state.phase = "ready";
+    state.season++; state.round = 1; state.results = []; state.offers = []; state.pending = null; state.lastMatch = null; state.phase = "ready";
     return state;
   }
   if (command.round !== state.round) throw new GameError("STALE_ROUND");
@@ -68,12 +71,23 @@ export function transition(previous: GameState, command: Exclude<Command, { type
   finishRound(state);
   return state;
 }
+function projectMatch(match: Match, visible: Shot[], pendingShot?: Shot) {
+  return {
+    id: match.id, round: match.round, home: match.home, away: match.away,
+    homeSelection: match.homeSelection, awaySelection: match.awaySelection,
+    homeGoals: visible.filter(s => s.clubId === match.home && s.goal).length,
+    awayGoals: visible.filter(s => s.clubId === match.away && s.goal).length,
+    events: visible.map(s => ({ id: s.id, minute: s.minute, clubId: s.clubId, playerId: s.playerId, goal: s.goal })),
+    pendingEvent: pendingShot ? { id: pendingShot.id, minute: pendingShot.minute, clubId: pendingShot.clubId, playerId: pendingShot.playerId } : null
+  };
+}
 // Explicit public projection: never return root seed, keeper decision, future
 // events, probability roll or automatic execution to a browser.
 export function publicView(state: GameState) {
   const pendingShot = nextShot(state);
   const match = state.pending?.find(m => m.home === state.clubId || m.away === state.clubId);
   const visible = match?.shots.filter(s => s.resolved && (!pendingShot || match.shots.indexOf(s) < match.shots.indexOf(pendingShot))) ?? [];
+  const last = state.lastMatch;
   const standings = table(state.results, state.seed, state.season);
   return {
     engineVersion: state.engineVersion, datasetCode: state.datasetCode, isSynthetic: true,
@@ -82,13 +96,8 @@ export function publicView(state: GameState) {
     calendar: schedule(state.seed, state.season), results: state.results, table: standings,
     tieBreakOrder: table([], state.seed, state.season).map(r => r.clubId),
     offers: state.offers, history: state.history,
-    match: match ? {
-      id: match.id, home: match.home, away: match.away,
-      homeSelection: match.homeSelection, awaySelection: match.awaySelection,
-      homeGoals: visible.filter(s => s.clubId === match.home && s.goal).length,
-      awayGoals: visible.filter(s => s.clubId === match.away && s.goal).length,
-      events: visible.map(s => ({ id: s.id, minute: s.minute, clubId: s.clubId, playerId: s.playerId, goal: s.goal })),
-      pendingEvent: pendingShot ? { id: pendingShot.id, minute: pendingShot.minute, clubId: pendingShot.clubId, playerId: pendingShot.playerId } : null
-    } : null
+    match: match ? projectMatch(match, visible, pendingShot) : null,
+    // Finished user match, fully resolved, so every shot is visible.
+    lastMatch: last ? projectMatch(last, last.shots) : null
   };
 }

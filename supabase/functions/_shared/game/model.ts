@@ -29,6 +29,8 @@ export interface GameState {
   phase: "ready" | "playing" | "finished";
   results: Result[]; offers: string[]; history: SeasonArchive[];
   pending: Match[] | null;
+  // Optional so states saved before it existed stay valid under cp2-v1.
+  lastMatch?: Match | null;
 }
 export type Command =
   | { type: "initialize"; clubId: string }

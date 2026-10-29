@@ -117,6 +117,31 @@ describe("match lifecycle", () => {
     }
     expect(seen).toBeGreaterThan(30);
   });
+  it("keeps the finished user match visible after the round closes", () => {
+    let immediate=0, played=0;
+    for(let i=0;i<200;i++){
+      let state=start(initialize("club-0","last"+i));
+      if(state.phase==="playing"){
+        played++;
+        while(state.phase==="playing") state=transition(state,{type:"shoot",season:1,round:1,eventId:nextShot(state)!.id,direction:"left",precision:50});
+      } else immediate++;
+      const view=publicView(state), own=state.results.find(r=>r.home==="club-0"||r.away==="club-0")!;
+      expect(view.match).toBeNull();
+      expect(view.lastMatch).toMatchObject({ id: own.id, round: 1, homeGoals: own.homeGoals, awayGoals: own.awayGoals, pendingEvent: null });
+      expect(view.lastMatch!.events).toHaveLength(state.lastMatch!.shots.length);
+      const serialized=JSON.stringify(view.lastMatch);
+      for(const key of ['"keeper":','"roll":','"automaticPrecision":'])expect(serialized).not.toContain(key);
+    }
+    // Both paths must be exercised: a round with no controllable chance closes on start.
+    expect(immediate).toBeGreaterThan(0); expect(played).toBeGreaterThan(0);
+  });
+  it("clears the last match on a new season and accepts states saved without it", () => {
+    const finished=complete(initialize("club-0","season-end"));
+    expect(publicView(finished).lastMatch!.round).toBe(14);
+    expect(publicView(transition(finished,{type:"nextSeason",season:1,offerClubId:null})).lastMatch).toBeNull();
+    const legacy=initialize("club-0","legacy"); delete legacy.lastMatch;
+    expect(publicView(legacy).lastMatch).toBeNull();
+  });
   it("finishes once and preserves reputation and history when staying or moving", () => {
     const finished=complete(initialize("club-0","career"));
     expect(finished.results).toHaveLength(56); expect(finished.round).toBe(15);
