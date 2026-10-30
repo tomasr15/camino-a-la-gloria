@@ -40,7 +40,10 @@ assert.equal(init.status, 200, JSON.stringify(init.body));
 const started = await call('game', token, { requestId: randomUUID(), expectedVersion: init.body.version,
   command: { type: 'start', season: 1, round: 1, formation: '4-4-2', tactic: 'balanced', lineup: bestLineup(clubs[0], '4-4-2') } });
 assert.equal(started.status, 200, JSON.stringify(started.body));
-const finished = await call('game', token, { requestId: randomUUID(), expectedVersion: started.body.version, command: { type: 'auto', season: 1, round: 1 } });
+// A match with no controlled chances is already committed by start.
+const finished = started.body.game.phase === 'playing'
+  ? await call('game', token, { requestId: randomUUID(), expectedVersion: started.body.version, command: { type: 'auto', season: 1, round: 1 } })
+  : started;
 assert.equal(finished.status, 200, JSON.stringify(finished.body));
 const result = finished.body.game.results[0], input = { season: 1, fixtureId: result.id };
 let narrative;

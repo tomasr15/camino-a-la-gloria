@@ -1,0 +1,176 @@
+{
+  "testedAt": "2026-10-30T11:36:44.802Z",
+  "environment": "Supabase cloud; two dedicated synthetic accounts; read-only burst",
+  "requests": 20,
+  "concurrency": 2,
+  "p95Ms": 1140,
+  "errorRatePercent": 0,
+  "passed": true,
+  "targets": {
+    "p95MsBelow": 2000,
+    "errorRatePercentBelow": 1
+  },
+  "samples": [
+    {
+      "index": 0,
+      "path": "game",
+      "status": 200,
+      "requestId": "4eb4edde-9c2a-4ea2-aaf1-35fc04f17ff1",
+      "durationMs": 1026,
+      "ok": true
+    },
+    {
+      "index": 1,
+      "path": "careers",
+      "status": 200,
+      "requestId": "0b095e78-7df0-4a90-a9b1-3af95aeae260",
+      "durationMs": 1140,
+      "ok": true
+    },
+    {
+      "index": 2,
+      "path": "game",
+      "status": 200,
+      "requestId": "c5d2bc7f-8bd1-42e1-adc2-2caaa58a3889",
+      "durationMs": 1063,
+      "ok": true
+    },
+    {
+      "index": 3,
+      "path": "careers",
+      "status": 200,
+      "requestId": "4b456a79-1110-4b86-9593-8f71b98ff77e",
+      "durationMs": 1053,
+      "ok": true
+    },
+    {
+      "index": 4,
+      "path": "game",
+      "status": 200,
+      "requestId": "ff881b64-da2e-4c39-aa5f-35c695f705cc",
+      "durationMs": 513,
+      "ok": true
+    },
+    {
+      "index": 5,
+      "path": "careers",
+      "status": 200,
+      "requestId": "dea67aaf-4bb9-46ba-977e-c02b86c2f459",
+      "durationMs": 1050,
+      "ok": true
+    },
+    {
+      "index": 6,
+      "path": "game",
+      "status": 200,
+      "requestId": "5893e5bb-2b20-404d-8131-b859c67fec56",
+      "durationMs": 1112,
+      "ok": true
+    },
+    {
+      "index": 7,
+      "path": "careers",
+      "status": 200,
+      "requestId": "8ec2284f-c23a-4f72-98b2-cb7b092b8487",
+      "durationMs": 692,
+      "ok": true
+    },
+    {
+      "index": 8,
+      "path": "game",
+      "status": 200,
+      "requestId": "30650736-b522-4c17-9b41-473ca099de5f",
+      "durationMs": 662,
+      "ok": true
+    },
+    {
+      "index": 10,
+      "path": "game",
+      "status": 200,
+      "requestId": "937fedee-b5f9-4818-a8dc-0e20e4ac1bc9",
+      "durationMs": 581,
+      "ok": true
+    },
+    {
+      "index": 9,
+      "path": "careers",
+      "status": 200,
+      "requestId": "3e62f308-c79b-4467-bbcf-6c3c4f2b88d8",
+      "durationMs": 1453,
+      "ok": true
+    },
+    {
+      "index": 11,
+      "path": "careers",
+      "status": 200,
+      "requestId": "540aa0e8-5620-4306-b025-0a5777600901",
+      "durationMs": 659,
+      "ok": true
+    },
+    {
+      "index": 12,
+      "path": "game",
+      "status": 200,
+      "requestId": "56c401dc-65d7-4ddf-9df4-93302d4daec2",
+      "durationMs": 660,
+      "ok": true
+    },
+    {
+      "index": 13,
+      "path": "careers",
+      "status": 200,
+      "requestId": "7eb06424-fa92-4c63-b760-8cfc2991f4dc",
+      "durationMs": 1038,
+      "ok": true
+    },
+    {
+      "index": 14,
+      "path": "game",
+      "status": 200,
+      "requestId": "23b497df-0d37-4431-a084-edeafa3b3e25",
+      "durationMs": 605,
+      "ok": true
+    },
+    {
+      "index": 16,
+      "path": "game",
+      "status": 200,
+      "requestId": "27b492e1-2a6e-4c5a-8675-c959927eeefb",
+      "durationMs": 593,
+      "ok": true
+    },
+    {
+      "index": 15,
+      "path": "careers",
+      "status": 200,
+      "requestId": "5a962b40-6cc8-4a44-9d86-dff9f6852f0d",
+      "durationMs": 613,
+      "ok": true
+    },
+    {
+      "index": 18,
+      "path": "game",
+      "status": 200,
+      "requestId": "506ba16b-c9e4-487c-afea-f5bfd1741e16",
+      "durationMs": 579,
+      "ok": true
+    },
+    {
+      "index": 17,
+      "path": "careers",
+      "status": 200,
+      "requestId": "0ea34f93-af14-4d49-a14b-ff3acfbe11da",
+      "durationMs": 1042,
+      "ok": true
+    },
+    {
+      "index": 19,
+      "path": "careers",
+      "status": 200,
+      "requestId": "e05abdaa-0c2a-40be-b021-69cdfce401ca",
+      "durationMs": 671,
+      "ok": true
+    }
+  ],
+  "limitations": "Small academic read burst; not a capacity or availability guarantee. Does not measure browser CORS or write latency. No narrative/provider calls."
+}

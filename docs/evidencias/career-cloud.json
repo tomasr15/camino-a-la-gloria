@@ -1,0 +1,152 @@
+{
+  "testedAt": "2026-10-30T11:46:20.995Z",
+  "environment": "Supabase cloud",
+  "project": "gmpjtvxpolmxtqvdxdit",
+  "checks": [
+    {
+      "name": "Health and trace propagation",
+      "status": "PASS"
+    },
+    {
+      "name": "Browser preflight allows x-request-id",
+      "status": "PASS"
+    },
+    {
+      "name": "Game rejects missing JWT",
+      "status": "PASS"
+    },
+    {
+      "name": "Narrative function deployed",
+      "status": "PASS"
+    },
+    {
+      "name": "Dedicated careers persist",
+      "status": "PASS"
+    },
+    {
+      "name": "Cross-user REST and endpoint isolation",
+      "status": "PASS"
+    },
+    {
+      "name": "Game contract and real dataset available",
+      "status": "PASS"
+    },
+    {
+      "name": "Game initialization and exact replay",
+      "status": "PASS"
+    },
+    {
+      "name": "Play, automatic resolution and reload persist once",
+      "status": "PASS"
+    },
+    {
+      "name": "Other synthetic account cannot read first game",
+      "status": "PASS"
+    }
+  ],
+  "requests": [
+    {
+      "path": "health",
+      "method": "GET",
+      "status": 200,
+      "requestId": "71d72af5-ce94-4e85-81b5-3677b23792c4",
+      "durationMs": 2957
+    },
+    {
+      "path": "careers",
+      "method": "OPTIONS",
+      "status": 204,
+      "requestId": "60fd1013-f8d7-40b5-b622-6fe9ab1a08b7",
+      "durationMs": 1537
+    },
+    {
+      "path": "game",
+      "method": "GET",
+      "status": 401,
+      "requestId": "4b826a61-cab8-4e77-ac3d-73d860f6daf5",
+      "durationMs": 1331
+    },
+    {
+      "path": "narrative",
+      "method": "POST",
+      "status": 401,
+      "requestId": "62abcbf0-dd42-4d09-8ee9-ce5a4a1dc033",
+      "durationMs": 1545
+    },
+    {
+      "path": "careers",
+      "method": "GET",
+      "status": 200,
+      "requestId": "78571391-11a3-4432-9eb7-3e521f9c6828",
+      "durationMs": 1149
+    },
+    {
+      "path": "careers",
+      "method": "GET",
+      "status": 200,
+      "requestId": "337d166b-b4a8-4f99-afff-365ae74a46c7",
+      "durationMs": 1062
+    },
+    {
+      "path": "careers",
+      "method": "GET",
+      "status": 200,
+      "requestId": "552444a3-1935-4122-89bf-df5a3e49286a",
+      "durationMs": 683
+    },
+    {
+      "path": "careers",
+      "method": "GET",
+      "status": 200,
+      "requestId": "c9f3a7ea-59f1-458f-bac2-5b33ade70ac1",
+      "durationMs": 696
+    },
+    {
+      "path": "game",
+      "method": "GET",
+      "status": 200,
+      "requestId": "4315ffa3-5f7e-495f-ac25-45a0952277cf",
+      "durationMs": 678
+    },
+    {
+      "path": "game",
+      "method": "GET",
+      "status": 200,
+      "requestId": "049fcbb3-576c-4f54-add5-36037432fd38",
+      "durationMs": 1000
+    },
+    {
+      "path": "game",
+      "method": "POST",
+      "status": 200,
+      "requestId": "f7018f91-1dd0-4932-b60e-6da8245c13ca",
+      "durationMs": 1040
+    },
+    {
+      "path": "game",
+      "method": "POST",
+      "status": 200,
+      "requestId": "14c72d6d-c133-448c-8b74-62dc48362d43",
+      "durationMs": 856
+    },
+    {
+      "path": "game",
+      "method": "GET",
+      "status": 200,
+      "requestId": "54e083c5-63ff-4df1-9550-3d671310c72f",
+      "durationMs": 663
+    },
+    {
+      "path": "game",
+      "method": "GET",
+      "status": 200,
+      "requestId": "cfdf92e2-b476-4147-a01f-522610f0034c",
+      "durationMs": 990
+    }
+  ],
+  "providerCalls": 0,
+  "limitations": [
+    "Existing dedicated game retained; initialization replay skipped on repeat run.",
+    "Narrative provider intentionally not invoked; no cloud outage induced. Only dedicated synthetic accounts mutated; retained for repeat tests. Frontend candidate not deployed."
+  ]
+}

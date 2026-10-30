@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-30T11:39:24.494Z",
+  "environment": "Local Next.js; all Supabase HTTP calls intercepted; real deterministic game engine; synthetic session; no Gemini/live Supabase calls",
+  "passed": true,
+  "scenarios": [
+    {
+      "scenario": "initial game GET 503 shows recovery; retry loads state",
+      "passed": true,
+      "observedStatus": 503
+    },
+    {
+      "scenario": "POST start lost response retries same body/requestId; engine transition occurs once",
+      "passed": true,
+      "requestId": "77eb44f9-7875-4759-a8f8-328fe0d3741b",
+      "committedVersion": 2
+    },
+    {
+      "scenario": "narrative 404 does not block confirmed result or progress",
+      "passed": true,
+      "observedStatus": 404,
+      "round": 2
+    },
+    {
+      "scenario": "narrative 503 does not block confirmed result or progress",
+      "passed": true,
+      "observedStatus": 503,
+      "round": 3
+    },
+    {
+      "scenario": "STALE_VERSION 409 offers refresh and does not repeat decision",
+      "passed": true,
+      "requestId": "4fd64abe-1957-4a7c-87a8-ab22e07d717a",
+      "authoritativeVersion": 6
+    },
+    {
+      "scenario": "401 displays session message and leaves engine state unchanged",
+      "passed": true,
+      "observedStatus": 401
+    },
+    {
+      "scenario": "429 displays safe action error and leaves engine state unchanged",
+      "passed": true,
+      "observedStatus": 429
+    }
+  ],
+  "assertions": {
+    "totalPosts": 10,
+    "distinctDecisionIds": 9,
+    "narrativeCalls": 3,
+    "pageErrors": 0
+  },
+  "limits": "Each injected error is exercised once; one career and bounded rounds only."
+}
