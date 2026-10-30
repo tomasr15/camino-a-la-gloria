@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-30T11:39:04.637Z",
+  "environment": "Local Next.js; all Supabase HTTP intercepted; real deterministic game engine; synthetic session; narrative success and outage responses stubbed; no Gemini/live Supabase calls",
+  "passed": true,
+  "checks": [
+    "editor formation and tactic",
+    "invalid lineup disables start",
+    "recommended lineup valid",
+    "draft survives reload",
+    "start command carries selected formation/tactic/11 players",
+    "confirmed fixture narrative success",
+    "narrative outage does not block next match",
+    "manual shot uses animated meter and confirmed engine event",
+    "mobile 390px navigation/editor without horizontal overflow",
+    "no page errors"
+  ]
+}

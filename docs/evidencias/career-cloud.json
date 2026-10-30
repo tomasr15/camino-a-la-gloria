@@ -1,0 +1,155 @@
+{
+  "testedAt": "2026-10-30T11:38:29.311Z",
+  "environment": "Supabase cloud",
+  "project": "gmpjtvxpolmxtqvdxdit",
+  "checks": [
+    {
+      "name": "Health and trace propagation",
+      "status": "FAIL",
+      "reason": "Expected values to be strictly equal:\n+ actual - expected\n\n+ '141b120e-5907-4622-bc9b-42a4dbbf58ed'\n- 'd34fbba3-bd77-4429-8dd2-fe230f382b2a'\n"
+    },
+    {
+      "name": "Browser preflight allows x-request-id",
+      "status": "FAIL",
+      "reason": "Cloud CORS omits x-request-id required by frontend"
+    },
+    {
+      "name": "Game rejects missing JWT",
+      "status": "PASS"
+    },
+    {
+      "name": "Narrative function deployed",
+      "status": "FAIL",
+      "reason": "Expected values to be strictly equal:\n\n404 !== 401\n"
+    },
+    {
+      "name": "Dedicated careers persist",
+      "status": "PASS"
+    },
+    {
+      "name": "Cross-user REST and endpoint isolation",
+      "status": "PASS"
+    },
+    {
+      "name": "Game contract and real dataset available",
+      "status": "PASS"
+    },
+    {
+      "name": "Game initialization and exact replay",
+      "status": "PASS"
+    },
+    {
+      "name": "Play, automatic resolution and reload persist once",
+      "status": "PASS"
+    },
+    {
+      "name": "Other synthetic account cannot read first game",
+      "status": "PASS"
+    }
+  ],
+  "requests": [
+    {
+      "path": "health",
+      "method": "GET",
+      "status": 200,
+      "requestId": "141b120e-5907-4622-bc9b-42a4dbbf58ed",
+      "durationMs": 1599
+    },
+    {
+      "path": "careers",
+      "method": "OPTIONS",
+      "status": 204,
+      "requestId": "c9de63f7-aad0-4520-af95-ab1f84354761",
+      "durationMs": 164
+    },
+    {
+      "path": "game",
+      "method": "GET",
+      "status": 401,
+      "requestId": "54000331-a09a-4f30-a139-87b9c990345c",
+      "durationMs": 210
+    },
+    {
+      "path": "narrative",
+      "method": "POST",
+      "status": 404,
+      "requestId": null,
+      "durationMs": 51
+    },
+    {
+      "path": "careers",
+      "method": "GET",
+      "status": 200,
+      "requestId": "74561bb9-210b-470f-934e-5e77d2c78cd0",
+      "durationMs": 1012
+    },
+    {
+      "path": "careers",
+      "method": "GET",
+      "status": 200,
+      "requestId": "69555a72-4aea-4670-955c-f30a4d86031f",
+      "durationMs": 1019
+    },
+    {
+      "path": "careers",
+      "method": "GET",
+      "status": 200,
+      "requestId": "241c4d65-b05c-492f-b118-bfefbdcd56c4",
+      "durationMs": 655
+    },
+    {
+      "path": "careers",
+      "method": "GET",
+      "status": 200,
+      "requestId": "bdd979fe-cd23-4729-ab24-a50f2a3bb0dd",
+      "durationMs": 968
+    },
+    {
+      "path": "game",
+      "method": "GET",
+      "status": 200,
+      "requestId": "60310527-639b-482e-a388-1619e65d3ee1",
+      "durationMs": 1061
+    },
+    {
+      "path": "game",
+      "method": "GET",
+      "status": 200,
+      "requestId": "f6d999b2-5f31-4405-b664-230d4c27abb3",
+      "durationMs": 471
+    },
+    {
+      "path": "game",
+      "method": "POST",
+      "status": 200,
+      "requestId": "8c4902e5-a6a7-4123-b951-8a47ba3ff14a",
+      "durationMs": 1256
+    },
+    {
+      "path": "game",
+      "method": "POST",
+      "status": 200,
+      "requestId": "3aa123b0-379d-442a-99b2-fa2ff9e70bf8",
+      "durationMs": 938
+    },
+    {
+      "path": "game",
+      "method": "GET",
+      "status": 200,
+      "requestId": "76a78a78-e4e9-45e8-a010-2a590e5243da",
+      "durationMs": 1042
+    },
+    {
+      "path": "game",
+      "method": "GET",
+      "status": 200,
+      "requestId": "20ded38a-7427-42d3-a414-588847e1fe63",
+      "durationMs": 1022
+    }
+  ],
+  "providerCalls": 0,
+  "limitations": [
+    "Existing dedicated game retained; initialization replay skipped on repeat run.",
+    "Narrative provider intentionally not invoked; no cloud outage induced. Only dedicated synthetic accounts mutated; retained for repeat tests. Frontend candidate not deployed."
+  ]
+}
