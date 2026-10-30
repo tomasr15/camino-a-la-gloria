@@ -30,6 +30,7 @@
     "test:career-resilience": "node --experimental-transform-types scripts/test-career-resilience.mjs",
     "test:career-load": "node --experimental-transform-types scripts/career-load.mjs",
     "test:career-cloud": "node --experimental-transform-types scripts/career-cloud.mjs",
+    "test:career-cloud-browser": "node scripts/test-career-cloud-browser.mjs",
     "test:career-cloud-load": "node scripts/career-cloud-load.mjs"
   },
   "dependencies": {
