@@ -21,7 +21,7 @@ const context = await browser.newContext({ viewport: { width: 1440, height: 1000
 const page = await context.newPage();
 page.on('pageerror', e => errors.push(e.message));
 const session = { access_token: 'test-token', refresh_token: 'test-refresh', expires_at: 4102444800, expires_in: 3600, token_type: 'bearer', user: { id: 'resilience-test-user', aud: 'authenticated', role: 'authenticated', email: 'resilience@example.invalid', app_metadata: {}, user_metadata: {}, created_at: '2026-01-01T00:00:00Z' } };
-await page.addInitScript(s => localStorage.setItem('sb-demo-auth-token', JSON.stringify(s)), session);
+await page.addInitScript(({ key, value }) => localStorage.setItem(key, JSON.stringify(value)), { key: 'sb-' + new URL(supabaseURL).hostname.split('.')[0] + '-auth-token', value: session });
 await page.route(`${supabaseURL}/**`, async route => {
   const req = route.request(), url = req.url();
   const headers = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET, POST, OPTIONS', 'content-type': 'application/json' };
@@ -62,6 +62,12 @@ await page.route(`${supabaseURL}/**`, async route => {
 });
 const assert = (ok, message) => { if (!ok) throw new Error(message); };
 
+async function openPregame() {
+  await page.goto(`${baseURL}/carrera`);
+  await page.getByRole('button', { name: 'Cargar mi carrera', exact: true }).click();
+  await page.getByRole('button', { name: 'Simular partido', exact: false }).click();
+  await page.getByRole('button', { name: 'Empezar partido', exact: true }).waitFor();
+}
 try {
   await page.goto(`${baseURL}/carrera`);
   await page.getByRole('button', { name: 'Cargar mi carrera', exact: true }).click();
@@ -69,75 +75,56 @@ try {
   failReadsRemaining = 0;
   await page.getByRole('button', { name: 'Volver a intentar', exact: true }).click();
   await page.getByRole('heading', { name: 'Elegí tu club.' }).waitFor();
-  results.push({ scenario: 'initial game GET 503 shows recovery; retry loads state', passed: true, observedStatus: 503 });
+  results.push({ scenario: 'Initial GET 503 recovers through retry', passed: true });
   await page.getByRole('button', { name: new RegExp(clubs.find(c => c.tier === 'low').name) }).click();
-  await page.getByRole('heading', { name: 'La próxima oportunidad.' }).waitFor();
+  await page.getByRole('heading', { name: 'Próximo partido' }).waitFor();
 
-  narrativeStatus = 404;
-  await page.getByRole('button', { name: 'Jugar partido', exact: false }).click();
-  await page.getByRole('button', { name: 'Reintentar acción', exact: true }).waitFor();
-  const firstAttempt = posts.at(-1);
-  assert(firstAttempt.command.type === 'start' && version === 2 && (state.phase === 'playing' || state.round === 2), 'Lost start response must commit once on server');
-  await page.getByRole('button', { name: 'Reintentar acción', exact: true }).click();
-  await page.getByText(state.phase === 'playing' ? 'El partido está en curso.' : 'Tu progreso quedó guardado.', { exact: true }).waitFor();
-  const retryPair = posts.slice(-2);
-  assert(retryPair.length === 2 && JSON.stringify(retryPair[0]) === JSON.stringify(retryPair[1]), 'Retry must send byte-equivalent decision payload');
-  assert(retryPair[0].requestId === retryPair[1].requestId && version === 2, 'Retry must reuse request ID and avoid duplicate engine transition');
-  results.push({ scenario: 'POST start lost response retries same body/requestId; engine transition occurs once', passed: true, requestId: firstAttempt.requestId, committedVersion: version });
-
-  if (state.phase === 'playing') await page.getByRole('button', { name: 'Resolver automáticamente', exact: true }).click();
-  await page.getByText('La crónica no está disponible. El resultado y tu progreso están guardados; podés continuar.').waitFor({ timeout: 10000 });
-  assert(state.results.length === 4 && narrativeCalls.at(-1)?.fixtureId === state.lastMatch.id, 'Narrative 404 must preserve confirmed engine result');
-  results.push({ scenario: 'narrative 404 does not block confirmed result or progress', passed: true, observedStatus: 404, round: state.round });
-
-  narrativeStatus = 503;
-  const failedNarrative = page.waitForResponse(r => r.url().includes('/functions/v1/narrative') && r.status() === 503);
   await page.getByRole('button', { name: 'Simular partido', exact: false }).click();
-  await failedNarrative;
-  await page.getByText('La crónica no está disponible. El resultado y tu progreso están guardados; podés continuar.').waitFor({ timeout: 10000 });
-  assert(state.results.length === 8, 'Narrative 503 must not block round completion');
-  results.push({ scenario: 'narrative 503 does not block confirmed result or progress', passed: true, observedStatus: 503, round: state.round });
+  await page.getByRole('button', { name: 'Empezar partido', exact: true }).click();
+  await page.getByRole('button', { name: 'Reintentar inicio', exact: true }).waitFor();
+  const firstAttempt = posts.at(-1);
+  assert(firstAttempt.command.type === 'start' && version === 2, 'Lost response still commits start once');
+  await page.getByRole('button', { name: 'Reintentar inicio', exact: true }).click();
+  await page.getByRole('heading', { name: 'Final del encuentro' }).waitFor({ state: 'attached' });
+  const retries = posts.filter(p => p.requestId === firstAttempt.requestId);
+  assert(retries.length === 2 && JSON.stringify(retries[0]) === JSON.stringify(retries[1]), 'Retry preserves exact request identity and body');
+  assert(state.round === 2 && state.results.length === 4, 'Retry does not duplicate result');
+  results.push({ scenario: 'Lost start response retried identically and round committed once', passed: true });
 
-  const beforeStalePosts = posts.length;
+  await openPregame();
   staleStartOnce = true;
-  if (state.phase === 'playing') await page.getByRole('button', { name: 'Resolver automáticamente', exact: true }).click();
-  if (state.phase === 'ready') await page.getByRole('button', { name: 'Jugar partido', exact: false }).click();
-  await page.getByText('La partida cambió o no es compatible. Actualizá para consultar su estado.').waitFor();
-  const staleBody = posts.at(-1);
-  assert(staleBody.command.type === 'start' && posts.length === beforeStalePosts + 1, 'Stale response should not replay the decision');
-  const beforeRefreshPosts = posts.length;
-  await page.getByRole('button', { name: 'Actualizar ↻', exact: true }).click();
-  await page.getByRole('heading', { name: state.phase === 'playing' ? 'El partido sigue.' : 'La próxima oportunidad.' }).waitFor();
-  assert(posts.length === beforeRefreshPosts && version >= 4, 'Refresh after STALE_VERSION must read authoritative state without POST');
-  results.push({ scenario: 'STALE_VERSION 409 offers refresh and does not repeat decision', passed: true, requestId: staleBody.requestId, authoritativeVersion: version });
+  const beforeStale = posts.length;
+  await page.getByRole('button', { name: 'Empezar partido', exact: true }).click();
+  await page.getByText(/La partida cambió o no es compatible/).waitFor();
+  assert(posts.length === beforeStale + 1, '409 does not silently replay the action');
+  await page.reload();
+  await page.getByRole('heading', { name: state.phase === 'playing' ? 'Acontecimientos' : 'Final del encuentro' }).waitFor({ state: 'attached' });
+  assert(posts.length === beforeStale + 1, 'Reload recovers authoritative state without POST');
+  results.push({ scenario: '409 recovers persisted game on reload without another decision', passed: true });
 
+  // Finish only this fixture in the intercepted server to prepare the error scenarios.
   if (state.phase === 'playing') {
-    await page.getByRole('button', { name: 'Resolver automáticamente', exact: true }).click();
-    await page.getByText('Tu progreso quedó guardado.', { exact: true }).waitFor();
+    state = transition(state, { type: 'auto', season: state.season, round: state.round });
+    version++;
   }
-  assert(state.phase === 'ready', 'Prepare ready state for authorization/rate-limit responses');
-  const stateBeforeAuthErrors = JSON.stringify({ state, version });
-  nextGameStatus = 401;
-  await page.getByRole('button', { name: 'Jugar partido', exact: false }).click();
-  await page.getByText(/Tu sesión venció/).waitFor();
-  assert(JSON.stringify({ state, version }) === stateBeforeAuthErrors, '401 must leave game unchanged');
-  results.push({ scenario: '401 displays session message and leaves engine state unchanged', passed: true, observedStatus: 401 });
-
-  nextGameStatus = 429;
-  await page.getByRole('button', { name: 'Jugar partido', exact: false }).click();
-  await page.getByText(/No pudimos confirmar la operación/).waitFor();
-  assert(JSON.stringify({ state, version }) === stateBeforeAuthErrors, '429 must leave game unchanged');
-  results.push({ scenario: '429 displays safe action error and leaves engine state unchanged', passed: true, observedStatus: 429 });
-  assert(errors.length === 0, `Unexpected browser runtime errors: ${errors.join('; ')}`);
-
-  const report = {
-    generatedAt: new Date().toISOString(),
-    environment: 'Local Next.js; all Supabase HTTP calls intercepted; real deterministic game engine; synthetic session; no Gemini/live Supabase calls',
-    passed: true, scenarios: results,
-    assertions: { totalPosts: posts.length, distinctDecisionIds: new Set(posts.map(p => p.requestId)).size, narrativeCalls: narrativeCalls.length, pageErrors: errors.length },
-    limits: 'Each injected error is exercised once; one career and bounded rounds only.'
-  };
+  for (const status of [401, 429, 503]) {
+    await openPregame();
+    const before = JSON.stringify({ state, version });
+    nextGameStatus = status;
+    await page.getByRole('button', { name: 'Empezar partido', exact: true }).click();
+    await page.getByText(status === 401 ? /Tu sesión venció/ : /No pudimos confirmar la operación/).waitFor();
+    assert(JSON.stringify({ state, version }) === before, `HTTP ${status} must preserve game state`);
+    results.push({ scenario: `HTTP ${status} displays error and preserves state`, passed: true });
+  }
+  assert(errors.length === 0, `Browser errors: ${errors.join('; ')}`);
+  assert(narrativeCalls.length === 0, 'Removed narrative panel must not request narratives');
   mkdirSync('docs/evidencias', { recursive: true });
-  writeFileSync(evidencePath, JSON.stringify(report, null, 2) + '\n');
-  console.log('PASS career browser resilience flow (intercepted API, real local engine)');
+  writeFileSync(evidencePath, JSON.stringify({
+    generatedAt: new Date().toISOString(),
+    environment: 'Local Next.js; intercepted Supabase HTTP; real deterministic engine; synthetic session',
+    passed: true,
+    scenarios: results,
+    limits: 'No live database or provider calls. 409 recovery exercised through page reload.',
+  }, null, 2) + '\n');
+  console.log('PASS career browser resilience (current kickoff and match routes)');
 } finally { await browser.close(); }

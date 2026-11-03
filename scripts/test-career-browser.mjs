@@ -18,7 +18,7 @@ const browser = await chromium.launch({ headless: true, ...(process.env.EDGE_EXE
 const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
 page.on('pageerror', e => errors.push(e.message));
 const session = { access_token: 'test-token', refresh_token: 'test-refresh', expires_at: 4102444800, expires_in: 3600, token_type: 'bearer', user: { id: 'dashboard-test-user', aud: 'authenticated', role: 'authenticated', email: 'test@example.invalid', app_metadata: {}, user_metadata: {}, created_at: '2026-01-01T00:00:00Z' } };
-await page.addInitScript(s => localStorage.setItem('sb-demo-auth-token', JSON.stringify(s)), session);
+await page.addInitScript(({ key, value }) => localStorage.setItem(key, JSON.stringify(value)), { key: 'sb-' + new URL(supabaseURL).hostname.split('.')[0] + '-auth-token', value: session });
 await page.route(`${supabaseURL}/**`, async route => {
   const req = route.request(), url = req.url();
   const headers = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET, POST, OPTIONS', 'content-type': 'application/json' };
@@ -49,7 +49,7 @@ try {
   await page.getByRole('button', { name: 'Cargar mi carrera', exact: true }).click();
   await page.getByRole('heading', { name: 'Elegí tu club.' }).waitFor();
   await page.getByRole('button', { name: new RegExp(clubs.find(c => c.tier === 'low').name) }).click();
-  await page.getByRole('heading', { name: 'La próxima oportunidad.' }).waitFor();
+  await page.getByRole('heading', { name: 'Próximo partido' }).waitFor();
 
   await page.getByRole('button', { name: 'Equipo', exact: true }).click();
   const formation = page.locator('select').nth(0);
@@ -73,45 +73,45 @@ try {
   assert(await page.locator('select').nth(1).inputValue() === 'offensive', 'Tactic draft reload persistence');
   await page.getByRole('button', { name: 'Central', exact: true }).click();
   await page.getByRole('button', { name: 'Jugar partido', exact: false }).click();
-  await page.getByRole('heading', { name: 'El partido sigue.' }).waitFor();
+  await page.getByRole('button', { name: 'Empezar partido', exact: true }).waitFor();
+  assert(decisions.filter(d => d.command.type === 'start').length === 0, 'Pregame must not start the engine');
+  await page.getByRole('button', { name: 'Empezar partido', exact: true }).click();
+  await page.getByRole('heading', { name: 'Acontecimientos', exact: true }).waitFor({ state: 'attached' });
   const start = decisions.find(d => d.command.type === 'start')?.command;
   assert(start?.formation === '4-3-3' && start.tactic === 'offensive' && start.lineup.length === 11, 'POST start must include the selected valid selection');
 
-  // Resolve the first round through the actual engine; narrative is intercepted and never reaches a provider.
-  await page.getByRole('button', { name: 'Resolver automáticamente', exact: true }).click();
-  await page.getByRole('heading', { name: 'Crónica de prueba' }).waitFor({ timeout: 10000 });
-  assert(narrativeCalls[0]?.fixtureId === state.lastMatch.id && narrativeCalls[0]?.season === state.season, 'Narrative request must reference confirmed fixture');
-  assert(state.phase === 'ready' && state.results.length === 4, 'Narrative cannot alter confirmed engine result');
-  narrativeMode = 'failure';
-  await page.getByRole('button', { name: 'Central', exact: true }).click();
-  await page.getByRole('button', { name: 'Simular partido', exact: false }).click();
-  await page.getByText('La crónica no está disponible. El resultado y tu progreso están guardados; podés continuar.').waitFor({ timeout: 10000 });
-  assert(state.round === 3 && state.results.length === 8, 'Narrative failure must not block career progress');
-
-  // Reach a controllable chance with a bounded number of deterministic rounds, then verify the shot receipt and arena.
-  await page.reload(); await page.getByRole('button', { name: 'Cargar mi carrera', exact: true }).click();
-  await page.getByRole('heading', { name: 'La próxima oportunidad.' }).waitFor();
-  for (let i = 0; i < 12 && state.phase !== 'playing'; i++) {
-    await page.getByRole('button', { name: 'Jugar partido', exact: false }).click();
-    await page.waitForTimeout(100);
-    if (state.phase === 'playing' && !state.pending?.flatMap(m => m.shots).some(s => s.controlled && !s.resolved)) {
-      await page.getByRole('button', { name: 'Resolver automáticamente', exact: true }).click();
-      await page.waitForTimeout(100);
-    }
-  }
-  if (state.phase === 'playing' && state.pending?.flatMap(m => m.shots).some(s => s.controlled && !s.resolved)) {
-    await page.getByRole('button', { name: 'Iniciar barra', exact: true }).click();
-    await page.waitForTimeout(600);
-    const meter = page.locator('[aria-label^="Precisión"] span');
-    const first = await meter.getAttribute('style'); await page.waitForTimeout(250); const second = await meter.getAttribute('style');
-    assert(first !== second, 'Meter should animate after starting');
+  const shotStatus = page.locator('p[role="status"][class*="result"]');
+  let shotCount = 0;
+  while (state.phase === 'playing') {
+    const before = version;
     await page.getByRole('button', { name: 'Patear', exact: true }).click();
-    await page.getByText(/Confirmado/).waitFor();
-    const shot = decisions.filter(d => d.command.type === 'shoot').at(-1)?.command;
-    assert(shot && shot.eventId && shot.precision >= 0 && shot.precision <= 100, 'Confirmed shot command fields');
-  } else {
-    throw new Error('Deterministic seed did not expose a controllable chance within 12 rounds');
+    await page.getByRole('button', { name: 'Iniciar precisión', exact: true }).click();
+    const meter = page.locator('[aria-label="Precisión del remate"] span');
+    const first = await meter.getAttribute('style');
+    await page.waitForTimeout(150);
+    assert(await meter.getAttribute('style') !== first, 'Precision meter must animate');
+    await page.getByRole('button', { name: 'Patear', exact: true }).click();
+    await shotStatus.waitFor();
+    assert(version === before + 1, 'Shot must commit exactly once');
+    shotCount++;
+    await shotStatus.waitFor({ state: 'hidden', timeout: 4000 });
   }
+  assert(shotCount > 0, 'Seed must exercise a controlled shot');
+  assert(state.round === 2 && state.results.length === 4, 'Completed match commits the round');
+  assert(new Set(state.lastMatch.shots.map(s => s.id)).size === state.lastMatch.shots.length, 'Events must be unique');
+  await page.getByRole('link', { name: 'Volver a Carrera', exact: true }).click();
+  await page.getByText(/Último resultado:/).waitFor();
+
+  const startsBeforeAuto = decisions.filter(d => d.command.type === 'start').length;
+  await page.getByRole('button', { name: 'Simular partido', exact: false }).click();
+  await page.getByRole('button', { name: 'Empezar partido', exact: true }).waitFor();
+  assert(decisions.filter(d => d.command.type === 'start').length === startsBeforeAuto, 'Automatic mode also waits for kickoff');
+  await page.getByRole('button', { name: 'Empezar partido', exact: true }).click();
+  await page.getByRole('heading', { name: 'Final del encuentro' }).waitFor({ state: 'attached' });
+  assert(state.round === 3 && state.results.length === 8, 'Automatic mode commits the next round');
+  assert(narrativeCalls.length === 0, 'Removed narrative panels must not issue requests');
+  await page.getByRole('link', { name: 'Volver a Carrera', exact: true }).click();
+  await page.getByText(/Último resultado:/).waitFor();
   await page.setViewportSize({ width: 390, height: 844 });
   for (const name of ['Central', 'Equipo', 'Tabla', 'Calendario']) {
     await page.getByRole('button', { name, exact: true }).click();
@@ -121,6 +121,6 @@ try {
   await page.getByRole('button', { name: 'Central', exact: true }).click();
   await page.screenshot({ path: `${screenshotDir}/career-editor-mobile.png`, fullPage: true });
   assert(errors.length === 0, `Browser exceptions: ${errors.join('; ')}`);
-  writeFileSync(`${screenshotDir}/career-browser.json`, JSON.stringify({ date: new Date().toISOString(), environment: 'Local Next.js; all Supabase HTTP intercepted; real deterministic game engine; synthetic session; narrative success and outage responses stubbed; no Gemini/live Supabase calls', passed: true, checks: ['editor formation and tactic', 'invalid lineup disables start', 'recommended lineup valid', 'draft survives reload', 'start command carries selected formation/tactic/11 players', 'confirmed fixture narrative success', 'narrative outage does not block next match', 'manual shot uses animated meter and confirmed engine event', 'mobile 390px navigation/editor without horizontal overflow', 'no page errors'] }, null, 2));
+  writeFileSync(`${screenshotDir}/career-browser.json`, JSON.stringify({ date: new Date().toISOString(), environment: 'Local Next.js; all Supabase HTTP intercepted; real deterministic game engine; synthetic session; explicit kickoff and match route; no Gemini/live Supabase calls', passed: true, checks: ['editor formation and tactic', 'invalid lineup disables start', 'recommended lineup valid', 'draft survives reload', 'start command carries selected formation/tactic/11 players', 'explicit kickoff for manual and automatic modes', 'match route and automatic return to career', 'final shot notice disappears', 'manual shot uses animated meter and confirmed engine event', 'mobile 390px navigation/editor without horizontal overflow', 'no page errors'] }, null, 2));
   console.log('PASS career browser flow (intercepted API, real local engine)');
 } finally { await browser.close(); }

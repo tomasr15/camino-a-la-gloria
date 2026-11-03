@@ -24,6 +24,23 @@ export default function CareerPage() {
     return () => data.subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (!session?.user.id || new URLSearchParams(window.location.search).get('volver') !== 'partido') return;
+    let cancelled = false;
+    void invokeFunction<{ careers: Career[] }>(getSupabase()!, "careers", { method: "GET" }).then(result => {
+      if (cancelled) return;
+      if (result.error || !result.data) {
+        setMessage(withReference("No pudimos cargar tu carrera. Usá Cargar mi carrera para reintentar.", result.requestId));
+        return;
+      }
+      setCareers(result.data.careers);
+      setLoaded(true);
+    }).catch(() => {
+      if (!cancelled) setMessage("No pudimos cargar tu carrera. Usá Cargar mi carrera para reintentar.");
+    });
+    return () => { cancelled = true; };
+  }, [session?.user.id]);
+
   async function loadCareers() {
     setBusy(true); setMessage("");
     let requestId: string | null = null;

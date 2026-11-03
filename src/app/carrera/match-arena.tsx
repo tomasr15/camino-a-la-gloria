@@ -4,10 +4,10 @@ import type { Direction } from '../../../supabase/functions/_shared/game/model';
 import styles from './career-dashboard.module.css';
 
 export type ConfirmedShot = { id: string; goal: boolean; direction: Direction; player: string; minute: number };
-export default function MatchArena({ shooter, minute, feedback }: { shooter: string; minute: number; feedback: ConfirmedShot | null }) {
+export default function MatchArena({ shooter, minute, feedback, className }: { shooter: string; minute: number; feedback: ConfirmedShot | null; className?: string }) {
   const goal = feedback?.goal;
   const x = feedback?.direction === 'left' ? '-105px' : feedback?.direction === 'right' ? '105px' : '0px';
-  return <div className={styles.arena} aria-label="Cancha de fútbol con arco, arquero y pelota">
+  return <div className={[styles.arena, className].filter(Boolean).join(' ')} aria-label="Cancha de fútbol con arco, arquero y pelota">
     <div className={styles.arenaLights} aria-hidden="true"/>
     <div className={styles.arenaCaption}>{feedback ? `${feedback.minute}′ · ${feedback.player}` : `${minute}′ · ${shooter}`}</div>
     <div className={styles.goal} aria-hidden="true"/>
