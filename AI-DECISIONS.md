@@ -168,7 +168,7 @@ Estado: propuesta e implementación asistidas. **Revisión técnica completada e
 - **Decisiones:** componente aislado de menú, navegación horizontal y cliente tipado sobre `invokeFunction`. Las acciones reutilizan contratos y reglas existentes. `bestLineup` proporciona el once recomendado. Jornadas e iniciales representan los datos disponibles. El estadio decorativo fue generado con `image_gen`; el prompt se conserva en `docs/career-dashboard.md`.
 - **Validación automática y local:** recorrido de navegador con HTTP interceptado y motor real. Esta comprobación inicial no verificó Supabase cloud.
 - **Límites y seguimiento:** el contrato carece de fechas de calendario y escudos oficiales. Los ajustes posteriores de distribución e inicio del partido se registran en AI-017.
-- **Validación/corrección humana:** pendiente de aprobación explícita de esta decisión. Julián informó el 30/10/2026 en la PR #25 que probó los cambios en local y pidió normalizar este registro antes de aprobar las decisiones de IA.
+- **Validación/corrección humana:** revisada el 03/11/2026 por Julian Coloma: probada en local el 30/10/2026 y acuerdo con el cambio.
 
 ## AI-014 · Once editable y resolución visual de ocasiones (CP2-04, issue #9)
 
@@ -177,7 +177,7 @@ Estado: propuesta e implementación asistidas. **Revisión técnica completada e
 - **Decisiones:** editor con validación y borrador por carrera, dataset, club y temporada. Reutilización de `bestLineup`, validadores y contratos `shoot`/`narrative`. La representación del remate refleja el desenlace confirmado. Se incorporó entonces una crónica desacoplada del avance; su retiro posterior de la interfaz se registra en AI-017.
 - **Validación automática y local:** Supabase local se levantó sin reset y se aplicó la migración existente del dataset real que faltaba. Se verificaron editor, borrador y remate desde navegador.
 - **Límites y seguimiento:** el movimiento ilustrado del arquero y la pelota no constituye una trayectoria calculada por el motor. Esta etapa no consumió Gemini ni desplegó cambios cloud.
-- **Validación/corrección humana:** pendiente de aprobación explícita de esta decisión. La prueba local favorable comunicada por Julián en la PR #25 se conserva como antecedente, separada de la aprobación solicitada.
+- **Validación/corrección humana:** revisada el 03/11/2026 por Julian Coloma: probada en local el 30/10/2026 y acuerdo con el cambio.
 
 ## AI-015 · Verificación inicial y preparación de PR (CP2-04)
 
@@ -186,7 +186,7 @@ Estado: propuesta e implementación asistidas. **Revisión técnica completada e
 - **Decisiones:** dos cuentas sintéticas dedicadas en cloud, credenciales en archivos ignorados y solicitudes de aplicación con JWT de usuario. Se agregó el job Chromium al CI. Se conservaron los resultados fallidos de la primera verificación.
 - **Validación automática y local:** carreras, RLS, motor y persistencia por HTTP. Carga cloud de 20 GET con concurrencia 2, p95 de 1140 ms y 0% de errores; carga local de 40 GET con concurrencia 2, p95 de 72,25 ms y 0% de errores. Codex corrigió la inicialización CJS de Playwright, la dependencia de Strict Mode y la espera de narrativa, y repitió los recorridos sobre build de producción.
 - **Límites y seguimiento:** en esa primera ejecución faltaba `narrative` en cloud, CORS omitía `x-request-id` y `health` no lo propagaba. Su resolución posterior figura en AI-016. Las muestras de carga son acotadas. Evidencia y alcance en `docs/verification-cp2-04.md`.
-- **Validación/corrección humana:** pendiente de revisión y aprobación explícita del equipo.
+- **Validación/corrección humana:** revisada el 03/11/2026 por Julian Coloma: evidencia de `docs/verification-cp2-04.md` leída y acuerdo con el cambio.
 
 ## AI-016 · Despliegue backend y verificación cloud (CP2-04)
 
@@ -195,7 +195,7 @@ Estado: propuesta e implementación asistidas. **Revisión técnica completada e
 - **Decisiones:** desplegar `health`, `careers`, `game` y `narrative` desde la rama de la PR #25. La CLI confirmó que las cinco migraciones ya estaban aplicadas. Se reutilizaron las dos cuentas sintéticas.
 - **Validación automática y local:** `test:career-cloud` aprobó diez controles, incluidos narrativa fallback, CORS y traza. El frontend candidato local contra cloud completó login, lectura, crónica fallback, secciones, recarga y móvil sin excepciones. Los jobs application, database y browser del commit `d481f11` aprobaron.
 - **Límites y seguimiento:** Playwright usó un puente de origen para mantener el CORS productivo restringido; el preflight de Vercel se comprobó por separado. Esta ejecución no desplegó el frontend ni invocó Gemini. Los resultados históricos no certifican automáticamente las modificaciones posteriores. Evidencia en `docs/verification-cp2-04.md`.
-- **Validación/corrección humana:** pendiente de revisión y aprobación explícita del equipo.
+- **Validación/corrección humana:** revisada el 03/11/2026 por Julian Coloma: diff nuevo leído y acuerdo con el cambio.
 
 ## AI-017 · Distribución final, vista de partido e inicio explícito (CP2-04, issue #9)
 
@@ -204,4 +204,4 @@ Estado: propuesta e implementación asistidas. **Revisión técnica completada e
 - **Decisiones:** menú de dos filas y vista `/carrera/partido` con marcador fijo, estadísticas laterales y cronología central con scroll interno. Eventos locales a la izquierda, visitantes a la derecha y minutos centrados. El prepartido conserva el borrador seleccionado y envía `start` recién al pulsar «Empezar partido»; el modo automático encadena `auto`. El regreso recupera la carrera automáticamente. Un estado de carga sobre el estadio evita mostrar el menú con medidas provisionales. El aviso del remate se retira a los 1400 ms, también al finalizar.
 - **Validación automática y local:** pruebas de navegador con motor real y API interceptada para gol, fallo, retorno, desaparición del aviso final, inicio manual y automático, conservación de alineación y carga demorada. Comparación visual con capturas de escritorio y móvil. Los scripts de CI se ajustan al flujo actual de inicio, remate y regreso. En esta revisión pasaron `npm run check` (lint, tipos, 198 pruebas y build), `test:career-browser` y `test:career-resilience` sobre el frontend local.
 - **Límites y seguimiento:** el motor entrega eventos por bloques entre ocasiones controlables, sin reloj continuo. Posesión, expulsiones y comentarios originales por jugada no existen en el contrato actual. Los textos de la cronología se derivan de eventos confirmados y los fallos se indican sin atribuirlos a una atajada o desvío. El usuario pidió retirar los bloques de vestuario y crónica del menú; el servicio de narrativa permanece disponible. Las verificaciones recientes de UI usan una API simulada, no prueban el despliegue cloud de esta versión.
-- **Validación/corrección humana:** pendiente de revisión y aprobación explícita del equipo sobre este nuevo diff. La conformidad local del comentario del 30/10/2026 antecede a estos ajustes y no se extiende a ellos de forma automática.
+- **Validación/corrección humana:** revisada el 03/11/2026 por Julian Coloma: diff nuevo leído y probado en local (check y pruebas de navegador del flujo de partido) y acuerdo con el cambio.
