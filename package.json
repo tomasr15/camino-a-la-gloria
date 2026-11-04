@@ -25,7 +25,13 @@
     "report:narrative-usage": "node scripts/narrative-usage.mjs",
     "report:narrative-quota": "node scripts/narrative-quota.mjs",
     "monitor:health": "node --experimental-transform-types scripts/health-monitor.mjs",
-    "test:cloud": "node scripts/cloud-smoke.mjs"
+    "test:cloud": "node scripts/cloud-smoke.mjs",
+    "test:career-browser": "node --experimental-transform-types scripts/test-career-browser.mjs",
+    "test:career-resilience": "node --experimental-transform-types scripts/test-career-resilience.mjs",
+    "test:career-load": "node --experimental-transform-types scripts/career-load.mjs",
+    "test:career-cloud": "node --experimental-transform-types scripts/career-cloud.mjs",
+    "test:career-cloud-browser": "node scripts/test-career-cloud-browser.mjs",
+    "test:career-cloud-load": "node scripts/career-cloud-load.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.117.2",
@@ -34,6 +40,7 @@
     "react-dom": "19.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "1.64.1",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",

@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-11-03T23:10:02.807Z",
+  "environment": "Local Next.js; intercepted Supabase HTTP; real deterministic engine; synthetic session",
+  "passed": true,
+  "scenarios": [
+    {
+      "scenario": "Initial GET 503 recovers through retry",
+      "passed": true
+    },
+    {
+      "scenario": "Lost start response retried identically and round committed once",
+      "passed": true
+    },
+    {
+      "scenario": "409 recovers persisted game on reload without another decision",
+      "passed": true
+    },
+    {
+      "scenario": "HTTP 401 displays error and preserves state",
+      "passed": true
+    },
+    {
+      "scenario": "HTTP 429 displays error and preserves state",
+      "passed": true
+    },
+    {
+      "scenario": "HTTP 503 displays error and preserves state",
+      "passed": true
+    }
+  ],
+  "limits": "No live database or provider calls. 409 recovery exercised through page reload."
+}

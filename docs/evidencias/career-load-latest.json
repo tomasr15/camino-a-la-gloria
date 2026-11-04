@@ -1,0 +1,323 @@
+{
+  "generatedAt": "2026-10-30T11:34:10.568Z",
+  "environment": "Supabase local only; two new synthetic accounts; no narrative/provider requests",
+  "status": "completed",
+  "limits": {
+    "getRequests": 40,
+    "concurrency": 2,
+    "targetP95Ms": 2000,
+    "targetErrorRatePercent": 1
+  },
+  "setup": {
+    "accountsCreated": 2,
+    "careersCreated": 2,
+    "gamesInitialized": 2
+  },
+  "samples": [
+    {
+      "endpoint": "careers",
+      "requestId": "40dd833a-2b12-41dd-89b6-d2d5823f376d",
+      "status": 200,
+      "durationMs": 70.6,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "af14d9bb-ec98-4df8-bf01-e24eba3e9c08",
+      "status": 200,
+      "durationMs": 70.4,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "1236e1a0-f94f-4ae5-93b4-5962434c688a",
+      "status": 200,
+      "durationMs": 77.24,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "5e34bd09-6daa-4dcb-a5bc-5f3398ef74e4",
+      "status": 200,
+      "durationMs": 78.48,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "261dd764-5754-4c6f-ab36-3d2828ebc787",
+      "status": 200,
+      "durationMs": 72.25,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "39b2620c-c82f-4700-b289-2d285bd29f9d",
+      "status": 200,
+      "durationMs": 71.6,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "23625ba3-5db3-4ed3-8abf-c2e71226422f",
+      "status": 200,
+      "durationMs": 71.48,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "d3dcebee-9a62-4fe4-9501-f91a8fa30e35",
+      "status": 200,
+      "durationMs": 71.29,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "dddb30a1-003b-43cd-b121-6fa2a8dd6d4f",
+      "status": 200,
+      "durationMs": 66.14,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "cb72ab1d-278e-4db5-ad62-24fa2e040828",
+      "status": 200,
+      "durationMs": 70.53,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "4bc191ae-ff19-47f8-a7d4-2f7b1a8f7c8f",
+      "status": 200,
+      "durationMs": 59.26,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "60f67a0a-a508-47b2-9bf6-6d5f499c55ae",
+      "status": 200,
+      "durationMs": 65.82,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "69c4b118-bdc5-4d18-b41d-5f29c2000181",
+      "status": 200,
+      "durationMs": 61.25,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "7fa94125-bf7d-4ff4-ae4d-bb779f3b0651",
+      "status": 200,
+      "durationMs": 61.44,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "83afc099-ca43-464e-b3e8-91cf31551c38",
+      "status": 200,
+      "durationMs": 69,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "1ddc3408-7833-4495-aa67-8f8ecce672bd",
+      "status": 200,
+      "durationMs": 68.39,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "bac9e985-ec0f-4895-87e4-643016ae7a5c",
+      "status": 200,
+      "durationMs": 61.68,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "c35957f5-5f53-4007-887f-a079fd30c98b",
+      "status": 200,
+      "durationMs": 61.99,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "3140fc12-9c7c-41de-a036-0c377b4d8356",
+      "status": 200,
+      "durationMs": 62,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "19eaa3b5-d235-4dcd-96f0-197793e9b8ea",
+      "status": 200,
+      "durationMs": 61.24,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "51bd9dbd-0eb6-4a9d-99b7-e6453ee1a6f8",
+      "status": 200,
+      "durationMs": 64.28,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "464aa0e7-2a54-4756-84af-44da3f29e2b4",
+      "status": 200,
+      "durationMs": 64.36,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "25e25165-1f6f-4c26-8828-168e33882aac",
+      "status": 200,
+      "durationMs": 63.31,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "a8ec01ca-ef03-4ef9-99fb-3477921a6b6b",
+      "status": 200,
+      "durationMs": 65.48,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "03a3b980-9a8b-43c1-a300-26385e1ca4dc",
+      "status": 200,
+      "durationMs": 65.69,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "47045447-47f7-4d68-8f66-6cb76647d51b",
+      "status": 200,
+      "durationMs": 69.44,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "a682944f-30d5-4bac-8f29-c52748ed8b0a",
+      "status": 200,
+      "durationMs": 64.32,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "472cdd1b-c016-4ee3-be8d-bc66a34e445d",
+      "status": 200,
+      "durationMs": 62.7,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "a979e13c-d7cb-4f13-b253-6cea80ea3f42",
+      "status": 200,
+      "durationMs": 71.37,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "4da6e750-6da1-4f99-ab9b-de682a2dab78",
+      "status": 200,
+      "durationMs": 71.35,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "a27420a6-190c-4c71-9bbd-e10728422df5",
+      "status": 200,
+      "durationMs": 61.35,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "ccecd057-d062-4e7e-a8b4-f080614bf008",
+      "status": 200,
+      "durationMs": 61.82,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "9c1e9853-bfb4-4a95-a6e6-89e8b59c58ff",
+      "status": 200,
+      "durationMs": 63.23,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "15aef402-83ee-45a9-9783-a410a64ccc2b",
+      "status": 200,
+      "durationMs": 62.83,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "2f633d21-746a-4042-8702-264bbdf1b334",
+      "status": 200,
+      "durationMs": 62.76,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "0fa49683-9763-4fc4-9955-3cbe04b15053",
+      "status": 200,
+      "durationMs": 62.86,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "7ea8f930-ec0f-4556-a4c2-a82d77c4e6b2",
+      "status": 200,
+      "durationMs": 62.84,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "c3b1b278-7cc8-443a-b7db-71b02985cc2a",
+      "status": 200,
+      "durationMs": 62.81,
+      "ok": true
+    },
+    {
+      "endpoint": "careers",
+      "requestId": "3f91d186-e016-4606-919b-ea81531af12e",
+      "status": 200,
+      "durationMs": 58.56,
+      "ok": true
+    },
+    {
+      "endpoint": "game",
+      "requestId": "c5f1348f-4544-4228-acfe-ae6f5bcbfe0c",
+      "status": 200,
+      "durationMs": 58.54,
+      "ok": true
+    }
+  ],
+  "metrics": {
+    "requestCount": 40,
+    "concurrency": 2,
+    "p50Ms": 64.28,
+    "p95Ms": 72.25,
+    "maxMs": 78.48,
+    "errorCount": 0,
+    "errorRatePercent": 0,
+    "byEndpoint": {
+      "careers": {
+        "count": 20,
+        "p95Ms": 72.25,
+        "errors": 0
+      },
+      "game": {
+        "count": 20,
+        "p95Ms": 71.6,
+        "errors": 0
+      }
+    }
+  },
+  "outcome": {
+    "p95Pass": true,
+    "errorRatePass": true
+  }
+}

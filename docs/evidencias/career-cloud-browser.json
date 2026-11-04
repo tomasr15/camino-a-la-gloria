@@ -1,0 +1,62 @@
+{
+  "testedAt": "2026-10-30T11:50:31.599Z",
+  "frontend": "Local production build of PR #25",
+  "backend": "https://gmpjtvxpolmxtqvdxdit.supabase.co",
+  "network": "Playwright forwards requests to live Supabase with the published allowed Origin and adapts response ACAO to the local frontend. Native CORS for the published Origin is checked by test:career-cloud.",
+  "checks": [
+    "login with dedicated cloud fixture",
+    "live dashboard and persisted match",
+    "real narrative fallback",
+    "team, standings and calendar render",
+    "session and game survive browser reload",
+    "mobile navigation has no horizontal overflow",
+    "no browser exceptions"
+  ],
+  "requests": [
+    {
+      "path": "/auth/v1/token",
+      "method": "POST",
+      "status": 200,
+      "requestId": null
+    },
+    {
+      "path": "/functions/v1/careers",
+      "method": "GET",
+      "status": 200,
+      "requestId": "31fcb461-ed59-47b4-8c18-4e33ad53c672"
+    },
+    {
+      "path": "/functions/v1/game",
+      "method": "GET",
+      "status": 200,
+      "requestId": "f7c7adeb-e86c-4d7f-8064-87b3f19b240d"
+    },
+    {
+      "path": "/functions/v1/narrative",
+      "method": "POST",
+      "status": 200,
+      "requestId": "077f791c-9283-4bf5-a99b-8a8930f5974a"
+    },
+    {
+      "path": "/functions/v1/careers",
+      "method": "GET",
+      "status": 200,
+      "requestId": "e495569c-f094-46f6-854a-56f668f5cc89"
+    },
+    {
+      "path": "/functions/v1/game",
+      "method": "GET",
+      "status": 200,
+      "requestId": "979186d7-aa95-498b-a3cf-75c7c77238b8"
+    },
+    {
+      "path": "/functions/v1/narrative",
+      "method": "POST",
+      "status": 200,
+      "requestId": "2bb6aa73-e057-4977-8d17-f749e47593cc"
+    }
+  ],
+  "pageErrors": [],
+  "networkErrors": [],
+  "passed": true
+}

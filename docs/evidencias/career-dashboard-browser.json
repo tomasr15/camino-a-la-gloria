@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-30T01:54:54.683Z",
+  "environment": "Local Next.js, HTTP responses intercepted; real engine, synthetic session; no live Supabase verification",
+  "checks": [
+    "desktop render",
+    "standings 8 clubs",
+    "calendar 14 rounds",
+    "simulation start + auto",
+    "lost response after commit + idempotent retry",
+    "reload persistence via intercepted API",
+    "manual play + timing + shoot + automatic completion",
+    "four tabs mobile 390px no overflow",
+    "no browser runtime exceptions"
+  ],
+  "passed": true
+}

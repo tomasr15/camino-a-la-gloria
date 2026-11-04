@@ -160,3 +160,48 @@ Estado: propuesta e implementación asistidas. **Revisión técnica completada e
 - **Validación automática y local:** `tests/health-monitor.test.ts` cubre éxito, corte transitorio, falla en los tres intentos (status, timeout y cuerpo incorrecto) y el evento de alerta. El script se ejecutó contra servidores locales de prueba: sale con 0 si health responde, con 1 tras tres fallos y con 0 sin configuración. El 29/10/2026 Lucas creó en Sentry las reglas «5xx sostenidos en Edge Functions» y «Health caído» y probó la primera: varias llamadas seguidas a `health?sentry-test=1` dispararon el correo de la alerta. Evidencia: `docs/evidencias/sentry-alerta-5xx.png`, con la IP tapada. La regla «Health caído» recién se puede probar cuando el monitor esté en `main`. Falta `npm run check` en la máquina de Lucas y el CI. Estas comprobaciones no constituyen aprobación humana.
 - **Límites y seguimiento:** el monitor recién corre cuando el workflow esté en `main` y se configuren `HEALTH_URL` y `SENTRY_DSN` como variables del repositorio. GitHub puede demorar los cron y los desactiva tras 60 días sin actividad. El correo de GitHub llega a quien modificó por última vez el `cron`. Las reglas de Sentry son configuración manual y no quedan en Git; están documentadas en `docs/infraestructura.md`.
 - **Validación/corrección humana:** revisada por Julian el 29/10/2026 sobre la PR #24, con CI en verde. Se confirma que el monitor alerta solo tras tres fallos y no usa secretos; al ser público el repositorio, el cron no consume minutos facturables. La prueba de «Health caído» queda pendiente hasta el merge. `SENTRY_TEST_EVENTS` debe quedar en `false` en producción.
+
+## AI-013 · Menú principal de Carrera (CP2-04, issue #9)
+
+- **Problema:** la carrera guardada necesitaba acceso al motor, la tabla y el calendario desde un menú deportivo.
+- **Prompt/herramienta:** Tomás pidió a Codex el 29/10/2026 reorganizar Carrera según la referencia de FIFA 20 y conservar la identidad verde, crema y lima.
+- **Decisiones:** componente aislado de menú, navegación horizontal y cliente tipado sobre `invokeFunction`. Las acciones reutilizan contratos y reglas existentes. `bestLineup` proporciona el once recomendado. Jornadas e iniciales representan los datos disponibles. El estadio decorativo fue generado con `image_gen`; el prompt se conserva en `docs/career-dashboard.md`.
+- **Validación automática y local:** recorrido de navegador con HTTP interceptado y motor real. Esta comprobación inicial no verificó Supabase cloud.
+- **Límites y seguimiento:** el contrato carece de fechas de calendario y escudos oficiales. Los ajustes posteriores de distribución e inicio del partido se registran en AI-017.
+- **Validación/corrección humana:** revisada el 03/11/2026 por Julian Coloma: probada en local el 30/10/2026 y acuerdo con el cambio.
+
+## AI-014 · Once editable y resolución visual de ocasiones (CP2-04, issue #9)
+
+- **Problema:** permitir configurar el equipo y resolver las ocasiones con dirección y precisión, conservando el resultado confirmado.
+- **Prompt/herramienta:** Tomás solicitó la ampliación a Codex el 30/10/2026 y autorizó GPT-6 Luna para las pruebas de navegador.
+- **Decisiones:** editor con validación y borrador por carrera, dataset, club y temporada. Reutilización de `bestLineup`, validadores y contratos `shoot`/`narrative`. La representación del remate refleja el desenlace confirmado. Se incorporó entonces una crónica desacoplada del avance; su retiro posterior de la interfaz se registra en AI-017.
+- **Validación automática y local:** Supabase local se levantó sin reset y se aplicó la migración existente del dataset real que faltaba. Se verificaron editor, borrador y remate desde navegador.
+- **Límites y seguimiento:** el movimiento ilustrado del arquero y la pelota no constituye una trayectoria calculada por el motor. Esta etapa no consumió Gemini ni desplegó cambios cloud.
+- **Validación/corrección humana:** revisada el 03/11/2026 por Julian Coloma: probada en local el 30/10/2026 y acuerdo con el cambio.
+
+## AI-015 · Verificación inicial y preparación de PR (CP2-04)
+
+- **Problema:** comprobar persistencia, aislamiento y recuperación antes de presentar la entrega.
+- **Prompt/herramienta:** Tomás autorizó el 30/10/2026 a Codex verificar cloud, completar pruebas y armar la PR. GPT-6 Luna realizó pruebas acotadas de carga local y errores de navegador.
+- **Decisiones:** dos cuentas sintéticas dedicadas en cloud, credenciales en archivos ignorados y solicitudes de aplicación con JWT de usuario. Se agregó el job Chromium al CI. Se conservaron los resultados fallidos de la primera verificación.
+- **Validación automática y local:** carreras, RLS, motor y persistencia por HTTP. Carga cloud de 20 GET con concurrencia 2, p95 de 1140 ms y 0% de errores; carga local de 40 GET con concurrencia 2, p95 de 72,25 ms y 0% de errores. Codex corrigió la inicialización CJS de Playwright, la dependencia de Strict Mode y la espera de narrativa, y repitió los recorridos sobre build de producción.
+- **Límites y seguimiento:** en esa primera ejecución faltaba `narrative` en cloud, CORS omitía `x-request-id` y `health` no lo propagaba. Su resolución posterior figura en AI-016. Las muestras de carga son acotadas. Evidencia y alcance en `docs/verification-cp2-04.md`.
+- **Validación/corrección humana:** revisada el 03/11/2026 por Julian Coloma: evidencia de `docs/verification-cp2-04.md` leída y acuerdo con el cambio.
+
+## AI-016 · Despliegue backend y verificación cloud (CP2-04)
+
+- **Problema:** resolver los tres bloqueos cloud encontrados en AI-015 y repetir la verificación.
+- **Prompt/herramienta:** Tomás autorizó a Codex el 30/10/2026 actualizar Supabase, repetir el recorrido de navegador y revisar CI.
+- **Decisiones:** desplegar `health`, `careers`, `game` y `narrative` desde la rama de la PR #25. La CLI confirmó que las cinco migraciones ya estaban aplicadas. Se reutilizaron las dos cuentas sintéticas.
+- **Validación automática y local:** `test:career-cloud` aprobó diez controles, incluidos narrativa fallback, CORS y traza. El frontend candidato local contra cloud completó login, lectura, crónica fallback, secciones, recarga y móvil sin excepciones. Los jobs application, database y browser del commit `d481f11` aprobaron.
+- **Límites y seguimiento:** Playwright usó un puente de origen para mantener el CORS productivo restringido; el preflight de Vercel se comprobó por separado. Esta ejecución no desplegó el frontend ni invocó Gemini. Los resultados históricos no certifican automáticamente las modificaciones posteriores. Evidencia en `docs/verification-cp2-04.md`.
+- **Validación/corrección humana:** revisada el 03/11/2026 por Julian Coloma: diff nuevo leído y acuerdo con el cambio.
+
+## AI-017 · Distribución final, vista de partido e inicio explícito (CP2-04, issue #9)
+
+- **Problema:** aprovechar el viewport del menú, separar la vista de partido y evitar saltos de diseño durante la carga.
+- **Prompt/herramienta:** Tomás pidió a Codex los ajustes visuales según las referencias adjuntas, la ruta independiente de partido, el botón para empezar y la corrección del aviso final y del scroll. Astra realizó la revisión visual. GPT-6 Luna comprobó el aviso final; al alcanzar su límite de uso, Astra completó la verificación del inicio.
+- **Decisiones:** menú de dos filas y vista `/carrera/partido` con marcador fijo, estadísticas laterales y cronología central con scroll interno. Eventos locales a la izquierda, visitantes a la derecha y minutos centrados. El prepartido conserva el borrador seleccionado y envía `start` recién al pulsar «Empezar partido»; el modo automático encadena `auto`. El regreso recupera la carrera automáticamente. Un estado de carga sobre el estadio evita mostrar el menú con medidas provisionales. El aviso del remate se retira a los 1400 ms, también al finalizar.
+- **Validación automática y local:** pruebas de navegador con motor real y API interceptada para gol, fallo, retorno, desaparición del aviso final, inicio manual y automático, conservación de alineación y carga demorada. Comparación visual con capturas de escritorio y móvil. Los scripts de CI se ajustan al flujo actual de inicio, remate y regreso. En esta revisión pasaron `npm run check` (lint, tipos, 198 pruebas y build), `test:career-browser` y `test:career-resilience` sobre el frontend local.
+- **Límites y seguimiento:** el motor entrega eventos por bloques entre ocasiones controlables, sin reloj continuo. Posesión, expulsiones y comentarios originales por jugada no existen en el contrato actual. Los textos de la cronología se derivan de eventos confirmados y los fallos se indican sin atribuirlos a una atajada o desvío. El usuario pidió retirar los bloques de vestuario y crónica del menú; el servicio de narrativa permanece disponible. Las verificaciones recientes de UI usan una API simulada, no prueban el despliegue cloud de esta versión.
+- **Validación/corrección humana:** revisada el 03/11/2026 por Julian Coloma: diff nuevo leído y probado en local (check y pruebas de navegador del flujo de partido) y acuerdo con el cambio.
